@@ -1,0 +1,1134 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+    background-color: #f8f9fa;
+    color: #343a40;
+    line-height: 1.6;
+}
+
+header {
+    background-color: #004080;
+    color: white;
+    padding: 1.2rem 1rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 1.6em;
+    font-weight: 500;
+}
+
+.app-icon {
+    margin-right: 10px;
+    font-size: 0.9em;
+    vertical-align: middle;
+}
+
+.app-version {
+    display: block;
+    font-size: 1em;
+    color: #e0e0e0;
+    margin-top: 5px;
+}
+
+/* --- BARRA DE FERRAMENTAS ETP --- */
+.etp-toolbar {
+    background-color: #0056b3;
+    padding: 10px 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.etp-tool-button {
+    padding: 8px 15px;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #0069d9;
+    border: 1px solid #005cbf;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.etp-tool-button:hover {
+    background-color: #0056b3;
+    border-color: #004080;
+}
+
+.etp-tool-button i {
+    margin-right: 5px;
+}
+
+
+/* --- LAYOUT PRINCIPAL COM ABAS --- */
+
+.tab-container {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch; /* Faz a barra lateral e o conteúdo terem a mesma altura */
+    width: 90%;
+    max-width: 1600px;
+    min-height: 80vh;
+    margin: 25px auto;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden; /* Mantém tudo dentro das bordas arredondadas */
+}
+
+.tab-nav {
+    flex: 0 0 310px; /* Largura da barra lateral: não cresce, não encolhe, base de 310px */
+    display: flex;
+    flex-direction: column;
+    background-color: #e2eef8;
+    border-right: 1px solid #dee2e6;
+    padding: 15px 0;
+    overflow-y: auto;
+}
+
+.tab-button {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Espaço entre ícone e texto */
+    width: 100%;
+    padding: 12px 20px;
+    cursor: pointer;
+    border: none;
+    background-color: transparent;
+    font-size: 0.95em;
+    font-weight: 500;
+    color: #495057;
+    text-align: left;
+    border-left: 4px solid transparent; /* Indicador de aba ativa */
+    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    border-bottom: 1px solid #c0d4e5;
+}
+
+.tab-button i {
+    font-size: 1.1em;
+    width: 20px; /* Largura fixa para alinhamento dos ícones */
+    text-align: center;
+    color: #888;
+    transition: color 0.2s ease-in-out;
+}
+
+.tab-button.active {
+    background-color: #7db8ef;
+    color: #004080;
+    border-left-color: #0056b3;
+    font-weight: 600;
+}
+
+.tab-button.active i {
+    color: #0056b3;
+}
+
+.tab-button:hover:not(.active) {
+    background-color: #7db8ef;
+}
+
+/* Aumentando a especificidade para sobrescrever o hover sem !important */
+.tab-nav .tab-button.inactive {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: transparent;
+    color: #6c757d;
+}
+
+.tab-nav .tab-button.inactive:hover {
+    background-color: transparent;
+}
+
+.tab-button.inactive i {
+    color: #aaa;
+}
+
+.tab-button.completed i {
+    color: #0056b3; 
+}
+
+.tab-button.completed {
+    font-weight: 500;
+}
+
+.tab-button.completed::after {
+    content: '\f00c'; 
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900; 
+    font-size: 1em;
+    color: #0056b3;
+    opacity: 0.5; 
+    margin-left: auto; 
+    padding-left: 10px; 
+}
+
+/* Container para o conteúdo principal e a barra de progresso */
+.main-content-wrapper {
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    min-width: 0;
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #e9ecef;
+    padding: 5px 0;
+	padding-left: 2px;
+    border-bottom: 1px solid #dee2e6;
+    flex-shrink: 0; 
+}
+
+.progress-bar {
+    width: 0%;
+    height: 20px;
+    background-color: #28a745;
+    text-align: center;
+    line-height: 20px;
+    color: white;
+    font-size: 0.8em;
+    font-weight: bold;
+    border-radius: 0 3px 3px 0;
+    transition: width 0.4s ease;
+    box-shadow: inset 0 -1px 1px rgba(0,0,0,0.15);
+}
+
+.progress-bar-container {
+    width: 100%;
+    background-color: #f8f9fa; 
+    padding: 8px 15px; 
+    border-bottom: 1px solid #dee2e6;
+    flex-shrink: 0;
+    display: flex; 
+    align-items: center;
+    gap: 10px;
+    box-sizing: border-box; 
+}
+
+.main-progress-track {
+    flex-grow: 1;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    height: 20px; 
+    overflow: hidden;
+}
+
+.tab-progress-track {
+    flex-grow: 1; 
+    background-color: #e9ecef; 
+    border-radius: 3px;
+    height: 16px;
+    overflow: hidden; 
+}
+
+.tab-progress-container .progress-bar {
+    height: 100%; 
+    line-height: 16px;
+    background-color: #17a2b8; 
+}
+
+.tab-content {
+    padding: 25px 30px;
+    display: none;
+    flex-grow: 1; 
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.tab-content h2,
+.tab-content h3,
+.tab-content h4 {
+    color: #004080;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+.tab-content h2 {
+    font-size: 1.5em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+.tab-content h3 {
+    font-size: 1.3em;
+    margin-top: 25px;
+    border-bottom: 1px dashed #e0e0e0;
+    padding-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.tab-content h4 {
+    font-size: 1.1em;
+    color: #333;
+    margin-top: 20px;
+}
+
+.chapter-icon {
+    margin-right: 10px;
+    font-size: 1em;
+    color: #0056b3;
+}
+
+/* --- ESTILOS DE FORMULÁRIO (CAMPOS, BOTÕES, LABELS) --- */
+
+.form-group {
+    margin-bottom: 22px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.label-with-help {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.label-with-help label {
+    margin-bottom: 0;
+}
+
+.input-with-ai {
+    display: flex;
+    align-items: stretch;
+}
+
+/* Estilos comuns para todos os campos de formulário */
+.input-with-ai textarea,
+.input-with-ai input[type="text"],
+.input-with-ai input[type="number"],
+.input-with-ai select,
+.full-width-input {
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    margin-bottom: 0;
+    background-color: #fff;
+    max-width:94%;
+}
+
+/* Campos que estão DENTRO de um contêiner com botão devem crescer para preencher o espaço */
+.input-with-ai textarea,
+.input-with-ai input[type="text"],
+.input-with-ai input[type="number"],
+.input-with-ai select {
+    flex-grow: 1;
+    width: auto; /* Permite que o flex-grow funcione corretamente */
+}
+
+/* Campos que devem ocupar a largura total QUANDO sozinhos */
+.full-width-input {
+    width: 95%;
+}
+
+select.full-width-input {
+    width: 95%;
+}
+
+.input-with-ai textarea:focus,
+.input-with-ai input[type="text"]:focus,
+.input-with-ai input[type="number"]:focus,
+.input-with-ai select:focus,
+.full-width-input:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.input-with-ai input[type="text"][readonly],
+input[type="text"].full-width-input[readonly],
+.input-with-ai textarea[readonly] {
+    background-color: #e9ecef;
+    color: #495057;
+    cursor: default;
+    border-color: #ced4da;
+    box-shadow: none;
+}
+.input-with-ai input[type="text"][readonly]:focus,
+input[type="text"].full-width-input[readonly]:focus,
+.input-with-ai textarea[readonly]:focus {
+    border-color: #ced4da;
+    box-shadow: none;
+}
+
+.input-with-ai textarea,
+textarea.full-width-input {
+    min-height: 70px;
+    resize: vertical;
+}
+
+.form-group > .full-width-input {
+    flex-grow: 0;
+}
+
+.ai-help-button {
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 8px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    /*display: flex;*/
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 40px;
+    height: auto;
+    height: 40px;
+    float: right;
+}
+
+.ai-help-button-checkbox{
+    margin-left: 10px;
+    padding: 8px 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    display: flex;
+    align-items: right;
+    gap: 5px;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    width: 40px;
+    height: auto;
+    min-height: 40px;
+}
+
+.ai-help-button:hover, .ai-help-button-select:hover {
+    background-color: #218838;
+}
+
+.ai-help-button i, .ai-help-button-select i {
+    font-size: 1.1em;
+}
+
+.label-with-help .ai-help-button {
+    padding: 4px 10px;
+    /*height: auto;*/
+    line-height: 1;
+}
+
+button[data-action="generate-title-ai"] {
+    padding: 8px 12px;
+}
+
+button[data-action="generate-title-ai"] i.fa-wand-magic-sparkles {
+    color: #ffdd57;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.875em;
+    color: #6c757d;
+}
+
+.placeholder-text {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+    border: 1px dashed #ced4da;
+    border-radius: 4px;
+    margin-top: 20px;
+    background-color: #f8f9fa;
+}
+
+/* --- ESTILOS PARA ITENS DINÂMICOS (SOLUÇÕES, RISCOS, ETC.) --- */
+
+.solucao-item, .risco-item, .anexo-item, .contratacao-item {
+    border: 1px solid #e0e0e0;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    background-color: #fdfdff;
+}
+
+.add-button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1em;
+}
+.add-button:hover {
+    background-color: #0056b3;
+}
+.add-button i {
+    font-size: 0.9em;
+}
+
+.remove-solucao-button, .remove-risco-button, .remove-anexo-button, .remove-contratacao-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    margin-left: auto;
+    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.remove-solucao-button:hover, .remove-risco-button:hover, .remove-anexo-button:hover, .remove-contratacao-button:hover {
+    background-color: #c82333;
+}
+.remove-solucao-button i, .remove-risco-button i, .remove-anexo-button i, .remove-contratacao-button i {
+    font-size: 0.9em;
+}
+
+hr {
+    margin-top: 25px;
+    margin-bottom: 25px;
+    border: 0;
+    border-top: 1px solid #dee2e6;
+}
+
+.save-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.save-button:hover {
+    background-color: #138496;
+}
+
+.export-buttons {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.export-buttons button {
+    padding: 10px 18px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.export-buttons button:hover {
+    background-color: #5a6268;
+}
+.export-buttons button i {
+    font-size: 0.9em;
+}
+
+/* --- ESTILOS PARA CHECKBOXES --- */
+
+.form-group input[type="checkbox"] {
+    margin-right: 8px;
+    vertical-align: middle;
+    width: 16px;
+    height: 16px;
+}
+.form-group input[type="checkbox"] + label {
+    font-weight: normal;
+    display: inline;
+    color: #495057;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.checkbox-group span {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 15px;
+}
+.checkbox-group input[type="checkbox"],
+.checkbox-group input[type="radio"] {
+    margin-right: 5px;
+    flex-shrink: 0;
+}
+.checkbox-group label {
+    font-weight: normal;
+    margin-bottom: 0;
+    color: #495057;
+}
+
+.scrollable-checkbox-group {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    width:93%;
+}
+
+
+/* --- ESTILOS DO MODAL DE AJUDA DA IA --- */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 8% auto;
+    padding: 25px 30px;
+    border: 1px solid #888;
+    width: 75%;
+    max-width: 750px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.close-button {
+    color: #aaa;
+    font-size: 30px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-content h3 {
+    margin-top: 0;
+    color: #004080;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    font-size: 1.4em;
+}
+.modal-content h3 i {
+    margin-right: 8px;
+}
+
+#aiModelUsed {
+    font-size: 0.85em;
+    color: #555;
+    margin-top: -10px;
+    margin-bottom: 15px;
+    font-style: italic;
+}
+#aiModelName {
+    font-weight: bold;
+}
+
+.modal-content h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.modal-content pre:not(#aiComplianceAnalysis) {
+    font-size: 1.1em;
+    line-height: 1.75;
+    color: #495057;
+    background-color: #f8f9fa;
+    padding: 15px 18px;
+    border-radius: 4px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 350px;
+    overflow-y: auto;
+    border: 1px solid #e0e0e0;
+}
+
+/* --- ESTILOS ADICIONAIS E ESPECÍFICOS --- */
+
+.warning-text {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+}
+
+.conditional-field {
+    padding-left: 20px;
+    border-left: 3px solid #e0e0e0;
+    margin-left: 5px;
+    margin-bottom: 18px;
+}
+
+/* --- ESTILOS PARA AS TABELAS DE RESUMO --- */
+
+.summary-table-container {
+    width: 100%;
+    overflow-x: auto; 
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    margin-top: 8px;
+    background-color: #f8f9fa;
+}
+
+.summary-table-container .placeholder-text {
+    padding: 15px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    border: none;
+}
+
+table.summary-table {
+    width: 100%;
+    min-width: 600px; 
+    border-collapse: collapse;
+    font-size: 0.9em;
+    table-layout: auto;
+}
+
+table.summary-table th,
+table.summary-table td {
+    border: 1px solid #dee2e6;
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+    white-space: pre-wrap; 
+}
+
+table.summary-table th {
+    background-color: #e9ecef;
+    font-weight: 600;
+    color: #495057;
+}
+
+table.summary-table tbody tr:nth-child(even) {
+    background-color: #fdfdff;
+}
+
+table.summary-table tbody tr:hover {
+    background-color: #f0f0f0;
+}
+
+/* --- ESTILOS PARA A ABA DE CONSOLIDAÇÃO --- */
+
+#consolidation_container {
+    margin-top: 20px;
+}
+
+details.consolidation-chapter {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+details.consolidation-chapter[open] {
+    border-color: #3e84cf;
+}
+
+summary.consolidation-title {
+    padding: 12px 18px;
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #004080;
+    background-color: #f0f6fc;
+    cursor: pointer;
+    list-style: none; 
+    display: flex;
+    align-items: center;
+    transition: background-color 0.2s ease;
+}
+
+summary.consolidation-title:hover {
+    background-color: #e2eef8;
+}
+
+summary.consolidation-title::-webkit-details-marker {
+    display: none; 
+}
+
+summary.consolidation-title::before {
+    content: '\f0da'; 
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-right: 12px;
+    transition: transform 0.2s ease-in-out;
+    font-size: 0.9em;
+}
+
+details[open] > summary.consolidation-title::before {
+    transform: rotate(90deg);
+}
+
+.consolidation-content {
+    padding: 20px;
+    background-color: #ffffff;
+}
+
+table.consolidation-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+}
+
+table.consolidation-table td {
+    padding: 10px 12px;
+    border: 1px solid #e9ecef;
+    vertical-align: top;
+}
+
+table.consolidation-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+table.consolidation-table td:first-child {
+    font-weight: 600;
+    color: #495057;
+    width: 35%;
+}
+
+.consolidation-value-unfilled {
+    color: #6c757d;
+    font-style: italic;
+}
+
+table.consolidation-sub-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95em;
+    margin-top: 5px;
+    background-color: #fdfdff;
+    border: 1px solid #e0e0e0;
+}
+
+table.consolidation-sub-table td {
+    padding: 8px 10px;
+    border: 1px solid #e9ecef;
+}
+
+table.consolidation-sub-table td:first-child {
+    background-color: #f0f0f0;
+    width: 30%;
+}
+
+/* --- ESTILOS PARA O MODO ETP SIMPLIFICADO --- */
+
+.etp-simplificado-mode .simplificado-hide {
+    display: none !important;
+}
+
+.etp-simplificado-mode #c3_1_completo_wrapper.form-group {
+    display: none !important;
+}
+
+.etp-simplificado-mode #c3_1_simplificado_wrapper.form-group {
+    display: block !important;
+}
+
+/* --- NOVOS ESTILOS: MODAL DE CONFIGURAÇÕES DE IA --- */
+
+#aiSettingsModal .modal-content {
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.info-text {
+    font-size: 0.9em;
+    color: #495057;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    padding: 10px 15px;
+    border-radius: 4px;
+    line-height: 1.7;
+}
+
+.info-list {
+    font-size: 0.9em;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.info-list li {
+    margin-bottom: 8px;
+}
+
+#customModelsList .dynamic-model-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+#customModelsList .dynamic-model-input input {
+    flex-grow: 1;
+}
+
+.remove-model-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    font-size: 0.9em;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.remove-model-button:hover {
+    background-color: #c82333;
+}
+
+#testConnectionResult {
+    padding: 10px;
+    border-radius: 4px;
+    display: none; /* Começa oculto */
+}
+
+#testConnectionResult.testing {
+    display: block;
+    color: #004085;
+    background-color: #cce5ff;
+    border: 1px solid #b8daff;
+}
+
+#testConnectionResult.success {
+    display: block;
+    color: #155724;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}
+
+#testConnectionResult.error {
+    display: block;
+    color: #721c24;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+}
+
+.modal-footer {
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 1px solid #dee2e6;
+    text-align: right;
+}
+
+.modal-footer .save-button {
+    margin-top: 0;
+}
+
+/* --- ESTILOS PARA O CABEÇALHO DA VERSÃO E BOTÃO SOBRE --- */
+
+.app-version-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* Espaçamento entre os itens */
+    margin-top: 8px;
+    color: #e0e0e0;
+}
+
+.app-version, .update-date {
+    font-size: 1em;
+}
+
+.about-icon {
+    font-size: 0.8em;
+    color: #b0c4de; /* Cor sutil */
+    cursor: pointer;
+    transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.about-icon:hover {
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+/* --- ESTILOS PARA O MODAL SOBRE --- */
+
+#aboutModal .modal-content {
+    max-width: 850px; /* Um pouco maior para caber o texto */
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#aboutModal .modal-content h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    color: #0056b3;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 8px;
+}
+
+#aboutModal .modal-content ul {
+    list-style-type: disc;
+    padding-left: 20px;
+}
+
+#aboutModal .modal-content li {
+    margin-bottom: 12px;
+    line-height: 1.6;
+}
+
+/* --- NOVOS ESTILOS PARA O CONTEÚDO DO MANUAL NO MODAL --- */
+
+/* Estilo aplicado aos containers de conteúdo no modal */
+.manual-content-block {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 15px 20px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Estilo unificado para os títulos dentro dos containers */
+.manual-content-block h4 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    color: #004080;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 8px;
+}
+
+/* Resetando o estilo do <pre> da IA para que ele não pareça uma "caixa" dentro da outra */
+#aiComplianceAnalysis {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.95em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #495057;
+}
+
+.manual-content-block p,
+.manual-content-block ul,
+.manual-content-block .fundamentacao-box {
+    font-size: 0.95em;
+}
+
+.manual-content-block ul {
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.manual-content-block li {
+    margin-bottom: 8px;
+}
+
+/* --- ESTILOS PARA O BANNER DE ALERTA BETA --- */
+
+#beta-alert-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background-color: #fff3cd; /* Tom de amarelo para alerta */
+    color: #856404; /* Cor de texto que contrasta com o fundo */
+    border-bottom: 1px solid #ffeeba;
+    font-size: 0.9em;
+    width: 90%;
+    max-width: 1600px;
+    margin: 0 auto; /* Centraliza o banner */
+    margin-top: 0px; /* Puxa o banner para cima para remover o espaço extra */
+    margin-bottom: -25px; /* Puxa a área de conteúdo para cima para remover o espaço extra */
+    border-radius: 0 0 8px 8px; /* Arredonda apenas os cantos inferiores */
+    box-sizing: border-box;
+}
+
+.beta-alert-content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#close-beta-alert {
+    font-size: 24px;
+    font-weight: bold;
+    color: #856404;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    padding: 0 10px;
+}
+
+#close-beta-alert:hover {
+    color: #5a4202;
+}
+
+.alert_link{
+    color: rgb(74, 74, 236);
+    text-decoration: none;
+}

@@ -384,13 +384,13 @@ window.manualContent = {
 
     // --- CAPÍTULO 4: VALOR ESTIMADO ---
     "c4_1_metodologia_estimativa": {
-        conceito: `<h4>Conceito</h4><p>É a descrição dos métodos e das fontes de pesquisa que a equipe de planejamento utilizou para estimar o valor da contratação.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Descreva de forma detalhada as fontes consultadas. A legislação prevê uma ordem de preferência, mas o ideal é utilizar uma "cesta de preços" com múltiplas fontes, sempre que possível, para conferir maior robustez à estimativa.</p><p><strong>Exemplo:</strong> <em>"A estimativa de valor para a presente contratação foi realizada com base em uma ampla pesquisa de preços, em conformidade com a IN SEGES/ME nº 65/2021, utilizando as seguintes fontes: 1) Pesquisa no Painel de Preços do Governo Federal, conforme link 'XYZ'; 2) Análise de contratos similares celebrados por outros órgãos do Poder Judiciário, como o STJ (Contrato nº XX/2022) e o TRF1 (Contrato nº YY/2023), que podem ser consultados no link 'XWZ'; e 3) Solicitação de propostas formais a três potenciais fornecedores do mercado, conforme Anexos 'XZZ'."</em></p>`,
+        conceito: `<h4>Conceito</h4><p>É a descrição da pesquisa de preços que foi realizada, com a indicação das fontes pesquisadas e dos valores encontrados.</p>`,
+        comoPreencher: `<h4>Como Preencher</h4><p>Apresente de forma detalhada os preços coletados, preferencialmente em formato de lista organizada. Inclua a fonte, a data da coleta, a descrição do item e o valor.</p><p><strong>Exemplo:</strong></p><ul><li>Fonte 1 (Painel de Preços, 10/07/2025): Licença de Software X - R$ 110,00/mês.</li><li>Fonte 2 (Contrato STJ nº 15/2024, 15/07/2025): Licença de Software X - R$ 125,00/mês.</li><li>Fonte 3 (Proposta Fornecedor A, 12/07/2025): Licença de Software X - R$ 115,00/mês.</li></ul>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O art. 18, § 1°, VI estabelece que o estudo técnico preliminar deve conter a estimativa do valor da contratação.</div><br><div class="fundamentacao-box"><strong>IN SEGES/ME nº 65/2021:</strong> Dispõe sobre o procedimento para realização de pesquisa de preços.</div>`
     },
     "c4_2_detalhamento_cesta_precos": {
-        conceito: `<h4>Conceito</h4><p>Este campo materializa a metodologia adotada para estimar o valor da solução. É a apresentação transparente dos dados coletados na pesquisa de preços.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Apresente de forma detalhada os preços coletados, preferencialmente em formato de lista organizada. Inclua a fonte, a data da coleta, a descrição do item e o valor. Ao final, demonstre o cálculo utilizado para chegar ao preço de referência (ex: média, mediana, menor valor).</p><p><strong>Exemplo:</strong></p><ul><li>Fonte 1 (Painel de Preços, 10/07/2025): Licença de Software X - R$ 110,00/mês.</li><li>Fonte 2 (Contrato STJ nº 15/2024, 15/07/2025): Licença de Software X - R$ 125,00/mês.</li><li>Fonte 3 (Proposta Fornecedor A, 12/07/2025): Licença de Software X - R$ 115,00/mês.</li><li><strong>Metodologia de Cálculo:</strong> A estimativa de preço de referência foi a média dos valores coletados (R$ 116,67), desconsiderando-se valores inexequíveis ou excessivamente elevados.</li></ul>`,
+        conceito: `<h4>Conceito</h4><p>Este campo materializa a metodologia adotada para estimar o valor da solução.</p>`,
+        comoPreencher: `<h4>Como Preencher</h4><p>Demonstre o cálculo utilizado para chegar ao preço de referência (ex: média, mediana, menor valor).</p><p><strong>Exemplo:</strong> A estimativa de preço de referência foi a média dos valores coletados (R$ 116,67), desconsiderando-se valores inexequíveis ou excessivamente elevados.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O art. 18, § 1°, VI estabelece que a estimativa do valor da contratação no Estudo Técnico Preliminar deve ser acompanhada dos preços unitários referenciais, das memórias de cálculo e dos documentos que lhe dão suporte.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa Seges/ME n° 65/2021:</strong> Dispõe sobre o procedimento para realização de pesquisa de preços.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa SGD/ME n° 94/2022:</strong> O art. 11, III, b c/c IV estabelece que o estudo técnico preliminar de soluções de TIC deverá trazer memória de cálculo que referencie os preços e os custos utilizados na análise das soluções, bem como a estimativa do custo total da contratação.</div>`
     },
     "c4_3_valor_total_estimado": {
@@ -548,7 +548,7 @@ window.manualContent = {
     },
     "c8_5_1_justificativa_amostras": {
         conceito: `<h4>Conceito</h4><p>É a argumentação que demonstra a necessidade de avaliação de amostras ou provas de conceito para julgar as propostas.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Justifique a necessidade da amostra/prova de conceito e defina critérios objetivos de avaliação que serão usados para aprová-las ou reprová-las. Ex: <em>"A prova de conceito é necessária para verificar a compatibilidade do software com os sistemas legados do TSE e para avaliar o desempenho da solução em nosso ambiente de rede, critérios que não podem ser aferidos apenas pela análise da proposta escrita."</em></p>`,
+        comoPreencher: `<h4>Como Preencher</h4><p>Justifique a necessidade da amostra/prova de conceito e defina critérios objetivos de avaliação que serão usados para aprová-las ou reprová-las. Ex: <em>"A prova de conceito é necessária para verificar a compatibilidade do software com os sistemas legados do TSE e para avaliar o desempenho da solução em nosso ambiente de rede, critérios que não podem ser aferidos apenas pela análise da proposta escrita. Para isto, serão realizados os seguintes testes: (detalhar os testes e os resultados esperados)."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O art. 41, II, dispõe que a exigência de amostra e prova de conceito é medida excepcional que deve ser justificada. </div>`
     },
     "c8_6_tem_vistoria": {
@@ -577,7 +577,7 @@ window.manualContent = {
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O art. 122 permite a subcontratação de parte da obra, do serviço ou do fornecimento, até o limite autorizado, em cada caso, pela Administração.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O art. 15, V, “a”, dispõe que a unidade demandante deve indicar as regras de participação no certame e de subcontratação, com a indicação da fração que pode ser subcontratada.</div>`
     },
     "c8_8_1_justificativa_subcontratacao": {
-        conceito: `<h4>Conceito</h4><p>É a definição de quais partes do objeto podem ser subcontratadas e os limites para isso.</p>`,
+        conceito: `<h4>Conceito</h4><p>É a justificativa para permissão da subcontratação e definição de quais partes do objeto podem ser subcontratados e os limites para isso.</p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Se permitida, justifique e defina qual parte do objeto poderá ser subcontratada e quais os limites. Ex: <em>"Será permitida a subcontratação dos serviços de instalação de cabeamento, limitados a 20% do valor do contrato, por se tratar de parcela acessória que não compromete o núcleo do objeto."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O art. 122 permite a subcontratação de parte da obra, do serviço ou do fornecimento, até o limite autorizado, em cada caso, pela Administração.</div>`
     },
@@ -594,7 +594,7 @@ window.manualContent = {
     "c8_9_2_tem_limite_consorcio": {
         conceito: `<h4>Conceito</h4><p>Define se haverá um número máximo de empresas que podem compor um consórcio.</p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Se consórcios forem permitidos, informe se haverá um limite. A imposição de limite também deve ser justificada.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O art. 15, §4°, dispõe que, desde que justificado, o edital de licitação poderá estabelecer limite máximo para o número de empresas consorciadas.</div>`
+        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O art. 15, V, “c”, dispõe que a unidade demandante deve indicar as regras de participação no certame de empresas concorrerem em consórcio.</div>`
     },
     "c8_9_2_1_quantidade_maxima": {
         conceito: `<h4>Conceito</h4><p>É a definição do número máximo de empresas que podem compor um consórcio.</p>`,

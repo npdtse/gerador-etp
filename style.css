@@ -888,6 +888,18 @@ table.consolidation-sub-table td:first-child {
     display: block !important;
 }
 
+/* --- Regras para ocultar itens no modo Completo (exclusivos do Simplificado) --- */
+
+/* Por padrão (Modo Completo), o item fica oculto */
+.completo-hide {
+    display: none !important;
+}
+
+/* Quando o Modo Simplificado está ativo, o item aparece */
+.etp-simplificado-mode .completo-hide {
+    display: block !important;
+}
+
 /* --- NOVOS ESTILOS: MODAL DE CONFIGURAÇÕES DE IA --- */
 
 #aiSettingsModal .modal-content {
@@ -1131,4 +1143,49 @@ table.consolidation-sub-table td:first-child {
 .alert_link{
     color: rgb(74, 74, 236);
     text-decoration: none;
+}
+
+/* --- MELHORIAS DE UX (CICATRIZES E BANNERS) --- */
+
+/* 2. Estilo do Banner de Contexto (Topo da aba) */
+.context-banner {
+    background-color: #e2eef8;
+    border-left: 5px solid #0056b3;
+    color: #004080;
+    padding: 15px 20px;
+    margin-bottom: 25px;
+    border-radius: 4px;
+    font-size: 0.95em;
+    display: none; /* Oculto por padrão, JS controla */
+    animation: fadeIn 0.3s ease-in;
+}
+
+.context-banner i {
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 3. Ajuste da Barra Lateral (Botões Inativos) */
+/* Sobrescreve regra anterior para garantir que o botão apareça, mas 'apagado' */
+.tab-nav .tab-button.inactive {
+    display: flex !important; /* Força a exibição */
+    opacity: 0.5;
+    background-color: #f1f3f5;
+    color: #adb5bd;
+    cursor: not-allowed;
+    border-left: 4px solid transparent;
+}
+
+.tab-nav .tab-button.inactive:hover {
+    background-color: #f1f3f5; /* Remove efeito de hover */
+    color: #adb5bd;
+}
+
+.tab-nav .tab-button.inactive i {
+    color: #adb5bd;
 }

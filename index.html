@@ -77,6 +77,9 @@
 				</div>
 			</div>
 
+            <!-- Banner de Contexto (UX) -->
+            <div id="contextBanner" class="context-banner"></div>
+
             <!-- Conteúdo das Abas -->
             <div id="identificacao" class="tab-content">
                 <h2><i class="fas fa-id-badge chapter-icon" aria-hidden="true"></i>Identificação do Estudo Técnico Preliminar</h2>
@@ -168,8 +171,8 @@
                         <button class="ai-help-button" data-action="get-ai-help" data-target-field="c1_3_contexto_externo"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="c1_4_processos_anteriores">1.4 Processos anteriores no TSE para atendimento da necessidade</label>
+                <div class="form-group completo-hide">
+                    <label for="c1_4_processos_anteriores">1.4 Nº SEI dos processos anteriores no TSE para atendimento da necessidade</label>
                      <div class="input-with-ai">
                         <textarea id="c1_4_processos_anteriores" rows="4" placeholder="Caso a necessidade já tenha sido atendida..."></textarea>
                         <button class="ai-help-button" data-action="get-ai-help" data-target-field="c1_4_processos_anteriores"><i class="fas fa-brain" aria-hidden="true"></i></button>
@@ -206,32 +209,6 @@
                     <div class="input-with-ai">
                         <textarea id="c1_7_1_indicacao_objetivos" rows="3" placeholder="Apontar o objetivo(s) estratégico(s) do TSE..."></textarea>
                         <button class="ai-help-button" data-action="get-ai-help" data-target-field="c1_7_1_indicacao_objetivos"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c1_8_previsao_pca_sim_nao">1.8 A demanda está prevista no Plano de Contratações Anual (PCA)?</label>
-                    </div>
-                    <select id="c1_8_previsao_pca_sim_nao" class="full-width-input" data-action="toggle-conditional" data-toggle-group="previsao_pca">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c1_8_previsao_pca_sim_nao"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c1_8_sim_pca" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c1_8_1_codigo_pca">1.8.1 Código da demanda no PCA</label>
-                    <div class="input-with-ai">
-                        <input type="text" id="c1_8_1_codigo_pca" placeholder="Informe o código da demanda no sistema PCA.">
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c1_8_1_codigo_pca"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-                <div id="conditional_c1_8_nao_pca" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c1_8_2_justificativa_inclusao_pca">1.8.2 Justificativa para inclusão da demanda no PCA</label>
-                    <div class="input-with-ai">
-                        <textarea id="c1_8_2_justificativa_inclusao_pca" rows="3" placeholder="Justifique a ausência da demanda no PCA e a necessidade de sua inclusão."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c1_8_2_justificativa_inclusao_pca"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
             </div>
@@ -353,376 +330,179 @@
                         <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_8_1_beneficios_vigencia_superior"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
-                
-                <div class="form-group">
-                    <label for="c3_9_prazo_execucao_entrega">3.9 Prazo de execução ou entrega</label>
+
+                <div class="form-group simplificado-hide">
+                    <div class="label-with-help">
+                        <label for="c3_9_tem_garantia">3.9 Há previsão de garantia técnica?</label>
+                    </div>
+                    <select id="c3_9_tem_garantia" class="full-width-input" data-action="toggle-conditional" data-toggle-group="garantia">
+                        <option value="">Selecione...</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_9_tem_garantia"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                </div>
+                <div id="conditional_c3_9_1_prazo_garantia" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <label for="c3_9_1_prazo_garantia">3.9.1 Qual é o prazo desejado da garantia?</label>
                     <div class="input-with-ai">
-                        <textarea id="c3_9_prazo_execucao_entrega" rows="3" placeholder="Detalhar os prazos de execução do serviço ou de entrega do material..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_9_prazo_execucao_entrega"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                        <input type="text" id="c3_9_1_prazo_garantia" placeholder="Ex: 12 meses, 24 meses...">
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_9_1_prazo_garantia"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                    </div>
+                </div>
+                <div id="conditional_c3_9_2_garantia_mercado" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <div class="label-with-help">
+                        <label for="c3_9_2_garantia_mercado">3.9.2 A garantia exigida está de acordo com o padrão praticado pelo mercado?</label>
+                    </div>
+                    <select id="c3_9_2_garantia_mercado" class="full-width-input" data-action="toggle-conditional" data-toggle-group="justificativa_garantia">
+                        <option value="">Selecione...</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_9_2_garantia_mercado"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                </div>
+                <div id="conditional_c3_9_2_1_justificativa_garantia" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <label for="c3_9_2_1_justificativa_garantia">3.9.2.1 Justificativa da exigência do prazo desejado de garantia fora do padrão de mercado</label>
+                    <div class="input-with-ai">
+                        <textarea id="c3_9_2_1_justificativa_garantia" rows="3" placeholder="Justificar se o prazo não estiver de acordo com o mercado..."></textarea>
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_9_2_1_justificativa_garantia"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
 
                 <div class="form-group simplificado-hide">
                     <div class="label-with-help">
-                        <label for="c3_10_tem_garantia">3.10 Há previsão de garantia técnica?</label>
+                        <label for="c3_10_tem_assistencia">3.10 Há previsão de assistência técnica?</label>
                     </div>
-                    <select id="c3_10_tem_garantia" class="full-width-input" data-action="toggle-conditional" data-toggle-group="garantia">
+                    <select id="c3_10_tem_assistencia" class="full-width-input" data-action="toggle-conditional" data-toggle-group="assistencia">
                         <option value="">Selecione...</option>
                         <option value="sim">Sim</option>
                         <option value="nao">Não</option>
                     </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_10_tem_garantia"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_10_tem_assistencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
                 </div>
-                <div id="conditional_c3_10_1_prazo_garantia" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_10_1_prazo_garantia">3.10.1 Qual é o prazo desejado da garantia?</label>
+                <div id="conditional_c3_10_1_prazo_assistencia" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <label for="c3_10_1_prazo_assistencia">3.10.1 Qual é o prazo desejado da assistência técnica?</label>
                     <div class="input-with-ai">
-                        <input type="text" id="c3_10_1_prazo_garantia" placeholder="Ex: 12 meses, 24 meses...">
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_10_1_prazo_garantia"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                        <input type="text" id="c3_10_1_prazo_assistencia" placeholder="Ex: Durante a vigência contratual...">
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_10_1_prazo_assistencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
-                <div id="conditional_c3_10_2_garantia_mercado" class="form-group conditional-field simplificado-hide" style="display: none;">
+                <div id="conditional_c3_10_2_assistencia_mercado" class="form-group conditional-field simplificado-hide" style="display: none;">
                     <div class="label-with-help">
-                        <label for="c3_10_2_garantia_mercado">3.10.2 A garantia exigida está de acordo com o padrão praticado pelo mercado?</label>
+                        <label for="c3_10_2_assistencia_mercado">3.10.2 A assistência técnica exigida está de acordo com o padrão praticado pelo mercado?</label>
                     </div>
-                    <select id="c3_10_2_garantia_mercado" class="full-width-input" data-action="toggle-conditional" data-toggle-group="justificativa_garantia">
+                    <select id="c3_10_2_assistencia_mercado" class="full-width-input" data-action="toggle-conditional" data-toggle-group="justificativa_assistencia">
                         <option value="">Selecione...</option>
                         <option value="sim">Sim</option>
                         <option value="nao">Não</option>
                     </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_10_2_garantia_mercado"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_10_2_assistencia_mercado"><i class="fas fa-brain" aria-hidden="true"></i></button>
                 </div>
-                <div id="conditional_c3_10_2_1_justificativa_garantia" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_10_2_1_justificativa_garantia">3.10.2.1 Justificativa da exigência do prazo desejado de garantia fora do padrão de mercado</label>
+                <div id="conditional_c3_10_2_1_justificativa_assistencia" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <label for="c3_10_2_1_justificativa_assistencia">3.10.2.1 Justificativa da exigência do prazo desejado de assistência fora do padrão de mercado</label>
                     <div class="input-with-ai">
-                        <textarea id="c3_10_2_1_justificativa_garantia" rows="3" placeholder="Justificar se o prazo não estiver de acordo com o mercado..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_10_2_1_justificativa_garantia"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                        <textarea id="c3_10_2_1_justificativa_assistencia" rows="3" placeholder="Justificar se a assistência não estiver de acordo com o mercado..."></textarea>
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_10_2_1_justificativa_assistencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
 
                 <div class="form-group simplificado-hide">
                     <div class="label-with-help">
-                        <label for="c3_11_tem_assistencia">3.11 Há previsão de assistência técnica?</label>
+                        <label for="c3_11_tem_transferencia_conhecimento">3.11 Será necessária a transferência de tecnologias ou de técnicas pela contratada ao término do contrato?</label>
                     </div>
-                    <select id="c3_11_tem_assistencia" class="full-width-input" data-action="toggle-conditional" data-toggle-group="assistencia">
+                    <select id="c3_11_tem_transferencia_conhecimento" class="full-width-input" data-action="toggle-conditional" data-toggle-group="transferencia">
                         <option value="">Selecione...</option>
                         <option value="sim">Sim</option>
                         <option value="nao">Não</option>
                     </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_11_tem_assistencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_11_tem_transferencia_conhecimento"><i class="fas fa-brain" aria-hidden="true"></i></button>
                 </div>
-                <div id="conditional_c3_11_1_prazo_assistencia" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_11_1_prazo_assistencia">3.11.1 Qual é o prazo desejado da assistência técnica?</label>
+                <div id="conditional_c3_11_transferencia" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <label for="c3_11_1_procedimentos_transferencia">3.11.1 Procedimentos a serem adotados para garantir transferência</label>
                     <div class="input-with-ai">
-                        <input type="text" id="c3_11_1_prazo_assistencia" placeholder="Ex: Durante a vigência contratual...">
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_11_1_prazo_assistencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-                <div id="conditional_c3_11_2_assistencia_mercado" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <div class="label-with-help">
-                        <label for="c3_11_2_assistencia_mercado">3.11.2 A assistência técnica exigida está de acordo com o padrão praticado pelo mercado?</label>
-                    </div>
-                    <select id="c3_11_2_assistencia_mercado" class="full-width-input" data-action="toggle-conditional" data-toggle-group="justificativa_assistencia">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_11_2_assistencia_mercado"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_11_2_1_justificativa_assistencia" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_11_2_1_justificativa_assistencia">3.11.2.1 Justificativa da exigência do prazo desejado de assistência fora do padrão de mercado</label>
-                    <div class="input-with-ai">
-                        <textarea id="c3_11_2_1_justificativa_assistencia" rows="3" placeholder="Justificar se a assistência não estiver de acordo com o mercado..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_11_2_1_justificativa_assistencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-                
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_12_tem_normas_legais">3.12 Há normas legais específicas da solução que impactam ou restringem sua adoção?</label>
-                    </div>
-                    <select id="c3_12_tem_normas_legais" class="full-width-input" data-action="toggle-conditional" data-toggle-group="normas_legais">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_12_tem_normas_legais"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_12_normas_legais" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_12_1_quais_normas_legais">3.12.1 Quais normas legais?</label>
-                    <div class="input-with-ai">
-                        <textarea id="c3_12_1_quais_normas_legais" rows="3" placeholder="Informar normas legais, regulamentares e convencionais exclusivas..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_12_1_quais_normas_legais"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                        <textarea id="c3_11_1_procedimentos_transferencia" rows="3" placeholder="Indicar os procedimentos para garantir a transferência de conhecimentos..."></textarea>
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_11_1_procedimentos_transferencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
 
                 <div class="form-group simplificado-hide">
                     <div class="label-with-help">
-                        <label for="c3_13_tem_normas_tecnicas">3.13 Há normas técnicas específicas da solução que impactam ou restringem sua adoção?</label>
+                        <label for="c3_12_tem_capacitacao_servidores">3.12 Há necessidade de capacitação de servidores para uso da solução escolhida?</label>
                     </div>
-                    <select id="c3_13_tem_normas_tecnicas" class="full-width-input" data-action="toggle-conditional" data-toggle-group="normas_tecnicas">
+                    <select id="c3_12_tem_capacitacao_servidores" class="full-width-input" data-action="toggle-conditional" data-toggle-group="capacitacao">
                         <option value="">Selecione...</option>
                         <option value="sim">Sim</option>
                         <option value="nao">Não</option>
                     </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_13_tem_normas_tecnicas"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_12_tem_capacitacao_servidores"><i class="fas fa-brain" aria-hidden="true"></i></button>
                 </div>
-                <div id="conditional_c3_13_normas_tecnicas" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_13_1_quais_normas_tecnicas">3.13.1 Quais normas técnicas?</label>
-                    <div class="input-with-ai">
-                        <textarea id="c3_13_1_quais_normas_tecnicas" rows="3" placeholder="Informar normas técnicas da ABNT, Inmetro, etc..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_13_1_quais_normas_tecnicas"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_14_tem_necessidade_experiencia">3.14 Há necessidade de experiência profissional ou formação técnica para a equipe que executará o contrato?</label>
-                    </div>
-                    <select id="c3_14_tem_necessidade_experiencia" class="full-width-input" data-action="toggle-conditional" data-toggle-group="experiencia">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_14_tem_necessidade_experiencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_14_experiencia" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_14_1_cursos_experiencias_necessarios">3.14.1 Cursos e experiências necessários</label>
-                    <div class="input-with-ai">
-                        <textarea id="c3_14_1_cursos_experiencias_necessarios" rows="3" placeholder="Registrar a formação e experiência profissional da equipe..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_14_1_cursos_experiencias_necessarios"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_15_tem_transicao_contratual">3.15 Será necessária transição do serviço ao término do contrato?</label>
-                    </div>
-                    <select id="c3_15_tem_transicao_contratual" class="full-width-input" data-action="toggle-conditional" data-toggle-group="transicao">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_15_tem_transicao_contratual"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_15_transicao" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_15_1_justificativa_transicao">3.15.1 Justificativa da exigência de transição</label>
-                    <div class="input-with-ai">
-                        <textarea id="c3_15_1_justificativa_transicao" rows="3" placeholder="Informar se é necessário que a contratada promova transição..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_15_1_justificativa_transicao"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_16_tem_transferencia_conhecimento">3.16 Será necessária a transferência de tecnologias ou de técnicas pela contratada ao término do contrato?</label>
-                    </div>
-                    <select id="c3_16_tem_transferencia_conhecimento" class="full-width-input" data-action="toggle-conditional" data-toggle-group="transferencia">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_16_tem_transferencia_conhecimento"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_16_transferencia" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_16_1_procedimentos_transferencia">3.16.1 Procedimentos a serem adotados para garantir transferência</label>
-                    <div class="input-with-ai">
-                        <textarea id="c3_16_1_procedimentos_transferencia" rows="3" placeholder="Indicar os procedimentos para garantir a transferência de conhecimentos..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_16_1_procedimentos_transferencia"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_17_tem_capacitacao_servidores">3.17 Há necessidade de capacitação de servidores para uso da solução escolhida?</label>
-                    </div>
-                    <select id="c3_17_tem_capacitacao_servidores" class="full-width-input" data-action="toggle-conditional" data-toggle-group="capacitacao">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_17_tem_capacitacao_servidores"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_17_capacitacao" class="form-group conditional-field simplificado-hide" style="display: none;">
+                <div id="conditional_c3_12_capacitacao" class="form-group conditional-field simplificado-hide" style="display: none;">
                     <div class="form-group">
                         <div class="label-with-help">
-                            <label for="c3_17_1_responsavel_capacitacao">3.17.1 Responsável pela capacitação</label>
+                            <label for="c3_12_1_responsavel_capacitacao">3.12.1 Responsável pela capacitação</label>
                         </div>
-                        <select id="c3_17_1_responsavel_capacitacao" class="full-width-input">
+                        <select id="c3_12_1_responsavel_capacitacao" class="full-width-input">
                             <option value="">Selecione...</option>
                             <option value="TSE">TSE</option>
                             <option value="Contratada">Contratada</option>
                         </select>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_17_1_responsavel_capacitacao"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_12_1_responsavel_capacitacao"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
 
                 <div class="form-group simplificado-hide">
                     <div class="label-with-help">
-                        <label for="c3_18_tem_deslocamento_reembolso">3.18 Há necessidade de deslocamento da contratada que possa gerar reembolso?</label>
+                        <label for="c3_13_tem_contratacao_adicional">3.13 A solução escolhida levará à necessidade de contratação adicional de serviços ou materiais não contemplados?</label>
                     </div>
-                    <select id="c3_18_tem_deslocamento_reembolso" class="full-width-input" data-action="toggle-conditional" data-toggle-group="deslocamento">
+                    <select id="c3_13_tem_contratacao_adicional" class="full-width-input" data-action="toggle-conditional" data-toggle-group="contratacao_adicional">
                         <option value="">Selecione...</option>
                         <option value="sim">Sim</option>
                         <option value="nao">Não</option>
                     </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_18_tem_deslocamento_reembolso"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_13_tem_contratacao_adicional"><i class="fas fa-brain" aria-hidden="true"></i></button>
                 </div>
-                 <div id="conditional_c3_18_deslocamento" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <div class="form-group">
-                        <label for="c3_18_1_estimativa_passagens">3.18.1 Estimativa da quantidade de passagens no período contratual</label>
-                         <div class="input-with-ai">
-                            <textarea id="c3_18_1_estimativa_passagens" rows="3" placeholder="Informar estimativa de passagens aéreas e/ou terrestres..."></textarea>
-                            <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_18_1_estimativa_passagens"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="c3_18_2_estimativa_diarias">3.18.2 Estimativa da quantidade de diárias no período contratual</label>
-                         <div class="input-with-ai">
-                            <textarea id="c3_18_2_estimativa_diarias" rows="3" placeholder="Informar estimativa de diárias para cobrir despesas de hospedagem, alimentação, etc..."></textarea>
-                            <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_18_2_estimativa_diarias"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_19_tem_ordem_servico_inicial">3.19 Há necessidade de emissão de ordem de serviço inicial?</label>
-                    </div>
-                    <select id="c3_19_tem_ordem_servico_inicial" class="full-width-input" data-action="toggle-conditional" data-toggle-group="ordem_servico">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_19_tem_ordem_servico_inicial"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_19_ordem_servico" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <div class="label-with-help">
-                        <label for="c3_19_1_prazo_emissao_os">3.19.1 Prazo de emissão a partir do início da vigência contratual</label>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_19_1_prazo_emissao_os"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                    <input type="text" id="c3_19_1_prazo_emissao_os" class="full-width-input" placeholder="Ex: 5 dias úteis, 10 dias corridos...">
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_20_tem_contratacao_adicional">3.20 A solução escolhida levará à necessidade de contratação adicional de serviços ou materiais não contemplados?</label>
-                    </div>
-                    <select id="c3_20_tem_contratacao_adicional" class="full-width-input" data-action="toggle-conditional" data-toggle-group="contratacao_adicional">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_20_tem_contratacao_adicional"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_20_contratacao_adicional" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_20_1_descricao_servicos_materiais">3.20.1 Descrição dos serviços ou materiais não contemplados</label>
+                <div id="conditional_c3_13_contratacao_adicional" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <label for="c3_13_1_descricao_servicos_materiais">3.13.1 Descrição dos serviços ou materiais não contemplados</label>
                     <div class="input-with-ai">
-                        <textarea id="c3_20_1_descricao_servicos_materiais" rows="3" placeholder="Indicar serviços ou materiais que devem ser providenciados no futuro..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_20_1_descricao_servicos_materiais"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                        <textarea id="c3_13_1_descricao_servicos_materiais" rows="3" placeholder="Indicar serviços ou materiais que devem ser providenciados no futuro..."></textarea>
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_13_1_descricao_servicos_materiais"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
 
                 <div class="form-group simplificado-hide">
                     <div class="label-with-help">
-                        <label for="c3_21_tem_ajuste_contratacoes">3.21 A solução escolhida levará à necessidade de ajuste em outras contratações já existentes?</label>
+                        <label for="c3_14_tem_ajuste_contratacoes">3.14 A solução escolhida levará à necessidade de ajuste em outras contratações já existentes?</label>
                     </div>
-                    <select id="c3_21_tem_ajuste_contratacoes" class="full-width-input" data-action="toggle-conditional" data-toggle-group="ajuste_contratacoes">
+                    <select id="c3_14_tem_ajuste_contratacoes" class="full-width-input" data-action="toggle-conditional" data-toggle-group="ajuste_contratacoes">
                         <option value="">Selecione...</option>
                         <option value="sim">Sim</option>
                         <option value="nao">Não</option>
                     </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_21_tem_ajuste_contratacoes"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_14_tem_ajuste_contratacoes"><i class="fas fa-brain" aria-hidden="true"></i></button>
                 </div>
-                <div id="conditional_c3_21_ajuste_contratacoes" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_21_1_indicacao_contratos_ajuste">3.21.1 Indicação dos contratos a serem ajustados</label>
+                <div id="conditional_c3_14_ajuste_contratacoes" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <label for="c3_14_1_indicacao_contratos_ajuste">3.14.1 Indicação dos contratos a serem ajustados</label>
                     <div class="input-with-ai">
-                        <textarea id="c3_21_1_indicacao_contratos_ajuste" rows="3" placeholder="Indicar quais contratos vigentes precisarão ser ajustados e por quê..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_21_1_indicacao_contratos_ajuste"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_22_tem_adequacoes_infra">3.22 Há necessidade de adequações nas instalações ou infraestrutura do TSE?</label>
-                    </div>
-                    <select id="c3_22_tem_adequacoes_infra" class="full-width-input" data-action="toggle-conditional" data-toggle-group="adequacoes_infra">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_22_tem_adequacoes_infra"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                 <div id="conditional_c3_22_adequacoes_infra" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_22_1_descricao_adequacoes">3.22.1 Descrição das adequações necessárias</label>
-                    <div class="input-with-ai">
-                        <textarea id="c3_22_1_descricao_adequacoes" rows="3" placeholder="Informar necessidade de reformas, mudanças de layout, novos mobiliários, etc..."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_22_1_descricao_adequacoes"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                        <textarea id="c3_14_1_indicacao_contratos_ajuste" rows="3" placeholder="Indicar quais contratos vigentes precisarão ser ajustados e por quê..."></textarea>
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_14_1_indicacao_contratos_ajuste"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
                 
                 <div class="form-group simplificado-hide">
                     <div class="label-with-help">
-                        <label for="c3_23_impacto_acessibilidade">3.23 A solução escolhida provocará impacto em relação a aspectos de acessibilidade para pessoas com deficiência ou mobilidade reduzida?</label>
+                        <label for="c3_15_impacto_acessibilidade">3.15 A solução escolhida provocará impacto em relação a aspectos de acessibilidade para pessoas com deficiência ou mobilidade reduzida?</label>
                     </div>
-                    <select id="c3_23_impacto_acessibilidade" class="full-width-input" data-action="toggle-conditional" data-toggle-group="acessibilidade">
+                    <select id="c3_15_impacto_acessibilidade" class="full-width-input" data-action="toggle-conditional" data-toggle-group="acessibilidade">
                         <option value="">Selecione...</option>
                         <option value="sim">Sim</option>
                         <option value="nao">Não</option>
                     </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_23_impacto_acessibilidade"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_15_impacto_acessibilidade"><i class="fas fa-brain" aria-hidden="true"></i></button>
                 </div>
-                <div id="conditional_c3_23_acessibilidade" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <label for="c3_23_1_acoes_acessibilidade">3.23.1 Indicação das ações previstas para garantia de acessibilidade</label>
+                <div id="conditional_c3_15_acessibilidade" class="form-group conditional-field simplificado-hide" style="display: none;">
+                    <label for="c3_15_1_acoes_acessibilidade">3.15.1 Indicação das ações previstas para garantia de acessibilidade</label>
                     <div class="input-with-ai">
-                        <textarea id="c3_23_1_acoes_acessibilidade" rows="3" placeholder="Indique as ações, como conformidade com WCAG, acessibilidade física, etc."></textarea>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_23_1_acoes_acessibilidade"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-
-                <div class="form-group simplificado-hide">
-                    <div class="label-with-help">
-                        <label for="c3_24_envolve_software">3.24 A solução escolhida envolve a contratação de software?</label>
-                    </div>
-                    <select id="c3_24_envolve_software" class="full-width-input" data-action="toggle-conditional" data-toggle-group="software_details">
-                        <option value="">Selecione...</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
-                    </select>
-                    <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_24_envolve_software"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                </div>
-                <div id="conditional_c3_24_software_detalhes" class="form-group conditional-field simplificado-hide" style="display: none;">
-                    <div class="form-group">
-                        <div class="label-with-help">
-                            <label for="c3_24_1_tipo_contratacao_software">3.24.1 Como será contratado o software?</label>
-                        </div>
-                        <select id="c3_24_1_tipo_contratacao_software" class="full-width-input" data-action="toggle-conditional" data-toggle-group="software_aquisicao">
-                            <option value="">Selecione...</option>
-                            <option value="aquisicao">Aquisição</option>
-                            <option value="locacao">Locação</option>
-                        </select>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_24_1_tipo_contratacao_software"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                    <div id="conditional_c3_24_1_aquisicao_detalhes" class="form-group conditional-field" style="display: none;">
-                        <div class="label-with-help">
-                            <label for="c3_24_1_1_vida_util_software">3.24.1.1 Qual é a estimativa de vida útil do software?</label>
-                        </div>
-                        <select id="c3_24_1_1_vida_util_software" class="full-width-input">
-                            <option value="">Selecione...</option>
-                            <option value="com_prazo">Com prazo definido</option>
-                            <option value="sem_prazo">Sem prazo definido</option>
-                        </select>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_24_1_1_vida_util_software"><i class="fas fa-brain" aria-hidden="true"></i></button>
-                    </div>
-                    <div class="form-group">
-                        <div class="label-with-help">
-                            <label for="c3_24_2_componente_hardware">3.24.2 O software será considerado como componente de um hardware que também faça parte da solução escolhida?</label>
-                        </div>
-                        <select id="c3_24_2_componente_hardware" class="full-width-input">
-                            <option value="">Selecione...</option>
-                            <option value="sim">Sim</option>
-                            <option value="nao">Não</option>
-                        </select>
-                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_24_2_componente_hardware"><i class="fas fa-brain" aria-hidden="true"></i></button>
+                        <textarea id="c3_15_1_acoes_acessibilidade" rows="3" placeholder="Indique as ações, como conformidade com WCAG, acessibilidade física, etc."></textarea>
+                        <button class="ai-help-button" data-action="get-ai-help" data-target-field="c3_15_1_acoes_acessibilidade"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
                 </div>
             </div>
@@ -943,7 +723,7 @@
                     <button class="ai-help-button" data-action="get-ai-help" data-target-field="c8_2_procedimentos_auxiliares"><i class="fas fa-brain" aria-hidden="true"></i></button>
                 </div>
 
-                <div class="form-group simplificado-hide">
+                <div class="form-group">
                     <div class="label-with-help">
                         <label for="c8_3_criterio_julgamento">8.3 Critério de julgamento das propostas (art. 33 da Lei 14.133/2021)</label>
                     </div>
@@ -1451,7 +1231,7 @@
             <span class="close-button" data-action="close-about-modal">×</span>
             
             <h4><i class="fas fa-info-circle" style="margin-right: 8px;"></i> Sobre o Gerador Inteligente de ETP</h4>
-            <p><strong>Versão do Aplicativo Desktop:</strong> 105, atualizada em 16/12/2025.</p>
+            <p><strong>Versão do Aplicativo Desktop:</strong> 106, atualizada em 16/01/2026.</p>
             <p>Esta ferramenta foi desenvolvida para simplificar e agilizar a elaboração de Estudos Técnicos Preliminares (ETP) no âmbito do Tribunal Superior Eleitoral, alinhando o processo às exigências da Lei 14.133/2021 (Licitações e Contratos).</p>
             <hr>
 

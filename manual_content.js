@@ -39,7 +39,7 @@ window.manualContent = {
     },
     "c1_2_situacoes_problemas": {
         conceito: `<h4>Conceito</h4><p>Este campo detalha a necessidade apresentada no item anterior, materializando-a em dificuldades concretas e observáveis no dia a dia do Tribunal. Ele serve para dar dimensão ao problema, mostrando como ele afeta processos, pessoas e resultados.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Liste as dificuldades práticas enfrentadas pela ausência de uma solução adequada. Seja específico e, se possível, quantifique os problemas.</p><p><strong>Exemplo:</strong> <em>"As dificuldades enfrentadas incluem: 1) Quedas constantes de conexão durante as sessões, gerando atrasos e perda de informações; 2) Impossibilidade de gravar reuniões importantes para consulta posterior; 3) Ausência de recursos de transcrição automática, o que gera retrabalho manual para a elaboração de atas; 4) Riscos de segurança pelo uso de plataformas não homologadas pelos servidores para contornar as limitações da ferramenta atual."</em></p>`,
+        comoPreencher: `<h4>Como Preencher</h4><p>Liste as dificuldades práticas enfrentadas pela ausência de uma solução adequada. Seja específico e, se possível, quantifique os problemas.</p><p><strong>Exemplo:</strong> <em>"As dificuldades enfrentadas incluem: 1) Quedas constantes de conexão durante as sessões, gerando atrasos e perda de informações; 2) Impossibilidade de gravar reuniões importantes para consulta posterior; 3) Ausência de recursos de transcrição automática, o que gera retrabalho manual para a elaboração de atas; 4) Riscos de segurança em razão do uso de plataformas não homologadas, como forma de contornar as limitações da ferramenta atual."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021, Art. 18, § 1º, I:</strong> Este item complementa a descrição da necessidade, detalhando o "problema a ser resolvido".</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, I, "b", indica que o ETP deve conter a descrição da necessidade a ser atendida.</div>`
     },
     "c1_3_contexto_externo": {
@@ -71,21 +71,6 @@ window.manualContent = {
         conceito: `<h4>Conceito</h4><p>Este campo especifica qual(is) objetivo(s) do PEI ou PDTIC serão impulsionados pela contratação.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Transcreva o número e o nome do objetivo estratégico ou da iniciativa do PDTIC com a qual a contratação está alinhada.</p><p><strong>Exemplo:</strong> <em>"Objetivo Estratégico 5 do PEI 2021-2026 - 'Aprimorar a Governança e a Gestão de Pessoas, Processos, Projetos e Contratações' e Iniciativa 3.2 do PDTIC - 'Modernizar a Infraestrutura de Comunicação e Colaboração'."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021, Art. 18, § 1º, IV:</strong> Materializa a demonstração do alinhamento exigido pela lei.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, I, "b", 7, afirma que a descrição do ETP deve conter a indicação quanto ao alinhamento com o Planejamento Estratégico do Tribunal.</div><br><div class="fundamentacao-box"><strong>Resolução CNJ nº 468/2022:</strong> O Art. 4º indica que as contratações serão alinhadas com o Plano Diretor de Tecnologia da Informação e Comunicação (PDTIC), com o Planejamento Estratégico Institucional e com a Estratégia Nacional do Poder Judiciário e Estratégia Nacional de TIC (ENTIC-JUD).</div>`
-    },
-    "c1_8_previsao_pca_sim_nao": {
-        conceito: `<h4>Conceito</h4><p>O Plano de Contratações Anual (PCA) é o instrumento que consolida todas as demandas que o órgão pretende contratar no ano seguinte. Este campo verifica se a necessidade em questão foi devidamente planejada e incluída no PCA, demonstrando o alinhamento da demanda com o planejamento orçamentário e de aquisições do TSE.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Consulte o PCA do ano vigente. Se a contratação estiver listada, selecione "Sim". Caso contrário, selecione "Não".</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021, Art. 12, VII:</strong> Estabelece que, a partir de documentos de formalização de demandas, os órgãos deverão elaborar anualmente o seu Plano de Contratações Anual.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 4º aponta a necessidade de elaboração do PCA para a consolidação das demandas de obras, serviços de engenharia, tecnologia da informação, bens e serviços comuns, bem como os contratos vigentes, com possibilidade ou não de prorrogação ou renovação.</div><br><div class="fundamentacao-box"><strong>Resolução TSE nº 23.702/2022:</strong> O Art. 6º fala sobre a necessidade de aprovação do PCA após seu alinhamento com o Plano Estratégico do Tribunal e com a Lei Orçamentária Anual.</div>`
-    },
-    "c1_8_1_codigo_pca": {
-        conceito: `<h4>Conceito</h4><p>É o código identificador único que a demanda recebe no PCA.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Caso a demanda esteja no PCA, insira aqui o código identificador dela apontado no PCA. Isso formaliza o alinhamento com o planejamento do órgão.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021, Art. 12, VII:</strong> Estabelece que, a partir de documentos de formalização de demandas, os órgãos deverão elaborar anualmente o seu Plano de Contratações Anual.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 4º aponta a necessidade de elaboração do PCA para a consolidação das demandas de obras, serviços de engenharia, tecnologia da informação, bens e serviços comuns, bem como os contratos vigentes, com possibilidade ou não de prorrogação ou renovação.</div><br><div class="fundamentacao-box"><strong>Resolução TSE nº 23.702/2022:</strong> O Art. 6º fala sobre a necessidade de aprovação do PCA após seu alinhamento com o Plano Estratégico do Tribunal e com a Lei Orçamentária Anual.</div>`
-    },
-    "c1_8_2_justificativa_inclusao_pca": {
-        conceito: `<h4>Conceito</h4><p>Caso uma contratação não tenha sido prevista no PCA, ela só pode ser realizada após autorização da Diretoria-Geral da Secretaria do Tribunal, se houver uma justificativa fundamentada que demonstre a sua necessidade imprevista ou a impossibilidade de planejamento prévio.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Se a contratação não estava no PCA, justifique a necessidade de incluí-la agora. Aponte os motivos, que devem ser excepcionais, como uma necessidade imprevista e urgente, uma oportunidade de mercado única e vantajosa, ou uma nova determinação legal que surgiu após a elaboração do PCA.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 12, VII, aponta que a inclusão de contratações no PCA deve ser racionalizada, de modo que o alinhamento ao planejamento estratégico seja reforçado.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> Os Art. 6º e Art. 7º, §§ 1º e 2º, indicam que novas demandas podem ser incluídas no PCA, desde que previamente autorizadas pela Diretoria-Geral da Secretaria do Tribunal.</div>`
     },
 
     // --- CAPÍTULO 2: SOLUÇÕES DE MERCADO ---
@@ -119,28 +104,23 @@ window.manualContent = {
         comoPreencher: `<h4>Como Preencher</h4><p>Identifique o que esta solução NÃO inclui e que pode ser necessário contratar separadamente. Ex: <em>"A solução não inclui o serviço de migração dos dados e gravações da plataforma antiga. Também não contempla a ampliação da largura de banda que será necessária para suportar o tráfego de vídeo."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, II, "d", indica que os ETPs devem contemplar as diferentes soluções de mercado que possam atender às necessidades da Administração, apontando os serviços e materiais complementares que não tenham sido considerados na solução avaliada.</div>`
     },
-    "c2_sol_g_infra_recursos_ti": {
-        conceito: `<h4>Conceito</h4><p>Descreve os pré-requisitos técnicos de infraestrutura do TSE, bem como de políticas e padrões de governo, para que a solução em análise possa ser implantada e funcionar corretamente.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Descreva os pré-requisitos de infraestrutura de TI. Ex: <em>"Requer links de internet com no mínimo 100Mbps de banda dedicada. As estações de trabalho dos usuários devem possuir no mínimo 8GB de RAM e sistema operacional Windows 10 ou superior."</em></p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, II, "e", indica que os ETPs devem contemplar as diferentes soluções de mercado que possam atender às necessidades da Administração, apontando os requisitos de tecnologia da informação presentes na solução, identificando a existência ou não de softwares, políticas, modelos ou padrões de governo a serem observados.</div>`
-    },
-    "c2_sol_h_custos_estimados": {
+    "c2_sol_g_custos_estimados": {
         conceito: `<h4>Conceito</h4><p>Nesta fase do planejamento, não se exige uma pesquisa de preços exaustiva, mas sim uma estimativa inicial que permita comparar economicamente as diferentes soluções e avaliar a viabilidade orçamentária da contratação.</p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Apresente uma estimativa de custo para esta solução, mesmo que preliminar, indicando a fonte dessa estimativa. Ex: <em>"Custo estimado de R$ 200,00 por licença/mês, totalizando R$ 1.200.000,00 para 500 licenças em 12 meses. A estimativa baseia-se em cotações informais obtidas em sites de fabricantes e no valor do contrato similar do STJ."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, II, "f", indica que os ETPs devem contemplar as diferentes soluções de mercado que possam atender às necessidades da Administração, apontando os custos de cada item da solução, observados os requisitos necessários à composição da demanda e indispensáveis à escolha da solução, com detalhamento do valor atribuído ao serviço ou ao material permanente ou de consumo, exceto nos casos devidamente justificados de impossibilidade de definição dos custos.</div>`
     },
-    "c2_sol_i_vantagens": {
+    "c2_sol_h_vantagens": {
         conceito: `<h4>Conceito</h4><p>É a análise dos pontos fortes da solução, considerando os aspectos técnicos, econômicos e de gestão que a tornam uma opção atrativa para o TSE.</p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Liste os pontos fortes desta solução em comparação com as outras. Ex: <em>"Interface amigável e de fácil aprendizado; forte integração com outras ferramentas de calendário e e-mail já utilizadas pelo TSE; excelente reputação de estabilidade no mercado; dispensa a necessidade de infraestrutura de servidores própria."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 18, § 1º, V, indica que a análise de vantagens e desvantagens de cada solução é o núcleo da justificativa técnica e econômica para a escolha da solução a se contratar.</div>`
     },
-    "c2_sol_j_desvantagens": {
+    "c2_sol_i_desvantagens": {
         conceito: `<h4>Conceito</h4><p>É a análise dos pontos fracos, riscos ou limitações da solução. Uma análise honesta das desvantagens é crucial para uma tomada de decisão consciente e para o mapeamento de riscos.</p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Liste os pontos fracos ou os riscos associados a esta solução. Ex: <em>"Custo de licenciamento mais elevado que as concorrentes; alta dependência de um único fornecedor (lock-in); suporte técnico padrão apenas em inglês; armazenamento de dados em nuvem fora do território nacional, o que exige análise jurídica aprofundada."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 18, § 1º, V, indica que a análise de vantagens e desvantagens de cada solução é o núcleo da justificativa técnica e econômica para a escolha da solução a se contratar.</div>`
     },
 
-    // --- CAPÍTULO 3: SOLUÇÃO ESCOLHIDA ---
+     // --- CAPÍTULO 3: SOLUÇÃO ESCOLHIDA ---
     "c3_1_solucao_escolhida": {
         conceito: `<h4>Conceito</h4><p>Após a análise comparativa das alternativas de mercado (realizada no Capítulo 2), este campo formaliza qual foi a solução considerada a mais vantajosa para atender à necessidade do TSE. Para o ETP Simplificado, onde o Capítulo 2 é suprimido, este campo serve para descrever diretamente a solução que se pretende contratar.</p>`,
         comoPreencher: `<h4>Como Preencher</h4><p><strong>No ETP Completo:</strong> Selecione na lista a solução que foi cadastrada e analisada no Capítulo 2.</p><p><strong>No ETP Simplificado:</strong> Descreva de forma clara e objetiva a solução pretendida. Ex: "Aquisição de 50 (cinquenta) licenças de software para projeto e modelagem de engenharia, com suporte técnico e atualização por 12 meses."</p>`,
@@ -172,13 +152,13 @@ window.manualContent = {
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 18, § 1º, IV, indica que o ETP deve conter a "demonstração dos quantitativos a serem contratados, acompanhadas das memórias de cálculo e dos documentos que lhe dão suporte".</div><br><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 40, III, indica que o  planejamento de compras deverá considerar a expectativa de consumo anual e observar a determinação de unidades e quantidades a serem adquiridas em função de consumo e utilização prováveis, cuja estimativa será obtida, sempre que possível, mediante adequadas técnicas quantitativas, admitido o fornecimento contínuo.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, IV, "a", afirma que os ETPs devem contemplar a descrição completa da solução que melhor atenderá às necessidades da Administração, devendo indicar o detalhamento dos estudos realizados que motivaram a escolha da solução, abordando o método de cálculo definido para quantificar a solução.</div>`
     },
     "c3_7_natureza_continua": {
-        conceito: `<h4>Conceito</h4><p>Serviços e aquisições de natureza contínua são aqueles que a Administração Pública necessita de forma permanente e prolongada, cuja interrupção pode comprometer a continuidade de atividades essenciais. A correta classificação como serviço ou aquisição contínuo é o que permite, legalmente, a celebração de contratos com vigência superior a 12 meses.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se o serviço ou a aquisição for essencial e ininterrupto (ex: limpeza, vigilância, link de internet, manutenção de sistemas críticos). Caso afirmativo, preencha os campos subsequentes para justificar essa natureza e definir a vigência do contrato.</p>`,
+        conceito: `<h4>Conceito</h4><p>Serviços e aquisições de natureza contínua são aqueles que a Administração Pública necessita para a manutenção da atividade administrativa, de forma permanente e prolongada. A correta classificação como serviço ou aquisição contínuo é o que permite, legalmente, a celebração de contratos com vigência superior a 12 meses.</p>`,
+        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se o serviço ou a aquisição for ininterrupto (ex: limpeza, vigilância, link de internet, manutenção de sistemas críticos). Caso afirmativo, preencha os campos subsequentes para justificar essa natureza e definir a vigência do contrato.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 6º, incisos XV a XVII, conceitua o que pode ser considerado como serviço contínuo.</div>`
     },
     "c3_7_1_justificativa_natureza_continua": {
-        conceito: `<h4>Conceito</h4><p>É a argumentação que demonstra que o serviço ou a aquisição é essencial e deve ser prestado de forma ininterrupta ao longo do tempo para o funcionamento do TSE.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Justifique por que o serviço ou aquisição é essencial e por que sua interrupção comprometeria as atividades do Tribunal. Ex: <em>"O serviço de limpeza e conservação é essencial para a manutenção da salubridade e do ambiente de trabalho adequado aos servidores e ao público, sendo, portanto, uma necessidade permanente e ininterrupta do Tribunal."</em></p>`,
+        conceito: `<h4>Conceito</h4><p>É a argumentação que demonstra que o serviço ou a aquisição deve ser prestado de forma ininterrupta ao longo do tempo para o funcionamento do TSE.</p>`,
+        comoPreencher: `<h4>Como Preencher</h4><p>Justifique por que a interrupção do serviço ou aquisição comprometeria as atividades do Tribunal. Ex: <em>"O serviço de limpeza e conservação é essencial para a manutenção da salubridade e do ambiente de trabalho adequado aos servidores e ao público, sendo, portanto, uma necessidade permanente e ininterrupta do Tribunal."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 6º, incisos XV a XVII, conceitua o que pode ser considerado como serviço contínuo.</div>`
     },
     "c3_8_vigencia_meses": {
@@ -191,195 +171,95 @@ window.manualContent = {
         comoPreencher: `<h4>Como Preencher</h4><p>Justifique os benefícios técnicos e econômicos de se firmar um contrato com vigência inicial superior a 12 meses. Ex: <em>"Uma vigência de 24 meses permite obter melhores preços com o fornecedor devido à maior previsibilidade e economia de escala. Além disso, reduz os custos administrativos com a realização de um novo processo licitatório no ano seguinte, otimizando o trabalho da equipe de contratações."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> Os Art. 105 e 106 tratam da duração dos contratos, da necessidade de atesto da vantajosidade econômica para contratos plurianuais, e permitem vigência inicial de até 5 anos para serviços contínuos.</div>`
     },
-    "c3_9_prazo_execucao_entrega": {
-        conceito: `<h4>Conceito</h4><p>Define o tempo que a contratada terá para entregar o bem ou iniciar a execução do serviço após a publicação do contrato ou emissão da ordem de serviço.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Especifique o prazo de forma clara. Ex: <em>"O prazo para entrega dos equipamentos será de 30 (trinta) dias corridos, contados a partir do recebimento da Nota de Empenho."</em> ou <em>"O serviço deverá ser iniciado em até 5 (cinco) dias úteis após a publicação do contrato."</em></p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, V, afirma que os ETPs devem indicar aspectos relacionados à execução contratual, contendo prazos de início e término, bem como controles necessários ao acompanhamento da execução e à verificação do atendimento das necessidades da Administração.</div>`
-    },
-    "c3_10_tem_garantia": {
+    "c3_9_tem_garantia": {
         conceito: `<h4>Conceito</h4><p>A garantia técnica é a obrigação que o contratado assume de reparar ou substituir, às suas expensas, o objeto do contrato que apresente vícios ou defeitos. É um instrumento de segurança para a Administração.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Caso a garantia técnica seja recomendada para o objeto, selecione "Sim". Caso seja desnecessária, selecione "Não".</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O planejamento da contratação deve abordar as garantias exigidas e ofertadas.</div>`
     },
-    "c3_10_1_prazo_garantia": {
+    "c3_9_1_prazo_garantia": {
         conceito: `<h4>Conceito</h4><p>Define o período de tempo pelo qual o objeto contratado estará coberto pela garantia técnica do fornecedor.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Defina o prazo de garantia desejado. Ex: <em>"Garantia de 36 meses para todos os componentes de hardware."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "j", afirma que os ETPs devem conter a descrição completa da solução que melhor atenderá às necessidades da Administração, devendo indicar a previsão, caso necessário, de garantia técnica, com o respectivo período, para equipamentos e materiais da solução selecionada.</div>`
     },
-    "c3_10_2_garantia_mercado": {
+    "c3_9_2_garantia_mercado": {
         conceito: `<h4>Conceito</h4><p>Verifica se a exigência de garantia do TSE é compatível com o que os fornecedores usualmente oferecem para aquele tipo de produto ou serviço, evitando exigências que possam restringir a competição ou aumentar o preço.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Uma pesquisa prévia de mercado é necessária para responder a esta pergunta com segurança. Se a garantia exigida for superior à padrão, será necessário justificar.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 9º, I, "a", veda a inclusão de cláusulas que restrinjam o caráter competitivo da licitação. Uma exigência de garantia muito acima do padrão de mercado pode ser considerada restritiva.</div>`
     },
-    "c3_10_2_1_justificativa_garantia": {
+    "c3_9_2_1_justificativa_garantia": {
         conceito: `<h4>Conceito</h4><p>É a argumentação técnica e econômica que demonstra a necessidade e a vantajosidade de se exigir uma garantia superior àquela usualmente oferecida pelo mercado.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Se a garantia exigida for superior à padrão, justifique tecnicamente a necessidade, demonstrando a essencialidade do bem, a criticidade de sua operação e a economicidade da exigência a longo prazo (ex: evitar custos futuros com manutenção corretiva).</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Princípio da Motivação:</strong> Exigências que fogem ao padrão devem ser devidamente motivadas para demonstrar que não são arbitrárias ou restritivas à competição.</div>`
     },
-    "c3_11_tem_assistencia": {
+    "c3_10_tem_assistencia": {
         conceito: `<h4>Conceito</h4><p>A assistência técnica refere-se ao suporte fornecido pelo contratado para solucionar problemas, tirar dúvidas e garantir o bom funcionamento da solução durante a vigência do contrato.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Caso a assistência técnica seja necessária para que a solução atenda às necessidades do TSE, selecione "Sim". Caso contrário, selecione "Não".</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 18, § 1º, VII, indica que o ETP deve conter a "descrição da solução como um todo, inclusive das exigências relacionadas à manutenção e à assistência técnica, quando for o caso".</div>`
     },
-    "c3_11_1_prazo_assistencia": {
+    "c3_10_1_prazo_assistencia": {
         conceito: `<h4>Conceito</h4><p>Define o período em que a assistência técnica estará disponível para o TSE.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Defina o prazo da assistência técnica. Ex: <em>"Assistência técnica remota em dias úteis, no horário comercial, durante toda a vigência contratual."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 18, § 1º, VII, indica que a definição do prazo é parte essencial das "exigências relacionadas à manutenção e à assistência técnica".</div>`
     },
-    "c3_11_2_assistencia_mercado": {
+    "c3_10_2_assistencia_mercado": {
         conceito: `<h4>Conceito</h4><p>Verifica se as condições da assistência técnica exigida são compatíveis com o que o mercado usualmente oferece.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Uma pesquisa prévia de mercado é necessária para responder a esta pergunta com segurança. Se a assistência técnica exigida for superior à padrão, será necessário justificar.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 9º, I, "a", veda a inclusão de cláusulas que restrinjam o caráter competitivo da licitação. Uma exigência de garantia muito acima do padrão de mercado pode ser considerada restritiva.</div>`
     },
-    "c3_11_2_1_justificativa_assistencia": {
+    "c3_10_2_1_justificativa_assistencia": {
         conceito: `<h4>Conceito</h4><p>É a argumentação que demonstra a necessidade de um período de assistência técnica superior ao que o mercado normalmente oferece, com base na criticidade da solução para as atividades do TSE.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Justifique a necessidade com base na criticidade do serviço ou na ausência de equipe interna para suporte. Ex: <em>"A exigência de assistência técnica por um período superior ao usual de mercado é necessária para garantir o funcionamento ininterrupto e para garantir a curva de aprendizagem da equipe do TSE quanto à nova solução."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Princípio da Motivação:</strong> Exigências que fogem ao padrão devem ser devidamente motivadas.</div>`
     },
-    "c3_12_tem_normas_legais": {
-        conceito: `<h4>Conceito</h4><p>Refere-se à identificação de leis, decretos, resoluções ou portarias que regulamentam diretamente o objeto da contratação ou sua execução. Não é necessário indicar leis que se aplicam a todas as contratações, como a Lei nº 14.133/2021.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se existirem normas específicas. A LGPD, por exemplo, é uma norma legal aplicável a quase todas as contratações que envolvem dados.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "h", afirma que a descrição completa da solução deve contemplar a indicação das normas legais, regulamentares e convencionais com as quais a solução deve estar em conformidade.</div>`
-    },
-    "c3_12_1_quais_normas_legais": {
-        conceito: `<h4>Conceito</h4><p>É a listagem das normas legais específicas que se aplicam à solução.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Liste as normas legais específicas que se aplicam. Exemplos:</p><ul><li>Lei nº 13.709/2018 (Lei Geral de Proteção de Dados Pessoais - LGPD)</li><li>Resolução CNJ nº 396/2021 (Institui a Estratégia Nacional de Segurança da Informação no Poder Judiciário)</li></ul>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "h", afirma que a descrição completa da solução deve contemplar a indicação das normas legais, regulamentares e convencionais com as quais a solução deve estar em conformidade.</div>`
-    },
-    "c3_13_tem_normas_tecnicas": {
-        conceito: `<h4>Conceito</h4><p>Refere-se à identificação de normas técnicas (ABNT, ISO, etc.) que se aplicam diretamente à solução, visando qualidade, segurança e interoperabilidade.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se houver normas técnicas aplicáveis, como normas de segurança da informação, de acessibilidade, de qualidade de software, etc.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "h", afirma que a descrição completa da solução deve contemplar a indicação das normas legais, regulamentares e convencionais com as quais a solução deve estar em conformidade.</div>`
-    },
-    "c3_13_1_quais_normas_tecnicas": {
-        conceito: `<h4>Conceito</h4><p>É a listagem das normas técnicas específicas que se aplicam à contratação.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Liste as normas técnicas aplicáveis. Ex: <em>"Norma ABNT NBR ISO/IEC 27001 para gestão de segurança da informação."</em></p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "h", afirma que a descrição completa da solução deve contemplar a indicação das normas legais, regulamentares e convencionais com as quais a solução deve estar em conformidade.</div>`
-    },
-    "c3_14_tem_necessidade_experiencia": {
-        conceito: `<h4>Conceito</h4><p>Verifica se, para a correta execução do serviço, é indispensável que a equipe da contratada possua qualificações específicas, como certificações ou tempo mínimo de experiência.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" apenas se a qualificação ou experiência profissional da equipe for um fator crítico para o sucesso do contrato. Essa exigência deve ser relevante e não pode restringir indevidamente a competição.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "k", afirma que a descrição da solução inclui a indicação da formação e da experiência profissional da equipe.</div>`
-    },
-    "c3_14_1_cursos_experiencias_necessarios": {
-        conceito: `<h4>Conceito</h4><p>É o detalhamento das qualificações e da experiência profissional que serão exigidas da equipe técnica que executará o serviço.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Detalhe a formação e a experiência exigidos (ex: curso superior, certificações, tempo de experiência em determinada atividade). As exigências devem ser pertinentes ao objeto e não podem ser excessivas a ponto de direcionar a contratação.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "k", afirma que a descrição da solução inclui a indicação da formação e da experiência profissional da equipe.</div>`
-    },
-    "c3_15_tem_transicao_contratual": {
-        conceito: `<h4>Conceito</h4><p>A transição contratual é o processo planejado de passagem das responsabilidades, das informações e do conhecimento de uma empresa contratada (a que está saindo) para uma nova contratada.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se a transição do serviço da atual contratada para a futura for necessária.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "d", afirma que a descrição da solução escolhida deve indicar a eventual necessidade de transição contratual.</div><br><div class="fundamentacao-box"><strong>Boas Práticas de Gestão de Contratos:</strong> A transição contratual é uma ferramenta essencial para a gestão de riscos e a garantia da continuidade dos serviços.</div>`
-    },
-    "c3_15_1_justificativa_transicao": {
-        conceito: `<h4>Conceito</h4><p>É a argumentação que demonstra a necessidade da transição contratual.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Justifique a necessidade da transição. Ex: <em>"A transição é necessária para garantir que o serviço de manutenção de sistemas não sofra interrupção. As atividades incluirão: transferência de toda a documentação técnica atualizada, repasse das bases de dados e configurações, e acompanhamento da nova equipe por um período de 30 dias."</em></p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "d", afirma que a descrição da solução escolhida deve indicar a eventual necessidade de transição contratual.</div>`
-    },
-    "c3_16_tem_transferencia_conhecimento": {
+    "c3_11_tem_transferencia_conhecimento": {
         conceito: `<h4>Conceito</h4><p>A transferência de tecnologias ou de técnicas é o processo pelo qual a contratada repassa o conhecimento, a tecnologia, os processos e as técnicas utilizadas para a equipe interna do TSE. O objetivo é reduzir a dependência do fornecedor e aumentar a autonomia do Tribunal.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se for estratégico para o TSE absorver o conhecimento da solução contratada.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "e", afirma que a descrição da solução escolhida deve indicar se haverá a transferência de conhecimentos, de tecnologia e de técnicas referentes à execução contratual.</div>`
     },
-    "c3_16_1_procedimentos_transferencia": {
+    "c3_11_1_procedimentos_transferencia": {
         conceito: `<h4>Conceito</h4><p>É a descrição de como, na prática, a transferência de conhecimento ocorrerá.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Descreva os mecanismos que serão utilizados. Ex: <em>"A transferência de conhecimento ocorrerá por meio de: 1) Workshops mensais com a equipe técnica do TSE; 2) Elaboração de documentação técnica detalhada de toda a solução implantada; 3) Sessões de treinamento prático para a equipe interna."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "e", afirma que a descrição da solução escolhida deve indicar se haverá a transferência de conhecimentos, de tecnologia e de técnicas referentes à execução contratual.</div>`
     },
-    "c3_17_tem_capacitacao_servidores": {
+    "c3_12_tem_capacitacao_servidores": {
         conceito: `<h4>Conceito</h4><p>Verifica a necessidade de treinar os servidores do TSE para que possam utilizar a nova solução de forma correta e eficiente, garantindo o máximo aproveitamento do objeto e do atendimento da necessidade da Administração.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se a solução escolhida exigir capacitação dos servidores do TSE.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "e", afirma que a descrição da solução escolhida deve indicar se haverá a transferência de conhecimentos, de tecnologia e de técnicas referentes à execução contratual, o que pode incluir a capacitação.</div>`
     },
-    "c3_17_1_responsavel_capacitacao": {
+    "c3_12_1_responsavel_capacitacao": {
         conceito: `<h4>Conceito</h4><p>Define quem será o responsável por ministrar o treinamento aos servidores.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Indique se o treinamento será de responsabilidade do próprio TSE ou se deverá ser fornecido pela empresa contratada como parte do objeto.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "e", ao tratar da transferência de conhecimento, implicitamente abrange a definição de responsabilidades sobre essa transferência, incluindo a capacitação.</div>`
     },
-    "c3_18_tem_deslocamento_reembolso": {
-        conceito: `<h4>Conceito</h4><p>Verifica se a execução do contrato pode exigir deslocamentos eventuais de pessoal da contratada (viagens) que gerarão custos de passagens e diárias a serem reembolsados pelo TSE. A previsão desses custos é fundamental para a correta estimativa do valor total da contratação.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se houver previsão de viagens eventuais.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 14, IX, exige que o Termo de Referência seja elaborado com fundamento nos Estudos Técnicos Preliminares e aborde a previsão de serviço eventual a ser prestado em local distinto, mediante estimativa das despesas de aquisição de passagens aéreas e de diárias. Assim, considerando que o Estudo Técnico será a base para elaboração do Termo de Referência, é necessário indicar eventual necessidade de deslocamento.</div>`
-    },
-    "c3_18_1_estimativa_passagens": {
-        conceito: `<h4>Conceito</h4><p>É a estimativa da quantidade de passagens (aéreas e/ou terrestres) que serão necessárias durante a vigência do contrato.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Apresente uma estimativa justificada. Ex: <em>"Estima-se a necessidade de 4 trechos aéreos (2 viagens de ida e volta) para a vinda do especialista para a instalação inicial e para o treinamento presencial."</em></p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 14, IX, exige que o Termo de Referência seja elaborado com fundamento nos Estudos Técnicos Preliminares e aborde a previsão de serviço eventual a ser prestado em local distinto, mediante estimativa das despesas de aquisição de passagens aéreas e de diárias. Assim, considerando que o Estudo Técnico é o momento adequado de justificar exigências que serão inseridas no Termo de Referência, é necessário indicar a estimativa justificada da quantidade de passagens aéreas.</div>`
-    },
-    "c3_18_2_estimativa_diarias": {
-        conceito: `<h4>Conceito</h4><p>É a estimativa da quantidade de diárias necessárias para cobrir despesas de hospedagem, alimentação e locomoção do pessoal da contratada durante a vigência do contrato.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Apresente uma estimativa justificada. Ex: <em>"Estima-se a necessidade de 10 diárias, sendo 5 para cada uma das duas viagens previstas para o especialista."</em></p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 14, IX, exige que o Termo de Referência seja elaborado com fundamento nos Estudos Técnicos Preliminares e aborde a previsão de serviço eventual a ser prestado em local distinto, mediante estimativa das despesas de aquisição de passagens aéreas e de diárias. Assim, considerando que o Estudo Técnico é o momento adequado de justificar exigências que serão inseridas no Termo de Referência, é necessário indicar a estimativa justificada da quantidade de diárias.</div>`
-    },
-    "c3_19_tem_ordem_servico_inicial": {
-        conceito: `<h4>Conceito</h4><p>A Ordem de Serviço (OS) é o documento que autoriza formalmente o início da execução de um serviço ou da entrega de um bem. Prever a necessidade de uma OS dá flexibilidade à Administração para iniciar a execução do contrato em momento oportuno.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se o início da execução depender de uma autorização formal após a publicação do contrato.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 14, III, "c", 4, exige que o Termo de Referência seja elaborado com base nos Estudos Técnicos Preliminares, abordando a descrição completa da solução, incluindo a rotina de execução do contrato e sua ordem de execução, quando cabível. Considerando que o Estudo Técnico será a base para elaboração do Termo de Referência, é necessário indicar se haverá necessidade de prever no Termo de Referência a emissão de ordem de serviço inicial.</div>`
-    },
-    "c3_19_1_prazo_emissao_os": {
-        conceito: `<h4>Conceito</h4><p>Define o prazo máximo que o TSE terá para emitir a Ordem de Serviço (OS) após o início da vigência do contrato.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Defina um prazo razoável. Ex: <em>"Até 10 dias úteis."</em></p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 14, III, "c", 9, exige que o Termo de Referência seja elaborado com base nos Estudos Técnicos Preliminares, abordando a descrição completa da solução, incluindo a rotina de execução do contrato e a indicação do prazo de início e término de execução, considerando que a OS é um marco para o início da execução contratual.</div><br><div class="fundamentacao-box"><strong>Princípio da Segurança Jurídica:</strong> Estabelecer um prazo dá previsibilidade tanto para a Administração quanto para a contratada.</div>`
-    },
-    "c3_20_tem_contratacao_adicional": {
+    "c3_13_tem_contratacao_adicional": {
         conceito: `<h4>Conceito</h4><p>Identifica dependências. Ajuda a prever e planejar outras aquisições que serão necessárias para o pleno funcionamento da solução que foi escolhida ou para atender de forma completa a necessidade do órgão.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se a implementação desta solução exigirá a contratação de outros serviços ou materiais que não estão incluídos na solução escolhida.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 18, §1º, XI, exige que o Estudo Técnico Preliminar informe as contratações correlatas ou interdependentes.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, III, "b", exige a indicação dos serviços e materiais complementares não contemplados na solução.</div>`
     },
-    "c3_20_1_descricao_servicos_materiais": {
+    "c3_13_1_descricao_servicos_materiais": {
         conceito: `<h4>Conceito</h4><p>É a listagem das contratações complementares que serão necessárias para atender a necessidade.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Liste as contratações complementares. Ex: <em>"Será necessário contratar um serviço de armazenamento em nuvem para os vídeos gravados pela nova plataforma, pois o armazenamento incluso na solução é limitado."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 18, 1º, XI, exige que o Estudo Técnico Preliminar informe as contratações correlatas ou interdependentes.</div>`
     },
-    "c3_21_tem_ajuste_contratacoes": {
+    "c3_14_tem_ajuste_contratacoes": {
         conceito: `<h4>Conceito</h4><p>Verifica se a nova solução impactará outros contratos que o TSE já possui, exigindo aditivos ou alterações.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se a nova solução demandará ajuste em contratos já vigentes. Por exemplo, mais banda de internet, mais espaço de armazenamento em outro contrato, aumento ou redução de postos de trabalho de um ajuste específico etc.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Princípio do planejamento:</strong> A identificação de possíveis ajustes em contratos vigentes demonstra uma visão estratégica e de longo prazo, evitando a realização de contratações desconectadas.</div><br><div class="fundamentacao-box"><strong>Princípio da eficiência:</strong> Ao identificar a necessidade de ajustes em outros contratos, assegura-se que o conjunto de contratações do TSE seja integrado e que os recursos públicos sejam utilizados da forma mais eficiente possível.</div>`
     },
-    "c3_21_1_indicacao_contratos_ajuste": {
+    "c3_14_1_indicacao_contratos_ajuste": {
         conceito: `<h4>Conceito</h4><p>É a identificação dos contratos vigentes que precisarão ser ajustados.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Indique quais contratos vigentes precisarão ser ajustados e quais alterações serão necessárias. Exemplo: <em>"O Contrato nº XX/2022, de link de internet, precisará ter sua banda ampliada em 500Mbps para suportar o tráfego de vídeo da nova solução."</em></p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Princípio do planejamento:</strong> A identificação de possíveis ajustes em contratos vigentes demonstra uma visão estratégica e de longo prazo, evitando a realização de contratações desconectadas.</div><br><div class="fundamentacao-box"><strong>Princípio da eficiência:</strong> Ao identificar a necessidade de ajustes em outros contratos, assegura-se que o conjunto de contratações do TSE seja integrado e que os recursos públicos sejam utilizados da forma mais eficiente possível.</div>`
     },
-    "c3_22_tem_adequacoes_infra": {
-        conceito: `<h4>Conceito</h4><p>Verifica se a contratação exigirá reformas, adaptações elétricas, de refrigeração ou qualquer outra mudança na infraestrutura física do TSE.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se houver necessidade de qualquer tipo de obra ou adaptação física.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Boas práticas de gestão:</strong> A análise sobre eventual necessidade de adequações na infraestrutura do TSE assegura que a solução escolhida seja viável, coordenada e planejada.</div>`
-    },
-    "c3_22_1_descricao_adequacoes": {
-        conceito: `<h4>Conceito</h4><p>É a descrição das adequações de infraestrutura física necessárias.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Descreva as adequações necessárias. Ex: <em>"Será preciso instalar um novo ponto de rede e um circuito elétrico dedicado na sala X do anexo Y para a instalação do novo equipamento."</em></p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Boas práticas de gestão:</strong> A análise sobre eventual necessidade de adequações na infraestrutura do TSE assegura que a solução escolhida seja viável, coordenada e planejada.</div>`
-    },
-    "c3_23_impacto_acessibilidade": {
+    "c3_15_impacto_acessibilidade": {
         conceito: `<h4>Conceito</h4><p>Acessibilidade é o direito que garante à pessoa com deficiência ou com mobilidade reduzida viver de forma independente e exercer seus direitos de cidadania. Este campo avalia se a solução a ser contratada promove a acessibilidade ou, ao contrário, cria barreiras.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Avalie se a solução terá impacto (positivo ou negativo) na acessibilidade para pessoas com deficiência ou mobilidade reduzida, conforme a Resolução CNJ nº 401/2021.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O Art. 10, IV, “g”, 3 exige que o Estudo Técnico Preliminar indique o detalhamento dos estudos realizados que motivaram a escolha da solução, abordando a avaliação dos impactos na acessibilidade e o que será feito para garanti-la.</div><br><div class="fundamentacao-box"><strong>Lei n° 14.133/2021:</strong> O Art. 45, VI dispõe que as licitações para obras e serviços de engenharia devem respeitar as normas relativas à acessibilidade para pessoas com deficiência ou com mobilidade reduzida.</div><br><div class="fundamentacao-box"><strong>Resolução CNJ n° 401/2021:</strong> Dispõe sobre as diretrizes voltadas à acessibilidade e à inclusão de pessoas com deficiência nos órgãos do Poder Judiciário.</div>`
     },
-    "c3_23_1_acoes_acessibilidade": {
+    "c3_15_1_acoes_acessibilidade": {
         conceito: `<h4>Conceito</h4><p>É a descrição das ações e requisitos que serão incluídos no Termo de Referência para garantir a acessibilidade da solução escolhida.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
         comoPreencher: `<h4>Como Preencher</h4><p>Descreva as ações para garantir a acessibilidade. Exemplos:</p><ul><li>"A solução de software deverá seguir as diretrizes do Modelo de Acessibilidade em Governo Eletrônico (eMAG)."</li><li>"Os vídeos produzidos deverão ter opção de legendas automáticas e audiodescrição."</li><li>"A instalação física do equipamento respeitará as normas de circulação da ABNT NBR 9050."</li></ul>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Instrução Normativa TSE n° 11/2021:</strong> O Art. 10, IV, “g”, 3 exige que o Estudo Técnico Preliminar indique o detalhamento dos estudos realizados que motivaram a escolha da solução, abordando o que será feito para garantir a acessibilidade.</div><br><div class="fundamentacao-box"><strong>Resolução CNJ n° 401/2021:</strong> Dispõe sobre as diretrizes voltadas à acessibilidade e à inclusão de pessoas com deficiência nos órgãos do Poder Judiciário.</div>`
-    },
-    "c3_24_envolve_software": {
-        conceito: `<h4>Conceito</h4><p>Verifica se o objeto da contratação inclui a aquisição ou o licenciamento de software. Esta resposta afeta a forma como a contratação será classificada e contabilizada.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se o objeto for um software ou incluir um componente de software relevante.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Manual de Contabilidade Aplicada ao Setor Público:</strong> A análise sobre a natureza do software que compõe a solução é necessária para classificação contábil e orçamentária do objeto.</div>`
-    },
-    "c3_24_1_tipo_contratacao_software": {
-        conceito: `<h4>Conceito</h4><p>Define o modelo de licenciamento do software.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Especifique se será uma <strong>'Aquisição'</strong> (compra de licença perpétua, que se torna um ativo do TSE) ou <strong>'Locação'</strong> (pagamento de uma assinatura periódica pelo direito de uso, como em modelos SaaS - Software as a Service).</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Manual de Contabilidade Aplicada ao Setor Público:</strong> A análise sobre a natureza do software que compõe a solução é necessária para classificação contábil e orçamentária do objeto.</div><br><div class="fundamentacao-box"><strong>Norma Brasileira de Contabilidade TSP 08:</strong> Norma de Contabilidade aplicada ao Setor Público que aborda ativo intangível.</div>`
-    },
-    "c3_24_1_1_vida_util_software": {
-        conceito: `<h4>Conceito</h4><p>A vida útil de um ativo intangível é o período durante o qual se espera que ele gere benefícios econômicos ou de serviço. Essa estimativa é importante para fins de amortização contábil.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>No caso de aquisição de licença perpétua, estime o período em que o software se manterá funcional e relevante para o TSE. Se for indeterminado, indique. Para locação (assinatura), este campo não se aplica.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Norma Brasileira de Contabilidade TSP 08:</strong> Norma de Contabilidade aplicada ao Setor Público que aborda ativo intangível.</div>`
-    },
-    "c3_24_2_componente_hardware": {
-        conceito: `<h4>Conceito</h4><p>Verifica se o software é parte integrante de um equipamento (embarcado) que também está sendo adquirido. Um exemplo é o sistema operacional de um servidor ou o firmware de um equipamento de rede.</p><p><em>Nota: Este campo não se aplica ao ETP Simplificado.</em></p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Selecione "Sim" se o software não puder ser dissociado do hardware. Nesses casos, o tratamento contábil e de garantia pode ser unificado como um único bem.</p>`,
-        fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Manual de Contabilidade Aplicada ao Setor Público:</strong> A análise sobre a natureza do software que compõe a solução é necessária para classificação contábil e orçamentária do objeto.</div><br><div class="fundamentacao-box"><strong>Norma Brasileira de Contabilidade TSP 08:</strong> Norma de Contabilidade aplicada ao Setor Público que aborda ativo intangível.</div>`
     },
 
     // --- CAPÍTULO 4: VALOR ESTIMADO ---
@@ -553,7 +433,7 @@ window.manualContent = {
     },
     "c8_6_tem_vistoria": {
         conceito: `<h4>Conceito</h4><p>A vistoria é a visita do licitante ao local de execução dos serviços para que ele possa conhecer as particularidades do ambiente e, com isso, elaborar sua proposta de preços de forma mais precisa.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>A regra é que a vistoria seja desnecessária. Mas, ela pode ser facultada quando a avaliação prévia do local de execução dos serviços for imprescindível para elaboração das pospostas.</p>`,
+        comoPreencher: `<h4>Como Preencher</h4><p>A regra é que a vistoria seja desnecessária. Ela poderá ser facultada apenas quando imprescindível à elaboração das propostas, vedada sua exigência obrigatória, devendo o edital prever a possibilidade de substituição por declaração formal assinada, atestando o pleno conhecimento das condições da contratação.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O art. 63, §§ 2º e 3º, afirma que o licitante tem direito de realizar vistoria prévia quando a avaliação do local de execução for imprescindível para elaboração das propostas e o edital prever a necessidade de o licitante atestar que conhece o local e as condições de realização dos serviços. Nestes casos, o edital deverá prever a possibilidade de substituição da vistoria por declaração formal assinada atestando conhecimento pleno das condições e peculiaridades da contratação.</div><br><div class="fundamentacao-box"><strong>Instrução Normativa TSE nº 11/2021:</strong> O art. 15, II, “d” dispõe que a unidade demandante deve indicar os critérios para seleção do fornecedor, acompanhados das devidas justificativas, abordando a realização de vistoria dos locais da execução dos serviços, que é medida excepcional.</div>`
     },
     "c8_6_1_justificativa_vistoria": {

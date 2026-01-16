@@ -42,29 +42,18 @@ const conditionalFieldIds = {
     etp_auth: ['conditional_etp_auth_sei'],
     // Campos do Capítulo 1
     alinhamento_estrategico: ['conditional_c1_7_sim_alinhamento'],
-    previsao_pca_sim: ['conditional_c1_8_sim_pca'],
-    previsao_pca_nao: ['conditional_c1_8_nao_pca'],
     // Campos do Capítulo 3
     natureza_continua: ['conditional_c3_7_natureza_continua'],
     beneficios_vigencia: ['conditional_c3_8_1_beneficios_vigencia'],
-    garantia: ['conditional_c3_10_1_prazo_garantia', 'conditional_c3_10_2_garantia_mercado'],
-    justificativa_garantia: ['conditional_c3_10_2_1_justificativa_garantia'],
-    assistencia: ['conditional_c3_11_1_prazo_assistencia', 'conditional_c3_11_2_assistencia_mercado'],
-    justificativa_assistencia: ['conditional_c3_11_2_1_justificativa_assistencia'],
-    normas_legais: ['conditional_c3_12_normas_legais'],
-    normas_tecnicas: ['conditional_c3_13_normas_tecnicas'],
-    experiencia: ['conditional_c3_14_experiencia'],
-    transicao: ['conditional_c3_15_transicao'],
-    transferencia: ['conditional_c3_16_transferencia'],
-    capacitacao: ['conditional_c3_17_capacitacao'],
-    deslocamento: ['conditional_c3_18_deslocamento'],
-    ordem_servico: ['conditional_c3_19_ordem_servico'],
-    contratacao_adicional: ['conditional_c3_20_contratacao_adicional'],
-    ajuste_contratacoes: ['conditional_c3_21_ajuste_contratacoes'],
-    adequacoes_infra: ['conditional_c3_22_adequacoes_infra'],
-    acessibilidade: ['conditional_c3_23_acessibilidade'],
-    software_details: ['conditional_c3_24_software_detalhes'],
-    software_aquisicao: ['conditional_c3_24_1_aquisicao_detalhes'],
+    garantia: ['conditional_c3_9_1_prazo_garantia', 'conditional_c3_9_2_garantia_mercado'],
+    justificativa_garantia: ['conditional_c3_9_2_1_justificativa_garantia'],
+    assistencia: ['conditional_c3_10_1_prazo_assistencia', 'conditional_c3_10_2_assistencia_mercado'],
+    justificativa_assistencia: ['conditional_c3_10_2_1_justificativa_assistencia'],
+    transferencia: ['conditional_c3_11_transferencia'],
+    capacitacao: ['conditional_c3_12_capacitacao'],
+    contratacao_adicional: ['conditional_c3_13_contratacao_adicional'],
+    ajuste_contratacoes: ['conditional_c3_14_ajuste_contratacoes'],
+    acessibilidade: ['conditional_c3_15_acessibilidade'],
     // Campos do Capítulo 7
     parcelamento_grupo_unico: ['conditional_c7_grupo_unico'],
     parcelamento_grupos_separados: ['conditional_c7_grupos_separados'],
@@ -117,18 +106,17 @@ const dynamicItemConfigs = {
                 { id: 'd_orgaos_similares', label: 'Órgãos públicos ou entidades que tenham adotado solução similar', rows: 2 },
                 { id: 'e_analise_contratos', label: 'Análise dos contratos identificados', rows: 3 },
                 { id: 'f_servicos_materiais_complementares', label: 'Serviços e materiais não contemplados na solução', rows: 2 },
-                { id: 'g_infra_recursos_ti', label: 'Infraestrutura e recursos de TI necessários para viabilizar a solução', rows: 2 },
-                { id: 'h_custos_estimados', label: 'Estimativa preliminar de custos', rows: 2 },
-                { id: 'i_vantagens', label: 'Vantagens', rows: 3 },
-                { id: 'j_desvantagens', label: 'Desvantagens', rows: 3 }
+                { id: 'g_custos_estimados', label: 'Estimativa preliminar de custos', rows: 2 },
+                { id: 'h_vantagens', label: 'Vantagens', rows: 3 },
+                { id: 'i_desvantagens', label: 'Desvantagens', rows: 3 }
             ].map((f, idx) => `<div class="form-group"><label for="c2_sol${i}_${f.id}">2.${i}.${idx + 1} ${f.label}</label><div class="input-with-ai"><textarea id="c2_sol${i}_${f.id}" rows="${f.rows}"></textarea><button class="ai-help-button" data-action="get-ai-help" data-target-field="c2_sol${i}_${f.id}"><i class="fas fa-brain"></i></button></div></div>`).join('');
         },
         renumberFields: (item, newIndex) => {
-            const fieldSuffixes = ['a_descricao_sucinta', 'b_indicacao_servicos_materiais', 'c_potenciais_fornecedores', 'd_orgaos_similares', 'e_analise_contratos', 'f_servicos_materiais_complementares', 'g_infra_recursos_ti', 'h_custos_estimados', 'i_vantagens', 'j_desvantagens'];
+            const fieldSuffixes = ['a_descricao_sucinta', 'b_indicacao_servicos_materiais', 'c_potenciais_fornecedores', 'd_orgaos_similares', 'e_analise_contratos', 'f_servicos_materiais_complementares', 'g_custos_estimados', 'h_vantagens', 'i_desvantagens'];
             const labelsMap = [
                 "Título da solução", "Descrição resumida dos serviços e materiais", "Potenciais fornecedores ou fabricantes",
                 "Órgãos públicos ou entidades que tenham adotado solução similar", "Análise dos contratos identificados",
-                "Serviços e materiais não contemplados na solução", "Infraestrutura e recursos de TI necessários para viabilizar a solução",
+                "Serviços e materiais não contemplados na solução",
                 "Estimativa preliminar de custos", "Vantagens", "Desvantagens"
             ];
             item.querySelectorAll('.form-group').forEach((group, index) => {

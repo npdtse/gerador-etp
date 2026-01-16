@@ -40,6 +40,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FUNÇÕES AUXILIARES ---
 
+    // --- FUNÇÕES DE UX (Novas) ---
+
+    function updateContextBanner() {
+        const activeTab = document.querySelector('.tab-content.active');
+        const banner = document.getElementById('contextBanner');
+        if (!activeTab || !banner) return;
+
+        const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
+        banner.style.display = 'none'; // Começa oculto
+        banner.innerHTML = '';
+
+        // 1. Verifica se o CAPÍTULO INTEIRO está inativo no modo Simplificado
+        if (isSimplificado && activeTab.classList.contains('simplificado-hide')) {
+             banner.style.display = 'block';
+             banner.innerHTML = `<i class="fas fa-exclamation-triangle"></i> <strong>Atenção:</strong> Este capítulo não é aplicável ao <strong>ETP Simplificado</strong> e não precisa ser preenchido.`;
+             return;
+        }
+
+        // 2. Verifica se há ITENS ESPECÍFICOS ocultos dentro do capítulo ativo
+        let hasHiddenItems = false;
+        if (isSimplificado) {
+            // No modo simplificado, procura por itens marcados para sumir neste modo
+            if (activeTab.querySelector('.form-group.simplificado-hide')) hasHiddenItems = true;
+        } else {
+            // No modo completo, procura por itens marcados para sumir no completo (ex: item 1.4)
+            if (activeTab.querySelector('.form-group.completo-hide')) hasHiddenItems = true;
+        }
+
+        if (hasHiddenItems) {
+            const modeName = isSimplificado ? "ETP Simplificado" : "ETP Completo";
+            banner.style.display = 'block';
+            banner.innerHTML = `<i class="fas fa-info-circle"></i> <strong>Modo ${modeName}:</strong> Alguns itens desta seção foram ocultados automaticamente pois não são exigidos nesta modalidade.`;
+        }
+    }
+
     function formatSEIProcess(input) {
         let value = input.value.replace(/\D/g, '');
         let formattedValue = '';
@@ -146,7 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openTab(tabName) {
         const tabButton = document.querySelector(`.tab-button[data-tab-target="${tabName}"]`);
-        if (tabButton && (tabButton.classList.contains('inactive') || window.getComputedStyle(tabButton).display === 'none')) {
+        
+        // Alteração: Agora permitimos clicar em botões 'inactive' para ver o aviso de não aplicável.
+        // Apenas impedimos se o botão estiver realmente invisível (display: none).
+        if (tabButton && window.getComputedStyle(tabButton).display === 'none') {
             return;
         }
 
@@ -160,8 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const activeTab = document.getElementById(tabName);
-        activeTab.style.display = "block";
-        activeTab.classList.add("active");
+        if (activeTab) {
+            activeTab.style.display = "block";
+            activeTab.classList.add("active");
+        }
+        
         if (tabButton) tabButton.classList.add("active");
 
         if (tabName === 'consolidacao') {
@@ -172,6 +213,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         updateAllProgressBars();
+        
+        // Chamada para atualizar o banner de contexto no topo da aba
+        if (typeof updateContextBanner === "function") {
+            updateContextBanner();
+        }
     }
     
     function applyEtpMode(mode) {
@@ -198,6 +244,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         updateAllProgressBars();
         updateAllSummariesAndDropDowns();
+        
+        // Atualiza apenas o banner, sem gerar cicatrizes
+        updateContextBanner();
     }
 
     function updateChapterAccess() {
@@ -218,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isSimplificadoHidden = button.classList.contains('simplificado-hide');
             let shouldBeActive = false;
 
-            // 1. Regra Geral (Completo vs Simplificado)
+            // 1. Regra Geral de Ativação (Lógica)
             if (enableCompleto) {
                 shouldBeActive = true;
             } else if (enableSimplificado) {
@@ -229,20 +278,25 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // 2. Regra Específica do Capítulo 9 (Registro de Preços)
             if (button.dataset.tabTarget === 'cap9') {
-                // O Cap 9 só aparece se o ETP estiver ativo (Completo ou Simplificado) E se for SRP
-                if (shouldBeActive && isSrpSelected) {
-                    shouldBeActive = true;
-                    button.style.display = 'flex'; // Garante que o botão apareça
+                // O Cap 9 só aparece se o ETP estiver ativo E se for SRP.
+                // Se não for SRP, ele some totalmente (display: none).
+                if ((enableCompleto || enableSimplificado) && isSrpSelected) {
+                    button.style.display = 'flex';
+                    shouldBeActive = true; 
                 } else {
+                    button.style.display = 'none';
                     shouldBeActive = false;
-                    button.style.display = 'none'; // Esconde o botão se não for SRP
                 }
+            } else {
+                // Para os demais capítulos (incluindo os ocultos no simplificado),
+                // o botão permanece visível na barra lateral, mas fica 'inactive' se não for aplicável.
+                button.style.display = 'flex';
             }
 
             button.classList.toggle('inactive', !shouldBeActive);
         });
         
-        // Se nenhum modo estiver habilitado, volta para identificação
+        // Se nenhum modo estiver habilitado (início), volta para identificação
         if (!enableCompleto && !enableSimplificado) {
             const activeTab = document.querySelector('.tab-content.active');
             if (activeTab && activeTab.id !== 'identificacao') {
@@ -250,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Aplica estilos visuais do modo
+        // Aplica estilos visuais do modo e gera cicatrizes
         if (enableSimplificado) {
             applyEtpMode('simplificado');
         } else {
@@ -322,9 +376,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!showSeiField) {
                 clearField('etp_auth_sei_number');
             }
-        } else if (groupKey === 'previsao_pca') {
-            toggle(conditionalFieldIds.previsao_pca_sim, selectedValue === 'sim');
-            toggle(conditionalFieldIds.previsao_pca_nao, selectedValue === 'nao');
         } else if (groupKey === 'parcelamento') {
             toggle(conditionalFieldIds.parcelamento_grupo_unico, selectedValue === 'grupo_unico');
             toggle(conditionalFieldIds.parcelamento_grupos_separados, selectedValue === 'grupos_separados');
@@ -347,7 +398,6 @@ document.addEventListener('DOMContentLoaded', () => {
             toggle(conditionalFieldIds.pessoa_fisica_proibicao, selectedValue === 'nao');
         } else {
             const condition = (groupKey.includes('justificativa')) ? selectedValue === 'nao'
-                            : (groupKey === 'software_aquisicao') ? selectedValue === 'aquisicao'
                             : selectedValue === 'sim';
             toggle(conditionalFieldIds[groupKey], condition);
         }
@@ -381,7 +431,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const isSimplificadoMode = document.body.classList.contains('etp-simplificado-mode');
+        
+        // Se estiver no modo Simplificado, ignora itens marcados para esconder no simplificado
         if (isSimplificadoMode && input.closest('.simplificado-hide')) {
+            return false;
+        }
+
+        // Se estiver no modo Completo (NÃO simplificado), ignora itens marcados para esconder no completo
+        if (!isSimplificadoMode && input.closest('.completo-hide')) {
             return false;
         }
 
@@ -842,9 +899,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 rowsData.push([
                     item.getAttribute('data-solucao-index') + "ª",
                     descricaoEl.value.trim(),
-                    item.querySelector(`textarea[id$="_h_custos_estimados"]`)?.value.trim() || 'N/P',
-                    item.querySelector(`textarea[id$="_i_vantagens"]`)?.value.trim() || 'N/P',
-                    item.querySelector(`textarea[id$="_j_desvantagens"]`)?.value.trim() || 'N/P',
+                    item.querySelector(`textarea[id$="_g_custos_estimados"]`)?.value.trim() || 'N/P',
+                    item.querySelector(`textarea[id$="_h_vantagens"]`)?.value.trim() || 'N/P',
+                    item.querySelector(`textarea[id$="_i_desvantagens"]`)?.value.trim() || 'N/P',
                 ]);
             }
         });

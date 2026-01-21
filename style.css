@@ -876,26 +876,50 @@ table.consolidation-sub-table td:first-child {
 
 /* --- ESTILOS PARA O MODO ETP SIMPLIFICADO --- */
 
-.etp-simplificado-mode .simplificado-hide {
-    display: none !important;
+/* 1. Campos individuais dentro de uma aba ativa ficam "apagados" */
+.etp-simplificado-mode .form-group.simplificado-hide {
+    display: block !important; /* Garante que o campo apareça, mas apenas o campo */
+    opacity: 0.45;
+    filter: grayscale(100%);
+    pointer-events: none;
+    user-select: none;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 10px;
+    border: 1px dashed #dee2e6;
 }
 
+/* 2. Capítulos INTEIROS (abas) continuam respeitando a lógica de exibição do JS */
+/* Se a aba inteira for simplificado-hide, ela NÃO deve ser forçada a aparecer */
+.etp-simplificado-mode .tab-content.simplificado-hide {
+    display: none; 
+}
+/* Apenas a aba que possuir a classe .active será mostrada pelo JavaScript */
+.etp-simplificado-mode .tab-content.active {
+    display: block !important;
+}
+
+/* 3. Ajuste do Menu Lateral: Garante que botões inativos mantenham o cursor de bloqueio */
+.tab-nav .tab-button.inactive {
+    cursor: not-allowed !important;
+    pointer-events: none; /* Bloqueia cliques a nível de sistema */
+    opacity: 0.5;
+    background-color: #f1f3f5;
+    color: #adb5bd;
+}
+
+/* 4. Casos especiais: Wrappers do item 3.1 */
 .etp-simplificado-mode #c3_1_completo_wrapper.form-group {
     display: none !important;
 }
-
 .etp-simplificado-mode #c3_1_simplificado_wrapper.form-group {
     display: block !important;
 }
 
 /* --- Regras para ocultar itens no modo Completo (exclusivos do Simplificado) --- */
-
-/* Por padrão (Modo Completo), o item fica oculto */
 .completo-hide {
     display: none !important;
 }
-
-/* Quando o Modo Simplificado está ativo, o item aparece */
 .etp-simplificado-mode .completo-hide {
     display: block !important;
 }
@@ -1182,10 +1206,10 @@ table.consolidation-sub-table td:first-child {
 }
 
 .tab-nav .tab-button.inactive:hover {
-    background-color: #f1f3f5; /* Remove efeito de hover */
-    color: #adb5bd;
+    background-color: #f1f3f5 !important;
+    color: #adb5bd !important;
 }
 
 .tab-nav .tab-button.inactive i {
-    color: #adb5bd;
+    color: #adb5bd !important;
 }

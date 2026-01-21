@@ -182,9 +182,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function openTab(tabName) {
         const tabButton = document.querySelector(`.tab-button[data-tab-target="${tabName}"]`);
         
-        // Alteração: Agora permitimos clicar em botões 'inactive' para ver o aviso de não aplicável.
-        // Apenas impedimos se o botão estiver realmente invisível (display: none).
-        if (tabButton && window.getComputedStyle(tabButton).display === 'none') {
+        // NOVO: Impede a abertura se o botão não existir, estiver invisível ou estiver desativado (inactive)
+        if (!tabButton || window.getComputedStyle(tabButton).display === 'none' || tabButton.classList.contains('inactive')) {
             return;
         }
 
@@ -203,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             activeTab.classList.add("active");
         }
         
-        if (tabButton) tabButton.classList.add("active");
+        tabButton.classList.add("active");
 
         if (tabName === 'consolidacao') {
             updateConsolidatedETP();
@@ -214,7 +213,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         updateAllProgressBars();
         
-        // Chamada para atualizar o banner de contexto no topo da aba
         if (typeof updateContextBanner === "function") {
             updateContextBanner();
         }
@@ -223,6 +221,14 @@ document.addEventListener('DOMContentLoaded', () => {
     function applyEtpMode(mode) {
         const isSimplificado = mode === 'simplificado';
         document.body.classList.toggle('etp-simplificado-mode', isSimplificado);
+
+        // Bloqueia apenas os campos de formulário desativados, sem afetar as abas
+        document.querySelectorAll('.form-group.simplificado-hide').forEach(container => {
+            const inputs = container.querySelectorAll('input, textarea, select, button');
+            inputs.forEach(input => {
+                input.disabled = isSimplificado;
+            });
+        });
 
         const completoWrapper = document.getElementById('c3_1_completo_wrapper');
         const simplificadoWrapper = document.getElementById('c3_1_simplificado_wrapper');
@@ -237,15 +243,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
+        // Se o usuário estiver em uma aba que acabou de ser desativada na sidebar, volta para identificação
         const activeNavButton = document.querySelector('.tab-button.active');
-        if (activeNavButton && window.getComputedStyle(activeNavButton).display === 'none') {
+        if (activeNavButton && activeNavButton.classList.contains('inactive')) {
             openTab('identificacao');
         }
         
         updateAllProgressBars();
         updateAllSummariesAndDropDowns();
-        
-        // Atualiza apenas o banner, sem gerar cicatrizes
         updateContextBanner();
     }
 
@@ -255,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hasAuth = document.getElementById('etp_auth_sim')?.checked;
         const seiNumber = document.getElementById('etp_auth_sei_number')?.value.trim();
         
-        // Verifica se SRP foi selecionado no Capítulo 8
+        // Verifica se SRP foi selecionado no Capítulo 8 (item 8.2)
         const isSrpSelected = document.getElementById('c8_2_procedimentos_auxiliares')?.value === 'srp';
 
         const enableCompleto = isCompleto;
@@ -267,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isSimplificadoHidden = button.classList.contains('simplificado-hide');
             let shouldBeActive = false;
 
-            // 1. Regra Geral de Ativação (Lógica)
+            // 1. Regra Geral de Ativação
             if (enableCompleto) {
                 shouldBeActive = true;
             } else if (enableSimplificado) {
@@ -277,34 +282,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             // 2. Regra Específica do Capítulo 9 (Registro de Preços)
+            // Só é ativado e clicável se (Completo ou Simplificado Habilitado) E for SRP.
             if (button.dataset.tabTarget === 'cap9') {
-                // O Cap 9 só aparece se o ETP estiver ativo E se for SRP.
-                // Se não for SRP, ele some totalmente (display: none).
                 if ((enableCompleto || enableSimplificado) && isSrpSelected) {
                     button.style.display = 'flex';
                     shouldBeActive = true; 
                 } else {
+                    // Se não for SRP, o botão some para não confundir o usuário
                     button.style.display = 'none';
                     shouldBeActive = false;
                 }
             } else {
-                // Para os demais capítulos (incluindo os ocultos no simplificado),
-                // o botão permanece visível na barra lateral, mas fica 'inactive' se não for aplicável.
                 button.style.display = 'flex';
             }
 
+            // Aplica o estado visual e lógico de inatividade
             button.classList.toggle('inactive', !shouldBeActive);
         });
         
-        // Se nenhum modo estiver habilitado (início), volta para identificação
-        if (!enableCompleto && !enableSimplificado) {
-            const activeTab = document.querySelector('.tab-content.active');
-            if (activeTab && activeTab.id !== 'identificacao') {
-                openTab('identificacao');
-            }
+        // Se a aba atual tornou-se inativa, volta para identificação
+        const activeNavButton = document.querySelector('.tab-button.active');
+        if (activeNavButton && activeNavButton.classList.contains('inactive')) {
+            openTab('identificacao');
         }
         
-        // Aplica estilos visuais do modo e gera cicatrizes
+        // Aplica o estilo visual dos campos (cinza/desabilitado)
         if (enableSimplificado) {
             applyEtpMode('simplificado');
         } else {
@@ -423,21 +425,20 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- LÓGICA DE PROGRESSO ---
 
     function isFieldLogicallyActive(input) {
-        const navButton = input.closest('.tab-content')?.id
-            ? document.querySelector(`.tab-button[data-tab-target="${input.closest('.tab-content').id}"]`)
-            : null;
-        if (navButton && navButton.classList.contains('inactive')) {
-            return false;
+        const tabContent = input.closest('.tab-content');
+        if (tabContent) {
+            const navButton = document.querySelector(`.tab-button[data-tab-target="${tabContent.id}"]`);
+            if (navButton && navButton.classList.contains('inactive')) {
+                return false;
+            }
         }
 
         const isSimplificadoMode = document.body.classList.contains('etp-simplificado-mode');
         
-        // Se estiver no modo Simplificado, ignora itens marcados para esconder no simplificado
         if (isSimplificadoMode && input.closest('.simplificado-hide')) {
             return false;
         }
 
-        // Se estiver no modo Completo (NÃO simplificado), ignora itens marcados para esconder no completo
         if (!isSimplificadoMode && input.closest('.completo-hide')) {
             return false;
         }
@@ -1771,21 +1772,140 @@ document.addEventListener('DOMContentLoaded', () => {
 			saveAs(blob, `${filename}.docx`);
 		});
 	}
+
+    function generateDocxText(data, etpTitle, filename) {
+        const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
+        const mainDocTitle = isSimplificado ? "Estudo Técnico Preliminar Simplificado" : "Estudo Técnico Preliminar";
+
+        const FONT_STYLE = { font: "Helvetica", color: "000000" };
+        const INDENT_LEVEL_1 = 400; // Recuo para respostas normais
+        const INDENT_LEVEL_2 = 800; // Recuo para subitens dinâmicos
+
+        const docChildren = [];
+
+        // 1. Cabeçalho Principal
+        docChildren.push(new Paragraph({
+            alignment: "center",
+            spacing: { after: 100 },
+            children: [new TextRun({ text: mainDocTitle, size: 44, bold: true, ...FONT_STYLE })]
+        }));
+        docChildren.push(new Paragraph({
+            alignment: "center",
+            spacing: { after: 600 },
+            children: [new TextRun({ text: etpTitle, size: 32, ...FONT_STYLE })]
+        }));
+
+        data.forEach(chapter => {
+            // 2. Título do Capítulo (H1)
+            docChildren.push(new Paragraph({
+                spacing: { before: 400, after: 200 },
+                heading: HeadingLevel.HEADING_1,
+                children: [new TextRun({ text: chapter.title, size: 28, bold: true, ...FONT_STYLE })]
+            }));
+
+            // 3. Caso o capítulo não se aplique (Simplificado)
+            if (chapter.isSkipped) {
+                docChildren.push(new Paragraph({
+                    spacing: { after: 200 },
+                    children: [new TextRun({ text: "Não se aplica ao ETP Simplificado.", size: 22, italics: true, ...FONT_STYLE })]
+                }));
+                return;
+            }
+
+            // 4. Tabelas de Resumo (Mantidas como tabela conforme solicitado)
+            if (chapter.summaryTable) {
+                docChildren.push(new Paragraph({
+                    spacing: { before: 200, after: 100 },
+                    children: [new TextRun({ text: chapter.summaryTable.title, size: 22, bold: true, italics: true, ...FONT_STYLE })]
+                }));
+
+                const summaryHeader = new TableRow({
+                    tableHeader: true,
+                    children: chapter.summaryTable.headers.map(headerText => new TableCell({
+                        children: [new Paragraph({ children: [new TextRun({ text: headerText, bold: true, size: 18, ...FONT_STYLE })] })],
+                        shading: { fill: "EAEAEA" }
+                    })),
+                });
+
+                const summaryRows = chapter.summaryTable.rows.map(row => new TableRow({
+                    children: row.map(cellText => new TableCell({
+                        children: [new Paragraph({ children: [new TextRun({ text: cellText, size: 18, ...FONT_STYLE })] })]
+                    })),
+                }));
+
+                docChildren.push(new Table({ 
+                    rows: [summaryHeader, ...summaryRows], 
+                    width: { size: 100, type: WidthType.PERCENTAGE } 
+                }));
+            }
+
+            // 5. Campos de Texto
+            chapter.fields.filter(field => field.status !== 'inactive').forEach(field => {
+                if (field.isDynamic) {
+                    // Título do Item Dinâmico (Ex: 1ª Solução)
+                    docChildren.push(new Paragraph({
+                        spacing: { before: 300, after: 100 },
+                        children: [new TextRun({ text: field.label, size: 24, bold: true, italics: true, ...FONT_STYLE })]
+                    }));
+
+                    // Subcampos do item dinâmico (Ex: Descrição, Custos...)
+                    field.subFields.forEach(sub => {
+                        docChildren.push(new Paragraph({
+                            spacing: { before: 150 },
+                            indent: { left: INDENT_LEVEL_1 },
+                            children: [new TextRun({ text: sub.label, bold: true, size: 22, ...FONT_STYLE })]
+                        }));
+                        docChildren.push(new Paragraph({
+                            spacing: { after: 150 },
+                            indent: { left: INDENT_LEVEL_2 },
+                            children: [new TextRun({ text: sub.value, size: 22, ...FONT_STYLE })]
+                        }));
+                    });
+                } else {
+                    // Campo Normal (Label acima, valor abaixo)
+                    docChildren.push(new Paragraph({
+                        spacing: { before: 250 },
+                        children: [new TextRun({ text: field.label, bold: true, size: 22, ...FONT_STYLE })]
+                    }));
+                    docChildren.push(new Paragraph({
+                        spacing: { after: 100 },
+                        indent: { left: INDENT_LEVEL_1 },
+                        children: [new TextRun({ text: field.value, size: 22, ...FONT_STYLE })]
+                    }));
+                }
+            });
+        });
+
+        const doc = new Document({
+            sections: [{
+                properties: { page: { margin: { top: 1440, bottom: 1440, left: 1440, right: 1440 } } },
+                children: docChildren,
+            }],
+        });
+
+        Packer.toBlob(doc).then(blob => {
+            saveAs(blob, `${filename}.docx`);
+        });
+    }
     
     function exportETP(format) {
-		const data = getConsolidatedDataForExport();
-		if (data.length === 0) {
-			alert("Não há dados preenchidos para exportar.");
-			return;
-		}
+        const data = getConsolidatedDataForExport();
+        if (data.length === 0) {
+            alert("Não há dados preenchidos para exportar.");
+            return;
+        }
 
-		const etpTitle = document.getElementById('etp_titulo')?.value || "ETP sem título";
-		const filename = etpTitle.replace(/[^\w\s.-]/gi, '').replace(/\s+/g, '_').substring(0, 50);
+        const etpTitle = document.getElementById('etp_titulo')?.value || "ETP sem título";
+        const filename = etpTitle.replace(/[^\w\s.-]/gi, '').replace(/\s+/g, '_').substring(0, 50);
 
-		if (format === 'docx') {
-			generateDocx(data, etpTitle, filename);
-		}
-	}
+        if (format === 'docx') {
+            // Chama o gerador original (Tabela)
+            generateDocx(data, etpTitle, filename);
+        } else if (format === 'docx-text') {
+            // Chama o novo gerador (Texto)
+            generateDocxText(data, etpTitle, filename);
+        }
+    }
 
     function downloadFile(filename, content, mimeType) {
         const element = document.createElement('a');

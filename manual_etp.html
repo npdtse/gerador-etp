@@ -254,6 +254,78 @@
             font-size: 0.95em;
         }
 
+        /* --- CONFIGURAÇÃO DE IMPRESSÃO ESTÁVEL (A4) --- */
+        @media print {
+            /* Define o tamanho da página explicitamente */
+            @page {
+                size: A4;
+                margin: 1.5cm;
+            }
+
+            header, .manual-toolbar, .side-nav, #beta-alert-banner, .close-button {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 11pt;
+            }
+
+            .container-manual {
+                display: block !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .main-content {
+                width: 100% !important;
+            }
+
+            section {
+                page-break-before: always;
+                border: none !important;
+                box-shadow: none !important;
+                padding: 0 !important;
+            }
+
+            /* Ajuste da Capa para Medidas de Papel */
+            #print-cover {
+                display: block !important;
+                text-align: center;
+                padding-top: 5cm;
+                height: 25cm; /* Medida fixa aproximada do A4 */
+                page-break-after: always;
+            }
+
+            /* Ajuste do Sumário */
+            #print-toc {
+                display: block !important;
+                page-break-after: always;
+            }
+
+            #print-toc h2 {
+                font-size: 20pt;
+                color: #004080;
+                border-bottom: 1px solid #004080;
+                margin-bottom: 1cm;
+            }
+
+            #print-toc ul { list-style: none; padding: 0; }
+            #print-toc li { margin-bottom: 6pt; }
+            #print-toc a { 
+                text-decoration: none; 
+                color: #0056b3 !important; 
+            }
+            #print-toc ul ul { padding-left: 20pt; }
+        }
+
+        /* Esconde na tela do PC, aparece só no papel */
+        #print-cover, #print-toc {
+            display: none;
+        }
+
     </style>
 </head>
 <body>
@@ -264,7 +336,6 @@
     </header>
 
     <!-- BARRA DE FERRAMENTAS DE EXPORTAÇÃO -->
-    <!--
     <div class="manual-toolbar">
         <button class="export-button" id="export-pdf-button">
             <i class="fas fa-file-pdf"></i>
@@ -272,7 +343,6 @@
             <i class="fas fa-spinner spinner"></i>
         </button>
     </div>
-    -->
 
     <div class="container-manual">
         <nav class="side-nav" id="side-nav">
@@ -445,6 +515,27 @@
 
         <!-- MUDANÇA 1: Adicionado um ID ao <main> para ser o alvo da exportação -->
         <main class="main-content" id="main-content-to-print">
+
+            <!-- CAPA PARA O PDF -->
+            <div id="print-cover">
+                <p style="font-weight: bold; font-size: 18pt;">TRIBUNAL SUPERIOR ELEITORAL</p>
+                <p style="font-size: 14pt;">Secretaria de Administração</p>
+                <div style="margin-top: 5cm;">
+                    <h1 style="font-size: 36pt; color: #004080; margin-bottom: 0;">Manual de Elaboração de</h1>
+                    <h1 style="font-size: 32pt; color: #004080; margin-bottom: 0;">Estudos Técnicos Preliminares</h1>
+                </div>
+                <div style="margin-top: 5cm; font-size: 12pt;">
+                    <p>Brasília - DF</p>
+                    <p>Versão de Referência: 21/01/2026</p>
+                </div>
+            </div>
+
+            <!-- SUMÁRIO PARA O PDF -->
+            <div id="print-toc">
+                <h2>Sumário</h2>
+                <div id="toc-content"></div>
+            </div>
+
             <section id="introducao">
                 <h2><i class="fa-solid fa-flag"></i>Introdução: O ETP como Alicerce da Contratação</h2>
                 <article class="campo-manual">
@@ -2922,69 +3013,53 @@
     </div>
 
 <script>
-    // Script para navegação lateral inteligente (Scroll Spy)
     document.addEventListener('DOMContentLoaded', () => {
+    
+        // --- 1. NAVEGAÇÃO (SCROLL SPY) ---
         const sections = document.querySelectorAll('section[id], article.campo-manual[id]');
         const navLinks = document.querySelectorAll('.side-nav a');
-        const sideNav = document.getElementById('side-nav');
 
-        const onScroll = () => {
-            let currentSectionId = '';
-            
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                if (window.scrollY >= sectionTop - 80) { // 80px offset
-                    currentSectionId = section.getAttribute('id');
-                }
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(s => {
+                if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
             });
-
             navLinks.forEach(link => {
                 link.classList.remove('active');
-                if (link.getAttribute('href') === `#${currentSectionId}`) {
-                    link.classList.add('active');
-                    // Scroll nav to keep active link in view
-                    const linkTop = link.offsetTop;
-                    const navScrollTop = sideNav.scrollTop;
-                    const navHeight = sideNav.clientHeight;
-                    if (linkTop < navScrollTop || linkTop > navScrollTop + navHeight - 40) {
-                        sideNav.scrollTo({ top: linkTop - navHeight / 2, behavior: 'smooth' });
-                    }
-                }
+                if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
             });
-        };
+        });
 
-        window.addEventListener('scroll', onScroll);
-    });
+        // --- 2. EXPORTAÇÃO PDF (CORRIGIDA) ---
+        document.getElementById('export-pdf-button').addEventListener('click', () => {
+            const tocContent = document.getElementById('toc-content');
+            const sideMenu = document.querySelector('.side-nav ul');
 
-    // Script para exportação em PDF
-    document.getElementById('export-pdf-button').addEventListener('click', () => {
-        const button = document.getElementById('export-pdf-button');
-        const buttonText = button.querySelector('.button-text');
-        const spinner = button.querySelector('.spinner');
-        
-        // Altera o estado do botão para indicar processamento
-        button.disabled = true;
-        buttonText.textContent = 'Gerando PDF...';
-        spinner.style.display = 'inline-block';
+            if (sideMenu && tocContent) {
+                tocContent.innerHTML = '';
+                const clonedMenu = sideMenu.cloneNode(true);
+                
+                // Limpa estilos que podem dar erro no PDF
+                clonedMenu.querySelectorAll('*').forEach(el => {
+                    el.classList.remove('active');
+                    if (el.tagName === 'A') {
+                        el.style.color = '#0056b3';
+                        el.style.textDecoration = 'none';
+                    }
+                });
+                tocContent.appendChild(clonedMenu);
+            }
 
-        // O alvo da exportação é o conteúdo principal, excluindo a navegação lateral
-        const element = document.getElementById('main-content-to-print');
-        const opt = {
-            margin:       [0.5, 0.5, 0.5, 0.5], // margens em polegadas [top, left, bottom, right]
-            filename:     'Manual_Elaboracao_ETP_TSE.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-        };
-
-        // Chama a biblioteca e, ao finalizar, restaura o botão
-        html2pdf().set(opt).from(element).save().then(() => {
-            button.disabled = false;
-            buttonText.textContent = 'Exportar para PDF';
-            spinner.style.display = 'none';
+            // Aguarda 300ms para garantir que o DOM renderizou o sumário
+            setTimeout(() => {
+                window.print();
+            }, 300);
         });
     });
 </script>
+
+<!-- Container invisível para montagem do PDF -->
+<div id="pdf-template"></div>
 
 </body>
 </html>

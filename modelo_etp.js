@@ -22,14 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
  * Cria a interface administrativa sobreposta ao app.
  */
 function initAdminOverlay() {
-    // Esconde o conteúdo principal visualmente para focar na ferramenta admin
     const elementsToHide = ['.tab-container', '.etp-toolbar', 'header', '#beta-alert-banner'];
     elementsToHide.forEach(selector => {
         const el = document.querySelector(selector);
         if (el) el.style.display = 'none';
     });
 
-    // Cria overlay Admin
     const overlay = document.createElement('div');
     Object.assign(overlay.style, {
         position: 'fixed', top: '0', left: '0', width: '100%', height: '100%',
@@ -38,17 +36,23 @@ function initAdminOverlay() {
     });
 
     overlay.innerHTML = `
-        <div style="background: white; padding: 50px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; max-width: 600px; border: 1px solid #dee2e6;">
+        <div style="background: white; padding: 50px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); text-align: center; width: 100%; max-width: 500px; border: 1px solid #dee2e6;">
             <div style="font-size: 52px; color: #004080; margin-bottom: 25px;"><i class="fas fa-file-word"></i></div>
-            <h1 style="color: #333; font-size: 26px; margin-bottom: 15px; font-weight: 600;">Gerador de Modelo de ETP</h1>
-            <p style="color: #666; margin-bottom: 35px; line-height: 1.6; font-size: 1.05em;">
-                Esta ferramenta gera um arquivo <strong>.docx</strong> contendo a estrutura completa do ETP, 
-                incluindo campos dinâmicos e regras condicionais.<br><br>
-                O documento gerado serve como <em>template</em> para preenchimento manual no SEI.
+            <h1 style="color: #333; font-size: 24px; margin-bottom: 15px; font-weight: 600;">Gerador de Modelos de ETP</h1>
+            <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">
+                Selecione qual estrutura de modelo em branco você deseja baixar.
             </p>
-            <button id="btnGenTemplate" style="padding: 14px 28px; font-size: 16px; background-color: #0056b3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; transition: background 0.2s;">
-                <i class="fas fa-download" style="margin-right: 8px;"></i> Baixar Modelo em Branco
-            </button>
+            
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <button id="btnGenCompleto" style="padding: 14px; font-size: 16px; background-color: #0056b3; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; transition: 0.2s;">
+                    <i class="fas fa-download" style="margin-right: 8px;"></i> Modelo ETP Completo
+                </button>
+                
+                <button id="btnGenSimplificado" style="padding: 14px; font-size: 16px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: 500; transition: 0.2s;">
+                    <i class="fas fa-download" style="margin-right: 8px;"></i> Modelo ETP Simplificado
+                </button>
+            </div>
+
             <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
                 <a href="${window.location.pathname}" style="color: #6c757d; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 5px;">
                     <i class="fas fa-arrow-left"></i> Voltar ao Aplicativo
@@ -59,10 +63,9 @@ function initAdminOverlay() {
 
     document.body.appendChild(overlay);
 
-    const btn = document.getElementById('btnGenTemplate');
-    btn.addEventListener('click', generateBlankTemplate);
-    btn.addEventListener('mouseover', () => btn.style.backgroundColor = '#004080');
-    btn.addEventListener('mouseout', () => btn.style.backgroundColor = '#0056b3');
+    // Listeners para os botões
+    document.getElementById('btnGenCompleto').addEventListener('click', () => generateBlankTemplate(false));
+    document.getElementById('btnGenSimplificado').addEventListener('click', () => generateBlankTemplate(true));
 }
 
 /**
@@ -95,103 +98,61 @@ function buildReverseConditionalMap() {
 /**
  * Função Principal de Geração do DOCX
  */
-function generateBlankTemplate() {
+function generateBlankTemplate(isSimplificado) {
     const { Document, Packer, Paragraph, TextRun, HeadingLevel, BorderStyle, AlignmentType } = window.docx;
 
-    // --- Definições de Estilo (Baseado no script.js e identidade visual oficial) ---
-    const FONT_FAMILY = "Calibri"; // Padrão oficial
+    const FONT_FAMILY = "Calibri";
     const COLOR_BLACK = "000000";
-    const COLOR_DARK_GRAY = "333333";
-    const COLOR_LIGHT_GRAY = "666666";
+    const docTitleText = isSimplificado ? "ESTUDO TÉCNICO PRELIMINAR SIMPLIFICADO" : "ESTUDO TÉCNICO PRELIMINAR";
 
     const styles = {
-        docTitle: { 
-            size: 32, // 16pt
-            bold: true, 
-            font: FONT_FAMILY, 
-            color: COLOR_BLACK,
-            allCaps: true
-        },
-        chapterTitle: { 
-            size: 28, // 14pt
-            bold: true, 
-            font: FONT_FAMILY, 
-            color: COLOR_BLACK, // Mantendo preto para sobriedade
-            spacing: { before: 600, after: 200 } // Espaço maior antes de novos capítulos
-        },
-        dynamicSectionTitle: {
-            size: 24, // 12pt
-            bold: true,
-            font: FONT_FAMILY,
-            color: COLOR_DARK_GRAY,
-            italics: true,
-            spacing: { before: 300, after: 100 }
-        },
-        fieldLabel: { 
-            size: 22, // 11pt
-            bold: true, 
-            font: FONT_FAMILY, 
-            color: COLOR_BLACK, 
-            spacing: { before: 300, after: 100 } 
-        },
-        instruction: { 
-            size: 20, // 10pt
-            italics: true, 
-            color: COLOR_LIGHT_GRAY, 
-            font: FONT_FAMILY,
-            spacing: { after: 100 }
-        },
-        placeholder: { 
-            size: 22, // 11pt
-            color: "555555", 
-            italics: true,
-            font: FONT_FAMILY 
-        },
-        optionText: {
-            size: 22, // 11pt
-            font: FONT_FAMILY,
-            color: COLOR_BLACK
-        }
+        docTitle: { size: 32, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, allCaps: true },
+        chapterTitle: { size: 28, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, spacing: { before: 600, after: 200 } },
+        dynamicSectionTitle: { size: 24, bold: true, font: FONT_FAMILY, color: "333333", italics: true, spacing: { before: 300, after: 100 } },
+        fieldLabel: { size: 22, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, spacing: { before: 300, after: 100 } },
+        instruction: { size: 20, italics: true, color: "666666", font: FONT_FAMILY, spacing: { after: 100 } },
+        placeholder: { size: 22, color: "555555", italics: true, font: FONT_FAMILY }
     };
 
     const docChildren = [];
     const conditionalMap = buildReverseConditionalMap();
 
-    // 1. Cabeçalho do Documento
+    // Título Principal
     docChildren.push(new Paragraph({
-        children: [new TextRun({ text: "ESTUDO TÉCNICO PRELIMINAR", ...styles.docTitle })],
-        alignment: AlignmentType.CENTER,
-        spacing: { after: 100 }
-    }));
-    
-    docChildren.push(new Paragraph({
-        children: [new TextRun({ text: "(Modelo para Preenchimento)", size: 24, font: FONT_FAMILY, italics: true })],
+        children: [new TextRun({ text: docTitleText, ...styles.docTitle })],
         alignment: AlignmentType.CENTER,
         spacing: { after: 600 }
     }));
 
-    // Ordem das abas para varredura
     const tabOrder = ['identificacao', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6', 'cap7', 'cap8', 'cap9', 'anexos'];
 
     tabOrder.forEach(tabId => {
         const tabEl = document.getElementById(tabId);
         if (!tabEl) return;
 
-        // --- Título do Capítulo ---
+        const isChapterHiddenInSimplificado = tabEl.classList.contains('simplificado-hide');
+
+        // Título do Capítulo
         const h2 = tabEl.querySelector('h2');
         if (h2) {
-            let titleText = h2.innerText.trim();
-            // Remove ícones do FontAwesome se tiverem sido capturados no innerText
-            titleText = titleText.replace(/^\W+/, ''); 
-
+            let titleText = h2.innerText.trim().replace(/^\W+/, '');
             docChildren.push(new Paragraph({
                 children: [new TextRun({ text: titleText, ...styles.chapterTitle })],
                 heading: HeadingLevel.HEADING_1,
-                border: { bottom: { color: "BFBFBF", space: 4, value: "single", size: 6 } } // Linha separadora
+                border: { bottom: { color: "BFBFBF", space: 4, value: "single", size: 6 } }
             }));
         }
 
-        // --- Configuração para Itens Dinâmicos (Soluções, Riscos, etc) ---
+        // Se o capítulo inteiro não se aplica ao simplificado
+        if (isSimplificado && isChapterHiddenInSimplificado) {
+            docChildren.push(new Paragraph({
+                children: [new TextRun({ text: "Nota: Este capítulo não se aplica ao ETP Simplificado.", ...styles.instruction })],
+                spacing: { after: 400 }
+            }));
+            return; // Pula para o próximo capítulo
+        }
+
+        // Blocos Dinâmicos (apenas se o capítulo estiver ativo)
         const dynamicContainers = {
             'cap2': { id: 'solucoes_mercado_container', config: dynamicItemConfigs.solucao, label: "Solução de Mercado" },
             'cap5': { id: 'contratacoes_anteriores_container', config: dynamicItemConfigs.contratacao, label: "Contratação Anterior" },
@@ -201,153 +162,77 @@ function generateBlankTemplate() {
 
         if (dynamicContainers[tabId]) {
             const dynData = dynamicContainers[tabId];
-            
-            // Bloco de instrução para item dinâmico
             docChildren.push(new Paragraph({
-                children: [
-                    new TextRun({ text: `Exemplo de Preenchimento: ${dynData.label}`, ...styles.dynamicSectionTitle })
-                ],
-                border: { left: { color: "E0E0E0", space: 10, value: "single", size: 20 } }, // Barra lateral para destacar
-                spacing: { before: 300, after: 100 }
+                children: [new TextRun({ text: `Exemplo de Bloco Dinâmico: ${dynData.label}`, ...styles.dynamicSectionTitle })],
+                spacing: { before: 300 }
             }));
             
-            docChildren.push(new Paragraph({
-                children: [new TextRun({ text: `(Nota: Copie e cole este bloco abaixo para cada ${dynData.label.toLowerCase()} adicional necessária)`, ...styles.instruction })],
-                spacing: { after: 300 }
-            }));
-
-            // Gera HTML temporário para extrair labels do template do config.js
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = dynData.config.template(1, false);
-            
-            // Extrai labels do template
-            const dynLabels = tempDiv.querySelectorAll('label');
-            dynLabels.forEach(lbl => {
-                let labelText = lbl.textContent.trim();
-                
-                // Remove a numeração fixa "1." para ficar genérico (ex: "2.1.1" vira "Título...")
-                // Ou mantém para referência. Vamos manter a referência "X.1" para indicar hierarquia.
-                labelText = labelText.replace(/\d+\.1\./, 'X.'); 
+            tempDiv.querySelectorAll('label').forEach(lbl => {
+                docChildren.push(new Paragraph({ children: [new TextRun({ text: lbl.textContent.trim().replace(/\d+\.1\./, 'X.'), ...styles.fieldLabel })] }));
+                docChildren.push(new Paragraph({ children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })], spacing: { after: 200 } }));
+            });
+        }
 
+        // Campos Estáticos
+        tabEl.querySelectorAll('.form-group').forEach(group => {
+            if (group.closest('.solucao-item, .risco-item, .contratacao-item, .anexo-item')) return;
+            
+            // Filtro de itens desativados no Simplificado
+            if (isSimplificado && group.classList.contains('simplificado-hide')) return;
+
+            // Tratamento especial para o item 3.1
+            if (tabId === 'cap3') {
+                const isCompletoWrapper = group.id === 'c3_1_completo_wrapper';
+                const isSimplificadoWrapper = group.id === 'c3_1_simplificado_wrapper';
+                if (isSimplificado && isCompletoWrapper) return;
+                if (!isSimplificado && isSimplificadoWrapper) return;
+            }
+
+            const label = group.querySelector('label') || group.querySelector('.label-with-help label');
+            if (!label) return;
+
+            docChildren.push(new Paragraph({
+                children: [new TextRun({ text: label.textContent.trim(), ...styles.fieldLabel })],
+                keepNext: true
+            }));
+
+            // Nota condicional
+            if (group.classList.contains('conditional-field')) {
+                const triggerName = conditionalMap[group.id] || "resposta anterior";
                 docChildren.push(new Paragraph({
-                    children: [new TextRun({ text: labelText, ...styles.fieldLabel })]
+                    children: [new TextRun({ text: `Nota: Preencher somente se necessário conforme a opção "${triggerName}".`, ...styles.instruction })]
                 }));
+            }
+
+            // Opções (Radio/Checkbox) ou Placeholder
+            const options = group.querySelectorAll('.checkbox-group label');
+            if (options.length > 0) {
+                options.forEach(opt => {
+                    docChildren.push(new Paragraph({
+                        children: [
+                            new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
+                            new TextRun({ text: opt.textContent.trim(), size: 22, font: FONT_FAMILY })
+                        ],
+                        indent: { left: 400 }
+                    }));
+                });
+            } else {
                 docChildren.push(new Paragraph({
                     children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })],
                     spacing: { after: 200 }
                 }));
-            });
-
-            // Adiciona um separador visual de fim de bloco dinâmico
-            docChildren.push(new Paragraph({
-                children: [new TextRun({ text: "--- Fim do Bloco Dinâmico ---", size: 18, color: "999999" })],
-                alignment: AlignmentType.CENTER,
-                spacing: { before: 300, after: 400 }
-            }));
-        }
-
-        // --- Campos Estáticos do Capítulo ---
-        const formGroups = Array.from(tabEl.querySelectorAll('.form-group'));
-        
-        formGroups.forEach(group => {
-            // Ignora se estiver dentro de um item dinâmico (já tratados acima)
-            if (group.closest('.solucao-item, .risco-item, .contratacao-item, .anexo-item')) return;
-
-            const label = group.querySelector('label');
-            let fieldTitle = "";
-            let isConditional = false;
-            let conditionText = "";
-
-            // Verifica Condicional
-            if (group.id && group.classList.contains('conditional-field')) {
-                isConditional = true;
-                const triggerName = conditionalMap[group.id];
-                conditionText = triggerName 
-                    ? `Preencher somente se a resposta anterior referente a "${triggerName}" indicar necessidade.` 
-                    : "Campo de preenchimento condicional.";
-            }
-
-            // Extração do Título do Campo
-            if (label) {
-                const inputId = label.getAttribute('for');
-                const input = document.getElementById(inputId);
-                
-                // Lógica para Radios/Checkboxes: Pegar o título do grupo, não da opção
-                if (input && (input.type === 'radio' || input.type === 'checkbox')) {
-                    if (!group.classList.contains('checkbox-group')) {
-                         // É um label de opção isolada (ex: "Sim"), tentamos pegar o pai
-                         const parentLabel = group.closest('.form-group')?.querySelector('.label-with-help label');
-                         if(parentLabel) fieldTitle = parentLabel.textContent.trim();
-                         else fieldTitle = label.textContent.trim(); // Fallback
-                    }
-                } else {
-                    fieldTitle = label.textContent.trim();
-                }
-            } else {
-                // Tenta pegar texto de label-with-help (comum no seu HTML)
-                const labelWithHelp = group.querySelector('.label-with-help label');
-                if (labelWithHelp) fieldTitle = labelWithHelp.textContent.trim();
-            }
-
-            if (fieldTitle) {
-                // 1. Label do Campo
-                docChildren.push(new Paragraph({
-                    children: [new TextRun({ text: fieldTitle, ...styles.fieldLabel })],
-                    keepNext: true // Tenta manter o label junto com a resposta/opções
-                }));
-
-                // 2. Instrução Condicional (se houver)
-                if (isConditional) {
-                    docChildren.push(new Paragraph({
-                        children: [new TextRun({ text: `Nota: ${conditionText}`, ...styles.instruction })]
-                    }));
-                }
-
-                // 3. Área de Resposta (Opções ou Texto)
-                const radioGroup = group.querySelector('.checkbox-group');
-                
-                if (radioGroup) {
-                    // Se for múltipla escolha, lista as opções visualmente
-                    const options = radioGroup.querySelectorAll('label');
-                    options.forEach(opt => {
-                        docChildren.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }), // Caixa vazia simulada
-                                new TextRun({ text: opt.textContent.trim(), ...styles.optionText })
-                            ],
-                            indent: { left: 400 }, // Recuo para parecer lista
-                            spacing: { after: 100 }
-                        }));
-                    });
-                } else {
-                    // Campo de Texto Livre
-                    docChildren.push(new Paragraph({
-                        children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })],
-                        spacing: { after: 200 }
-                    }));
-                }
             }
         });
     });
 
-    // --- Geração e Download ---
-    const doc = new Document({
+    const filename = isSimplificado ? "Modelo_ETP_Simplificado.docx" : "Modelo_ETP_Completo.docx";
+
+    Packer.toBlob(new Document({
         sections: [{
-            properties: {
-                page: {
-                    margin: {
-                        top: 1440, // 1 polegada (twips)
-                        bottom: 1440,
-                        left: 1134, // ~2 cm
-                        right: 1134
-                    }
-                }
-            },
+            properties: { page: { margin: { top: 1440, bottom: 1440, left: 1134, right: 1134 } } },
             children: docChildren,
         }],
-    });
-
-    Packer.toBlob(doc).then(blob => {
-        saveAs(blob, "Modelo_ETP_Em_Branco.docx");
-    });
+    })).then(blob => saveAs(blob, filename));
 }

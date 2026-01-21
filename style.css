@@ -874,11 +874,15 @@ table.consolidation-sub-table td:first-child {
     width: 30%;
 }
 
-/* --- ESTILOS PARA O MODO ETP SIMPLIFICADO --- */
+/* --- ESTILOS DE ITENS DESATIVADOS POR MODO (SIMÉTRICO) --- */
 
-/* 1. Campos individuais dentro de uma aba ativa ficam "apagados" */
-.etp-simplificado-mode .form-group.simplificado-hide {
-    display: block !important; /* Garante que o campo apareça, mas apenas o campo */
+/* Regra unificada: 
+   - No modo simplificado, apaga os itens .simplificado-hide
+   - No modo completo, apaga os itens .completo-hide (ex: item 1.4)
+*/
+.etp-simplificado-mode .form-group.simplificado-hide,
+body:not(.etp-simplificado-mode) .form-group.completo-hide {
+    display: block !important; /* Garante visibilidade */
     opacity: 0.45;
     filter: grayscale(100%);
     pointer-events: none;
@@ -887,28 +891,16 @@ table.consolidation-sub-table td:first-child {
     border-radius: 4px;
     padding: 10px;
     border: 1px dashed #dee2e6;
+    transition: all 0.3s ease;
 }
 
-/* 2. Capítulos INTEIROS (abas) continuam respeitando a lógica de exibição do JS */
-/* Se a aba inteira for simplificado-hide, ela NÃO deve ser forçada a aparecer */
-.etp-simplificado-mode .tab-content.simplificado-hide {
-    display: none; 
-}
-/* Apenas a aba que possuir a classe .active será mostrada pelo JavaScript */
-.etp-simplificado-mode .tab-content.active {
-    display: block !important;
-}
-
-/* 3. Ajuste do Menu Lateral: Garante que botões inativos mantenham o cursor de bloqueio */
-.tab-nav .tab-button.inactive {
+/* Garante o cursor de bloqueio nos campos internos */
+.etp-simplificado-mode .form-group.simplificado-hide *,
+body:not(.etp-simplificado-mode) .form-group.completo-hide * {
     cursor: not-allowed !important;
-    pointer-events: none; /* Bloqueia cliques a nível de sistema */
-    opacity: 0.5;
-    background-color: #f1f3f5;
-    color: #adb5bd;
 }
 
-/* 4. Casos especiais: Wrappers do item 3.1 */
+/* --- Lógica específica para os wrappers do item 3.1 (Troca de Input) --- */
 .etp-simplificado-mode #c3_1_completo_wrapper.form-group {
     display: none !important;
 }
@@ -916,12 +908,9 @@ table.consolidation-sub-table td:first-child {
     display: block !important;
 }
 
-/* --- Regras para ocultar itens no modo Completo (exclusivos do Simplificado) --- */
-.completo-hide {
+/* Garantia de que o wrapper simplificado do 3.1 não apareça no modo completo */
+body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
     display: none !important;
-}
-.etp-simplificado-mode .completo-hide {
-    display: block !important;
 }
 
 /* --- NOVOS ESTILOS: MODAL DE CONFIGURAÇÕES DE IA --- */

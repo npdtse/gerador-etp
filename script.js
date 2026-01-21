@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hasHiddenItems) {
             const modeName = isSimplificado ? "ETP Simplificado" : "ETP Completo";
             banner.style.display = 'block';
-            banner.innerHTML = `<i class="fas fa-info-circle"></i> <strong>Modo ${modeName}:</strong> Alguns itens desta seção foram ocultados automaticamente pois não são exigidos nesta modalidade.`;
+            banner.innerHTML = `<i class="fas fa-info-circle"></i> <strong>Modo ${modeName}:</strong> Um ou mais itens desta seção foram ocultados automaticamente, pois não são exigidos nesta modalidade.`;
         }
     }
 
@@ -222,14 +222,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const isSimplificado = mode === 'simplificado';
         document.body.classList.toggle('etp-simplificado-mode', isSimplificado);
 
-        // Bloqueia apenas os campos de formulário desativados, sem afetar as abas
+        // 1. Gerencia itens que devem ser desativados no modo SIMPLIFICADO
         document.querySelectorAll('.form-group.simplificado-hide').forEach(container => {
-            const inputs = container.querySelectorAll('input, textarea, select, button');
-            inputs.forEach(input => {
+            container.querySelectorAll('input, textarea, select, button').forEach(input => {
                 input.disabled = isSimplificado;
             });
         });
 
+        // 2. Gerencia itens que devem ser desativados no modo COMPLETO (ex: item 1.4)
+        document.querySelectorAll('.form-group.completo-hide').forEach(container => {
+            container.querySelectorAll('input, textarea, select, button').forEach(input => {
+                // Se NÃO for simplificado (ou seja, modo Completo), o campo deve ser desabilitado
+                input.disabled = !isSimplificado; 
+            });
+        });
+
+        // 3. Gerencia a troca de inputs do item 3.1
         const completoWrapper = document.getElementById('c3_1_completo_wrapper');
         const simplificadoWrapper = document.getElementById('c3_1_simplificado_wrapper');
 
@@ -243,7 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Se o usuário estiver em uma aba que acabou de ser desativada na sidebar, volta para identificação
+        // 4. Se o usuário estiver em uma aba que se tornou inativa, volta para identificação
         const activeNavButton = document.querySelector('.tab-button.active');
         if (activeNavButton && activeNavButton.classList.contains('inactive')) {
             openTab('identificacao');

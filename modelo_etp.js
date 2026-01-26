@@ -68,33 +68,81 @@ function initAdminOverlay() {
     document.getElementById('btnGenSimplificado').addEventListener('click', () => generateBlankTemplate(true));
 }
 
+// --- DICIONÁRIO DE NOMES AMIGÁVEIS ---
+// Mapeia o ID do grupo condicional (do config.js) para o texto que aparecerá na nota do DOCX.
+const friendlyConditionNames = {
+    // Identificação
+    "etp_tipo": "tipo de ETP",
+    "etp_auth": "autorização de ETP simplificado",
+    // Cap 1
+    "alinhamento_estrategico": "alinhamento estratégico",
+    // Cap 3
+    "natureza_continua": "natureza contínua",
+    "beneficios_vigencia": "benefícios da vigência",
+    "garantia": "garantia",
+    "justificativa_garantia": "justificativa de garantia fora do padrão",
+    "assistencia": "assistência técnica",
+    "justificativa_assistencia": "justificativa de assistência fora do padrão",
+    "transferencia": "transferência de conhecimento",
+    "capacitacao": "capacitação",
+    "contratacao_adicional": "contratação adicional",
+    "ajuste_contratacoes": "ajuste em contratações",
+    "acessibilidade": "acessibilidade",
+    // Cap 7
+    "parcelamento": "forma de parcelamento", // Nome genérico para o select pai
+    "parcelamento_grupo_unico": "agrupamento único",
+    "parcelamento_grupos_separados": "grupos separados",
+    // Cap 8
+    "modalidade_contratacao": "modalidade da contratação",
+    "contratacao_dispensa": "dispensa de licitação",
+    "contratacao_inexigibilidade": "inexigibilidade de licitação",
+    "dispensa_outra_hipotese": "outra hipótese de dispensa",
+    "qualificacao_tecnica": "qualificação técnica",
+    "amostras": "amostras ou prova de conceito",
+    "vistoria": "vistoria",
+    "confidencialidade": "confidencialidade",
+    "subcontratacao": "subcontratação",
+    "consorcio": "formação de consórcio", // Select pai
+    "consorcio_proibicao": "proibição de consórcio",
+    "consorcio_permissao": "permissão de consórcio",
+    "limite_consorcio": "limite de consorciadas",
+    "cooperativas": "participação de cooperativas",
+    "cooperativas_proibicao": "proibição de cooperativas",
+    "estrangeiras": "empresas estrangeiras",
+    "estrangeiras_proibicao": "proibição de estrangeiras",
+    "estrangeiras_permissao": "permissão de estrangeiras",
+    "margem_preferencia": "margem de preferência",
+    "pessoa_fisica": "participação de pessoa física",
+    "pessoa_fisica_proibicao": "proibição de pessoa física",
+    // Cap 9
+    "quantitativo_inferior": "quantitativo inferior",
+    "precos_diferentes": "preços diferentes",
+    "mais_de_um_fornecedor": "mais de um fornecedor",
+    "adesao_futura": "adesão futura",
+    "prorrogacao_ata": "prorrogação da ata",
+    "renovacao_quantidades_ata": "renovação de quantidades"
+};
+
 /**
- * Mapeia os IDs dos campos condicionais de volta para o nome do campo que os ativa.
+ * Retorna o nome amigável da condição que ativa um determinado campo alvo.
+ * @param {string} targetFieldId - O ID do div conditional que está sendo exibido.
  */
-function buildReverseConditionalMap() {
-    const map = {};
-    if (typeof conditionalFieldIds !== 'undefined') {
-        for (const [triggerId, targets] of Object.entries(conditionalFieldIds)) {
-            targets.forEach(targetId => {
-                let triggerLabelText = triggerId;
-                
-                // Tenta achar inputs com esse name (radio) ou id (select)
-                const triggerEl = document.getElementById(triggerId) || document.querySelector(`input[name="${triggerId}"]`);
-                if (triggerEl) {
-                    // Busca o label mais próximo
-                    const labelEl = triggerEl.closest('.form-group')?.querySelector('label');
-                    if (labelEl) {
-                        // Limpa o texto do label (remove numeração se houver para ficar mais limpo)
-                        triggerLabelText = labelEl.textContent.trim().replace(/^\d+(\.\d+)*\s*/, '');
-                    }
-                }
-                map[targetId] = triggerLabelText;
-            });
+function getFriendlyTriggerText(targetFieldId) {
+    if (typeof conditionalFieldIds === 'undefined') return "opção anterior";
+
+    // Procura qual chave em conditionalFieldIds contém o targetFieldId
+    for (const [triggerKey, targets] of Object.entries(conditionalFieldIds)) {
+        if (targets.includes(targetFieldId)) {
+            // Se encontrou, retorna o nome amigável ou a própria chave se não houver tradução
+            return friendlyConditionNames[triggerKey] || triggerKey;
         }
     }
-    return map;
+    return "opção anterior";
 }
 
+/**
+ * Função Principal de Geração do DOCX
+ */
 /**
  * Função Principal de Geração do DOCX
  */
@@ -103,21 +151,64 @@ function generateBlankTemplate(isSimplificado) {
 
     const FONT_FAMILY = "Calibri";
     const COLOR_BLACK = "000000";
-    const docTitleText = isSimplificado ? "ESTUDO TÉCNICO PRELIMINAR SIMPLIFICADO" : "ESTUDO TÉCNICO PRELIMINAR";
+    const docTitleText = isSimplificado ? "ESTUDO TÉCNICO PRELIMINAR SIMPLIFICADO" : "ESTUDO TÉCNICO PRELIMINAR COMPLETO";
 
+    // Definição de Estilos com Espaçamentos Ajustados
     const styles = {
-        docTitle: { size: 32, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, allCaps: true },
-        chapterTitle: { size: 28, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, spacing: { before: 600, after: 200 } },
-        dynamicSectionTitle: { size: 24, bold: true, font: FONT_FAMILY, color: "333333", italics: true, spacing: { before: 300, after: 100 } },
-        fieldLabel: { size: 22, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, spacing: { before: 300, after: 100 } },
-        instruction: { size: 20, italics: true, color: "666666", font: FONT_FAMILY, spacing: { after: 100 } },
-        placeholder: { size: 22, color: "555555", italics: true, font: FONT_FAMILY }
+        docTitle: { 
+            size: 32, 
+            bold: true, 
+            font: FONT_FAMILY, 
+            color: COLOR_BLACK, 
+            allCaps: true 
+        },
+        chapterTitle: { 
+            size: 28, 
+            bold: true, 
+            font: FONT_FAMILY, 
+            color: COLOR_BLACK, 
+            // AUMENTADO: before: 1200 para duplicar o espaço antes do capítulo
+            spacing: { before: 1400, after: 600 } 
+        },
+        dynamicSectionTitle: { 
+            size: 24, 
+            bold: true, 
+            font: FONT_FAMILY, 
+            color: "333333", 
+            italics: true, 
+            spacing: { before: 800, after: 400 } 
+        },
+        fieldLabel: { 
+            size: 22, 
+            bold: true, 
+            font: FONT_FAMILY, 
+            color: COLOR_BLACK, 
+            // AUMENTADO: before: 600 cria uma linha em branco antes de cada item/subitem
+            spacing: { before: 600, after: 300 } 
+        },
+        instruction: { 
+            size: 20, 
+            italics: true, 
+            color: "666666", 
+            font: FONT_FAMILY, 
+            spacing: { after: 100 } 
+        },
+        placeholder: { 
+            size: 22, 
+            color: "555555", 
+            italics: true, 
+            font: FONT_FAMILY 
+        },
+        optionText: { 
+            size: 22, 
+            color: COLOR_BLACK, 
+            font: FONT_FAMILY 
+        }
     };
 
     const docChildren = [];
-    const conditionalMap = buildReverseConditionalMap();
 
-    // Título Principal
+    // Título Principal do Documento
     docChildren.push(new Paragraph({
         children: [new TextRun({ text: docTitleText, ...styles.docTitle })],
         alignment: AlignmentType.CENTER,
@@ -132,10 +223,10 @@ function generateBlankTemplate(isSimplificado) {
 
         const isChapterHiddenInSimplificado = tabEl.classList.contains('simplificado-hide');
 
-        // Título do Capítulo
+        // 1. Título do Capítulo (O espaçamento 'before' duplicado está no estilo chapterTitle)
         const h2 = tabEl.querySelector('h2');
         if (h2) {
-            let titleText = h2.innerText.trim().replace(/^\W+/, '');
+            let titleText = h2.innerText.trim().replace(/^\W+/, ''); // Remove ícones/espaços iniciais
             docChildren.push(new Paragraph({
                 children: [new TextRun({ text: titleText, ...styles.chapterTitle })],
                 heading: HeadingLevel.HEADING_1,
@@ -143,7 +234,7 @@ function generateBlankTemplate(isSimplificado) {
             }));
         }
 
-        // Se o capítulo inteiro não se aplica ao simplificado
+        // 2. Se o capítulo inteiro não se aplica ao simplificado
         if (isSimplificado && isChapterHiddenInSimplificado) {
             docChildren.push(new Paragraph({
                 children: [new TextRun({ text: "Nota: Este capítulo não se aplica ao ETP Simplificado.", ...styles.instruction })],
@@ -152,7 +243,7 @@ function generateBlankTemplate(isSimplificado) {
             return; // Pula para o próximo capítulo
         }
 
-        // Blocos Dinâmicos (apenas se o capítulo estiver ativo)
+        // 3. Blocos Dinâmicos (Soluções, Riscos, etc.)
         const dynamicContainers = {
             'cap2': { id: 'solucoes_mercado_container', config: dynamicItemConfigs.solucao, label: "Solução de Mercado" },
             'cap5': { id: 'contratacoes_anteriores_container', config: dynamicItemConfigs.contratacao, label: "Contratação Anterior" },
@@ -164,19 +255,49 @@ function generateBlankTemplate(isSimplificado) {
             const dynData = dynamicContainers[tabId];
             docChildren.push(new Paragraph({
                 children: [new TextRun({ text: `Exemplo de Bloco Dinâmico: ${dynData.label}`, ...styles.dynamicSectionTitle })],
-                spacing: { before: 300 }
+                spacing: { before: 200 }
             }));
             
+            // Renderiza um template "em branco" do item dinâmico para pegar os labels
             const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = dynData.config.template(1, false);
-            tempDiv.querySelectorAll('label').forEach(lbl => {
-                docChildren.push(new Paragraph({ children: [new TextRun({ text: lbl.textContent.trim().replace(/\d+\.1\./, 'X.'), ...styles.fieldLabel })] }));
-                docChildren.push(new Paragraph({ children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })], spacing: { after: 200 } }));
+            tempDiv.innerHTML = dynData.config.template(1, false); 
+            
+            // Itera sobre os SUBITENS do bloco dinâmico
+            tempDiv.querySelectorAll('.form-group').forEach(group => {
+                const lbl = group.querySelector('label');
+                if(lbl) {
+                    const labelText = lbl.textContent.trim().replace(/\d+\.1\./, 'X.');
+                    // O estilo 'fieldLabel' aqui garante o espaçamento antes de cada subitem
+                    docChildren.push(new Paragraph({ 
+                        children: [new TextRun({ text: labelText, ...styles.fieldLabel })],
+                        keepNext: true // Mantém título junto com a resposta
+                    }));
+                    
+                    // Verifica se dentro do template há selects
+                    const select = group.querySelector('select');
+                    if (select) {
+                        Array.from(select.options).forEach(opt => {
+                            if (opt.value) { 
+                                docChildren.push(new Paragraph({
+                                    children: [
+                                        new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
+                                        new TextRun({ text: opt.text, ...styles.optionText })
+                                    ],
+                                    indent: { left: 400 }
+                                }));
+                            }
+                        });
+                    } else {
+                        // Caso contrário (textarea/input), placeholder padrão
+                        docChildren.push(new Paragraph({ children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })], spacing: { after: 200 } }));
+                    }
+                }
             });
         }
 
-        // Campos Estáticos
+        // 4. Campos Estáticos do Formulário
         tabEl.querySelectorAll('.form-group').forEach(group => {
+            // Ignora campos que estão dentro de templates dinâmicos
             if (group.closest('.solucao-item, .risco-item, .contratacao-item, .anexo-item')) return;
             
             // Filtro de itens desativados no Simplificado
@@ -193,32 +314,63 @@ function generateBlankTemplate(isSimplificado) {
             const label = group.querySelector('label') || group.querySelector('.label-with-help label');
             if (!label) return;
 
+            // Imprime o Título do Item
+            // O estilo 'fieldLabel' aqui garante o espaçamento antes de cada item principal
             docChildren.push(new Paragraph({
                 children: [new TextRun({ text: label.textContent.trim(), ...styles.fieldLabel })],
                 keepNext: true
             }));
 
-            // Nota condicional
+            // 5. Nota Condicional (com nomes amigáveis)
             if (group.classList.contains('conditional-field')) {
-                const triggerName = conditionalMap[group.id] || "resposta anterior";
+                const friendlyName = getFriendlyTriggerText(group.id);
                 docChildren.push(new Paragraph({
-                    children: [new TextRun({ text: `Nota: Preencher somente se necessário conforme a opção "${triggerName}".`, ...styles.instruction })]
+                    children: [new TextRun({ text: `Nota: Preencher somente se necessário conforme a opção "${friendlyName}".`, ...styles.instruction })]
                 }));
             }
 
-            // Opções (Radio/Checkbox) ou Placeholder
-            const options = group.querySelectorAll('.checkbox-group label');
-            if (options.length > 0) {
-                options.forEach(opt => {
+            // 6. Renderização das Opções de Resposta
+            const checkOptions = group.querySelectorAll('.checkbox-group label');
+            const selectElement = group.querySelector('select');
+
+            if (checkOptions.length > 0) {
+                // Renderiza Radio/Checkboxes
+                checkOptions.forEach(opt => {
                     docChildren.push(new Paragraph({
                         children: [
                             new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
-                            new TextRun({ text: opt.textContent.trim(), size: 22, font: FONT_FAMILY })
+                            new TextRun({ text: opt.textContent.trim(), ...styles.optionText })
                         ],
                         indent: { left: 400 }
                     }));
                 });
+            } else if (selectElement) {
+                // Renderiza Select como lista de opções
+                const options = Array.from(selectElement.options);
+                let hasValidOptions = false;
+                
+                options.forEach(opt => {
+                    if (opt.value && opt.value.trim() !== "") {
+                        hasValidOptions = true;
+                        docChildren.push(new Paragraph({
+                            children: [
+                                new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
+                                new TextRun({ text: opt.text.trim(), ...styles.optionText })
+                            ],
+                            indent: { left: 400 }
+                        }));
+                    }
+                });
+
+                if (!hasValidOptions) {
+                    docChildren.push(new Paragraph({
+                        children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })],
+                        spacing: { after: 200 }
+                    }));
+                }
+
             } else {
+                // Caso C: Inputs de Texto / Textarea
                 docChildren.push(new Paragraph({
                     children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })],
                     spacing: { after: 200 }
@@ -229,6 +381,7 @@ function generateBlankTemplate(isSimplificado) {
 
     const filename = isSimplificado ? "Modelo_ETP_Simplificado.docx" : "Modelo_ETP_Completo.docx";
 
+    // Gera e salva o arquivo
     Packer.toBlob(new Document({
         sections: [{
             properties: { page: { margin: { top: 1440, bottom: 1440, left: 1134, right: 1134 } } },

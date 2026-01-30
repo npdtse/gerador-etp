@@ -69,14 +69,10 @@ function initAdminOverlay() {
 }
 
 // --- DICIONÁRIO DE NOMES AMIGÁVEIS ---
-// Mapeia o ID do grupo condicional (do config.js) para o texto que aparecerá na nota do DOCX.
 const friendlyConditionNames = {
-    // Identificação
     "etp_tipo": "tipo de ETP",
     "etp_auth": "autorização de ETP simplificado",
-    // Cap 1
     "alinhamento_estrategico": "alinhamento estratégico",
-    // Cap 3
     "natureza_continua": "natureza contínua",
     "beneficios_vigencia": "benefícios da vigência",
     "garantia": "garantia",
@@ -88,11 +84,9 @@ const friendlyConditionNames = {
     "contratacao_adicional": "contratação adicional",
     "ajuste_contratacoes": "ajuste em contratações",
     "acessibilidade": "acessibilidade",
-    // Cap 7
-    "parcelamento": "forma de parcelamento", // Nome genérico para o select pai
+    "parcelamento": "forma de parcelamento",
     "parcelamento_grupo_unico": "agrupamento único",
     "parcelamento_grupos_separados": "grupos separados",
-    // Cap 8
     "modalidade_contratacao": "modalidade da contratação",
     "contratacao_dispensa": "dispensa de licitação",
     "contratacao_inexigibilidade": "inexigibilidade de licitação",
@@ -102,7 +96,7 @@ const friendlyConditionNames = {
     "vistoria": "vistoria",
     "confidencialidade": "confidencialidade",
     "subcontratacao": "subcontratação",
-    "consorcio": "formação de consórcio", // Select pai
+    "consorcio": "formação de consórcio",
     "consorcio_proibicao": "proibição de consórcio",
     "consorcio_permissao": "permissão de consórcio",
     "limite_consorcio": "limite de consorciadas",
@@ -114,7 +108,6 @@ const friendlyConditionNames = {
     "margem_preferencia": "margem de preferência",
     "pessoa_fisica": "participação de pessoa física",
     "pessoa_fisica_proibicao": "proibição de pessoa física",
-    // Cap 9
     "quantitativo_inferior": "quantitativo inferior",
     "precos_diferentes": "preços diferentes",
     "mais_de_um_fornecedor": "mais de um fornecedor",
@@ -123,17 +116,10 @@ const friendlyConditionNames = {
     "renovacao_quantidades_ata": "renovação de quantidades"
 };
 
-/**
- * Retorna o nome amigável da condição que ativa um determinado campo alvo.
- * @param {string} targetFieldId - O ID do div conditional que está sendo exibido.
- */
 function getFriendlyTriggerText(targetFieldId) {
     if (typeof conditionalFieldIds === 'undefined') return "opção anterior";
-
-    // Procura qual chave em conditionalFieldIds contém o targetFieldId
     for (const [triggerKey, targets] of Object.entries(conditionalFieldIds)) {
         if (targets.includes(targetFieldId)) {
-            // Se encontrou, retorna o nome amigável ou a própria chave se não houver tradução
             return friendlyConditionNames[triggerKey] || triggerKey;
         }
     }
@@ -143,90 +129,124 @@ function getFriendlyTriggerText(targetFieldId) {
 /**
  * Função Principal de Geração do DOCX
  */
-/**
- * Função Principal de Geração do DOCX
- */
 function generateBlankTemplate(isSimplificado) {
     const { Document, Packer, Paragraph, TextRun, HeadingLevel, BorderStyle, AlignmentType } = window.docx;
 
     const FONT_FAMILY = "Calibri";
     const COLOR_BLACK = "000000";
+    const COLOR_RED = "FF0000";
     const docTitleText = isSimplificado ? "ESTUDO TÉCNICO PRELIMINAR SIMPLIFICADO" : "ESTUDO TÉCNICO PRELIMINAR COMPLETO";
 
-    // Definição de Estilos com Espaçamentos Ajustados
     const styles = {
-        docTitle: { 
-            size: 32, 
-            bold: true, 
-            font: FONT_FAMILY, 
-            color: COLOR_BLACK, 
-            allCaps: true 
-        },
-        chapterTitle: { 
-            size: 28, 
-            bold: true, 
-            font: FONT_FAMILY, 
-            color: COLOR_BLACK, 
-            // AUMENTADO: before: 1200 para duplicar o espaço antes do capítulo
-            spacing: { before: 1400, after: 600 } 
-        },
-        dynamicSectionTitle: { 
-            size: 24, 
-            bold: true, 
-            font: FONT_FAMILY, 
-            color: "333333", 
-            italics: true, 
-            spacing: { before: 800, after: 400 } 
-        },
-        fieldLabel: { 
-            size: 22, 
-            bold: true, 
-            font: FONT_FAMILY, 
-            color: COLOR_BLACK, 
-            // AUMENTADO: before: 600 cria uma linha em branco antes de cada item/subitem
-            spacing: { before: 600, after: 300 } 
-        },
-        instruction: { 
-            size: 20, 
-            italics: true, 
-            color: "666666", 
-            font: FONT_FAMILY, 
-            spacing: { after: 100 } 
-        },
-        placeholder: { 
-            size: 22, 
-            color: "555555", 
-            italics: true, 
-            font: FONT_FAMILY 
-        },
-        optionText: { 
-            size: 22, 
-            color: COLOR_BLACK, 
-            font: FONT_FAMILY 
-        }
+        docTitle: { size: 32, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, allCaps: true },
+        chapterTitle: { size: 28, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, spacing: { before: 1200, after: 200 } },
+        dynamicSectionTitle: { size: 24, bold: true, font: FONT_FAMILY, color: "333333", italics: true, spacing: { before: 400, after: 100 } },
+        fieldLabel: { size: 22, bold: true, font: FONT_FAMILY, color: COLOR_BLACK, spacing: { before: 600, after: 100 } },
+        instruction: { size: 20, italics: true, color: "666666", font: FONT_FAMILY, spacing: { after: 100 } },
+        redNote: { size: 22, italics: true, color: COLOR_RED, font: FONT_FAMILY, spacing: { after: 200 } },
+        placeholder: { size: 22, color: "555555", italics: true, font: FONT_FAMILY },
+        optionText: { size: 22, color: COLOR_BLACK, font: FONT_FAMILY }
     };
 
     const docChildren = [];
+    const tabOrder = ['identificacao', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6', 'cap7', 'cap8', 'cap9', 'anexos'];
+    const processedFieldIds = new Set();
 
-    // Título Principal do Documento
+    // Título Principal
     docChildren.push(new Paragraph({
         children: [new TextRun({ text: docTitleText, ...styles.docTitle })],
         alignment: AlignmentType.CENTER,
         spacing: { after: 600 }
     }));
 
-    const tabOrder = ['identificacao', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6', 'cap7', 'cap8', 'cap9', 'anexos'];
+    // Flag para controlar se já inserimos a mensagem de exclusão do range 3.9-3.15
+    let hasInsertedCap3Exclusion = false;
+
+    // === FUNÇÃO HELPER: Renderizar Campo ===
+    function renderField(groupElement, forcedLabel = null) {
+        if (groupElement.id.includes('table_container') || groupElement.id.includes('resumo_')) return;
+
+        const label = groupElement.querySelector('label') || groupElement.querySelector('.label-with-help label');
+        const inputElement = groupElement.querySelector('input:not([type="hidden"]), select, textarea');
+        
+        if (!label) return;
+        if (groupElement.id && processedFieldIds.has(groupElement.id)) return;
+        if (groupElement.id) processedFieldIds.add(groupElement.id);
+        if (inputElement && inputElement.id) {
+            if (processedFieldIds.has(inputElement.id)) return;
+            processedFieldIds.add(inputElement.id);
+        }
+
+        // Título do Campo
+        let labelText = forcedLabel || label.textContent.trim();
+        docChildren.push(new Paragraph({
+            children: [new TextRun({ text: labelText, ...styles.fieldLabel })],
+            keepNext: true
+        }));
+
+        // Nota Condicional
+        if (groupElement.classList.contains('conditional-field')) {
+            const friendlyName = getFriendlyTriggerText(groupElement.id);
+            docChildren.push(new Paragraph({
+                children: [new TextRun({ text: `Nota: Preencher somente se necessário conforme a opção "${friendlyName}".`, ...styles.instruction })]
+            }));
+        }
+
+        // Opções ou Placeholder
+        const checkOptions = groupElement.querySelectorAll('.checkbox-group label');
+        
+        if (checkOptions.length > 0) {
+            checkOptions.forEach(opt => {
+                let marker = "(   )";
+                const optText = opt.textContent.trim();
+                
+                // Lógica de Pré-Seleção (X)
+                if (isSimplificado) {
+                    if (labelText.includes("Tipo de ETP") && optText.includes("Simplificado")) marker = "( X )";
+                    if (labelText.includes("autorização formal") && optText === "Sim") marker = "( X )";
+                } else {
+                    if (labelText.includes("Tipo de ETP") && optText.includes("Completo")) marker = "( X )";
+                }
+
+                docChildren.push(new Paragraph({
+                    children: [
+                        new TextRun({ text: `${marker} `, font: "Courier New", size: 22 }),
+                        new TextRun({ text: optText, ...styles.optionText })
+                    ],
+                    indent: { left: 400 }
+                }));
+            });
+        } else if (inputElement && inputElement.tagName === 'SELECT') {
+            const options = Array.from(inputElement.options);
+            let hasValidOptions = false;
+            options.forEach(opt => {
+                if (opt.value && opt.value.trim() !== "") {
+                    hasValidOptions = true;
+                    docChildren.push(new Paragraph({
+                        children: [
+                            new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
+                            new TextRun({ text: opt.text.trim(), ...styles.optionText })
+                        ],
+                        indent: { left: 400 }
+                    }));
+                }
+            });
+            if (!hasValidOptions) {
+                docChildren.push(new Paragraph({ children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })], spacing: { after: 200 } }));
+            }
+        } else {
+            docChildren.push(new Paragraph({ children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })], spacing: { after: 200 } }));
+        }
+    }
 
     tabOrder.forEach(tabId => {
         const tabEl = document.getElementById(tabId);
         if (!tabEl) return;
 
-        const isChapterHiddenInSimplificado = tabEl.classList.contains('simplificado-hide');
-
-        // 1. Título do Capítulo (O espaçamento 'before' duplicado está no estilo chapterTitle)
+        // Título do Capítulo
         const h2 = tabEl.querySelector('h2');
         if (h2) {
-            let titleText = h2.innerText.trim().replace(/^\W+/, ''); // Remove ícones/espaços iniciais
+            let titleText = h2.innerText.trim().replace(/^\W+/, '');
             docChildren.push(new Paragraph({
                 children: [new TextRun({ text: titleText, ...styles.chapterTitle })],
                 heading: HeadingLevel.HEADING_1,
@@ -234,76 +254,132 @@ function generateBlankTemplate(isSimplificado) {
             }));
         }
 
-        // 2. Se o capítulo inteiro não se aplica ao simplificado
-        if (isSimplificado && isChapterHiddenInSimplificado) {
+        // LÓGICA DE EXCLUSÃO DE CAPÍTULOS INTEIROS (SIMPLIFICADO)
+        if (isSimplificado && (tabId === 'cap2' || tabId === 'cap5')) {
             docChildren.push(new Paragraph({
-                children: [new TextRun({ text: "Nota: Este capítulo não se aplica ao ETP Simplificado.", ...styles.instruction })],
+                children: [new TextRun({ text: "Nota: Este capítulo não se aplica ao ETP Simplificado.", ...styles.redNote })],
                 spacing: { after: 400 }
             }));
-            return; // Pula para o próximo capítulo
+            return;
         }
 
-        // 3. Blocos Dinâmicos (Soluções, Riscos, etc.)
+        // LÓGICA CAP 5 (COMPLETO) - Nota inicial
+        if (tabId === 'cap5' && !isSimplificado) {
+            const naoSeAplicaGroup = document.getElementById('c5_nao_se_aplica')?.closest('.form-group');
+            if (naoSeAplicaGroup) {
+                docChildren.push(new Paragraph({
+                    children: [new TextRun({ text: "5.0 Não se aplica / Primeira Contratação", ...styles.fieldLabel })],
+                    keepNext: true
+                }));
+                docChildren.push(new Paragraph({
+                    children: [new TextRun({ text: "Nota: Caso este item seja marcado, os itens do bloco dinâmico abaixo não devem ser preenchidos.", ...styles.instruction })]
+                }));
+                docChildren.push(new Paragraph({
+                    children: [
+                        new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
+                        new TextRun({ text: "Sim", ...styles.optionText })
+                    ],
+                    indent: { left: 400 }
+                }));
+                processedFieldIds.add('c5_nao_se_aplica');
+                if (naoSeAplicaGroup.id) processedFieldIds.add(naoSeAplicaGroup.id);
+            }
+        }
+
+        // BLOCOS DINÂMICOS
         const dynamicContainers = {
-            'cap2': { id: 'solucoes_mercado_container', config: dynamicItemConfigs.solucao, label: "Solução de Mercado" },
-            'cap5': { id: 'contratacoes_anteriores_container', config: dynamicItemConfigs.contratacao, label: "Contratação Anterior" },
-            'cap6': { id: 'riscos_container', config: dynamicItemConfigs.risco, label: "Risco Identificado" },
-            'anexos': { id: 'anexos_container', config: dynamicItemConfigs.anexo, label: "Anexo" }
+            'cap2': { id: 'solucoes_mercado_container', config: dynamicItemConfigs.solucao, label: "Solução de Mercado", prefix: "2" },
+            'cap5': { id: 'contratacoes_anteriores_container', config: dynamicItemConfigs.contratacao, label: "Contratação Anterior", prefix: "5" },
+            'cap6': { id: 'riscos_container', config: dynamicItemConfigs.risco, label: "Risco Identificado", prefix: "6" },
+            'anexos': { id: 'anexos_container', config: dynamicItemConfigs.anexo, label: "Anexo", prefix: "A" }
         };
 
         if (dynamicContainers[tabId]) {
             const dynData = dynamicContainers[tabId];
             docChildren.push(new Paragraph({
                 children: [new TextRun({ text: `Exemplo de Bloco Dinâmico: ${dynData.label}`, ...styles.dynamicSectionTitle })],
-                spacing: { before: 200 }
+                spacing: { before: 300 }
             }));
             
-            // Renderiza um template "em branco" do item dinâmico para pegar os labels
             const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = dynData.config.template(1, false); 
+            tempDiv.innerHTML = dynData.config.template(1, false);
             
-            // Itera sobre os SUBITENS do bloco dinâmico
             tempDiv.querySelectorAll('.form-group').forEach(group => {
                 const lbl = group.querySelector('label');
                 if(lbl) {
-                    const labelText = lbl.textContent.trim().replace(/\d+\.1\./, 'X.');
-                    // O estilo 'fieldLabel' aqui garante o espaçamento antes de cada subitem
-                    docChildren.push(new Paragraph({ 
-                        children: [new TextRun({ text: labelText, ...styles.fieldLabel })],
-                        keepNext: true // Mantém título junto com a resposta
-                    }));
-                    
-                    // Verifica se dentro do template há selects
-                    const select = group.querySelector('select');
-                    if (select) {
-                        Array.from(select.options).forEach(opt => {
-                            if (opt.value) { 
-                                docChildren.push(new Paragraph({
-                                    children: [
-                                        new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
-                                        new TextRun({ text: opt.text, ...styles.optionText })
-                                    ],
-                                    indent: { left: 400 }
-                                }));
-                            }
-                        });
+                    let labelText = lbl.textContent.trim();
+                    if (dynData.prefix !== "A") {
+                        labelText = labelText.replace(/^(\d+)\.\d+\.(\d+)/, '$1.X.$2'); 
                     } else {
-                        // Caso contrário (textarea/input), placeholder padrão
-                        docChildren.push(new Paragraph({ children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })], spacing: { after: 200 } }));
+                        labelText = labelText.replace(/^A\.\d+\.(\d+)/, 'A.X.$1');
                     }
+                    const cloneGroup = group.cloneNode(true);
+                    renderField(cloneGroup, labelText);
                 }
             });
         }
 
-        // 4. Campos Estáticos do Formulário
+        // CAMPOS ESTÁTICOS
         tabEl.querySelectorAll('.form-group').forEach(group => {
-            // Ignora campos que estão dentro de templates dinâmicos
             if (group.closest('.solucao-item, .risco-item, .contratacao-item, .anexo-item')) return;
-            
-            // Filtro de itens desativados no Simplificado
+            if (group.id.includes('resumo_') || group.querySelector('.summary-table-container')) return;
+
+            // Filtros de visibilidade do formulário
             if (isSimplificado && group.classList.contains('simplificado-hide')) return;
 
-            // Tratamento especial para o item 3.1
+            // Lógica Item 1.4 (Completo)
+            if (!isSimplificado && group.classList.contains('completo-hide')) {
+                const label = group.querySelector('label');
+                if (label && label.textContent.includes('1.4')) {
+                    docChildren.push(new Paragraph({
+                        children: [new TextRun({ text: label.textContent.trim(), ...styles.fieldLabel })],
+                        spacing: { before: 600 }
+                    }));
+                    docChildren.push(new Paragraph({
+                        children: [new TextRun({ text: "Nota: Este item não se aplica ao ETP Completo.", ...styles.instruction })],
+                        spacing: { after: 200 }
+                    }));
+                    processedFieldIds.add(group.id);
+                    return;
+                }
+            }
+
+            // Lógica Capítulo 3 (Simplificado - Range 3.9 a 3.15)
+            if (isSimplificado && tabId === 'cap3') {
+                const id = group.id || "";
+                // Verifica se é um dos itens do range
+                if (id.startsWith('c3_9') || id.startsWith('c3_10') || id.startsWith('c3_11') || 
+                    id.startsWith('c3_12') || id.startsWith('c3_13') || id.startsWith('c3_14') || id.startsWith('c3_15') ||
+                    group.querySelector('label')?.getAttribute('for')?.startsWith('c3_9')) {
+                    
+                    if (!hasInsertedCap3Exclusion) {
+                        docChildren.push(new Paragraph({
+                            children: [new TextRun({ text: "3.9 a 3.15 Os itens 3.9 a 3.15 não se aplicam ao ETP Simplificado.", ...styles.redNote })],
+                            spacing: { before: 600, after: 400 }
+                        }));
+                        hasInsertedCap3Exclusion = true;
+                    }
+                    processedFieldIds.add(group.id);
+                    return; // Pula a renderização individual
+                }
+            }
+
+            // Lógica Item 8.7 (Simplificado)
+            if (isSimplificado && tabId === 'cap8' && group.id.includes('c8_7_')) {
+                const label = group.querySelector('label');
+                if (label && label.textContent.includes('8.7')) {
+                    docChildren.push(new Paragraph({
+                        children: [new TextRun({ text: "8.7 O item 8.7 não se aplica ao ETP Simplificado.", ...styles.redNote })],
+                        spacing: { before: 600 }
+                    }));
+                    processedFieldIds.add(group.id);
+                    return;
+                }
+                // Se for o subitem (justificativa), apenas ignora
+                if (label && label.textContent.includes('8.7.1')) return;
+            }
+
+            // Tratamento 3.1
             if (tabId === 'cap3') {
                 const isCompletoWrapper = group.id === 'c3_1_completo_wrapper';
                 const isSimplificadoWrapper = group.id === 'c3_1_simplificado_wrapper';
@@ -311,77 +387,26 @@ function generateBlankTemplate(isSimplificado) {
                 if (!isSimplificado && isSimplificadoWrapper) return;
             }
 
-            const label = group.querySelector('label') || group.querySelector('.label-with-help label');
-            if (!label) return;
-
-            // Imprime o Título do Item
-            // O estilo 'fieldLabel' aqui garante o espaçamento antes de cada item principal
-            docChildren.push(new Paragraph({
-                children: [new TextRun({ text: label.textContent.trim(), ...styles.fieldLabel })],
-                keepNext: true
-            }));
-
-            // 5. Nota Condicional (com nomes amigáveis)
-            if (group.classList.contains('conditional-field')) {
-                const friendlyName = getFriendlyTriggerText(group.id);
-                docChildren.push(new Paragraph({
-                    children: [new TextRun({ text: `Nota: Preencher somente se necessário conforme a opção "${friendlyName}".`, ...styles.instruction })]
-                }));
-            }
-
-            // 6. Renderização das Opções de Resposta
-            const checkOptions = group.querySelectorAll('.checkbox-group label');
-            const selectElement = group.querySelector('select');
-
-            if (checkOptions.length > 0) {
-                // Renderiza Radio/Checkboxes
-                checkOptions.forEach(opt => {
-                    docChildren.push(new Paragraph({
-                        children: [
-                            new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
-                            new TextRun({ text: opt.textContent.trim(), ...styles.optionText })
-                        ],
-                        indent: { left: 400 }
-                    }));
-                });
-            } else if (selectElement) {
-                // Renderiza Select como lista de opções
-                const options = Array.from(selectElement.options);
-                let hasValidOptions = false;
-                
-                options.forEach(opt => {
-                    if (opt.value && opt.value.trim() !== "") {
-                        hasValidOptions = true;
-                        docChildren.push(new Paragraph({
-                            children: [
-                                new TextRun({ text: "(   ) ", font: "Courier New", size: 22 }),
-                                new TextRun({ text: opt.text.trim(), ...styles.optionText })
-                            ],
-                            indent: { left: 400 }
-                        }));
-                    }
-                });
-
-                if (!hasValidOptions) {
-                    docChildren.push(new Paragraph({
-                        children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })],
-                        spacing: { after: 200 }
-                    }));
+            // Renumeração Inexigibilidade (Cap 8)
+            let forcedLabel = null;
+            const input = group.querySelector('select, textarea, input');
+            if (input) {
+                if (input.id === 'c8_1_1_hipotese_inexigibilidade') {
+                    forcedLabel = "8.1.2 Hipótese de Inexigibilidade";
+                } else if (input.id === 'c8_1_2_justificativa_inexigibilidade') {
+                    forcedLabel = "8.1.2.1 Justificativa da inviabilidade de competição";
                 }
-
-            } else {
-                // Caso C: Inputs de Texto / Textarea
-                docChildren.push(new Paragraph({
-                    children: [new TextRun({ text: "[Insira a resposta aqui]", ...styles.placeholder })],
-                    spacing: { after: 200 }
-                }));
             }
+
+            renderField(group, forcedLabel);
         });
+        
+        // Reseta flag para o próximo capítulo (segurança)
+        hasInsertedCap3Exclusion = false;
     });
 
     const filename = isSimplificado ? "Modelo_ETP_Simplificado.docx" : "Modelo_ETP_Completo.docx";
 
-    // Gera e salva o arquivo
     Packer.toBlob(new Document({
         sections: [{
             properties: { page: { margin: { top: 1440, bottom: 1440, left: 1134, right: 1134 } } },

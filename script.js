@@ -2335,6 +2335,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btnAbrirManualEtp').addEventListener('click', () => {
             window.open('manual_etp.html', '_blank');
         });
+        document.getElementById('btnAbrirDocTecnica').addEventListener('click', () => {
+            window.open('documentacao.html', '_blank');
+        });
         // --- FIM: Listeners do Modal Sobre ---
 
         // --- INÍCIO: Listeners para controle de acesso aos capítulos ---

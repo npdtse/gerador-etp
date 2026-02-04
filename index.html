@@ -1235,45 +1235,66 @@
             <span class="close-button" data-action="close-about-modal">×</span>
             
             <h4><i class="fas fa-info-circle" style="margin-right: 8px;"></i> Sobre o Gerador Inteligente de ETP</h4>
-            <p><strong>Versão do Aplicativo Desktop:</strong> 110, atualizada em 26/01/2026.</p>
             <p>Esta ferramenta foi desenvolvida para simplificar e agilizar a elaboração de Estudos Técnicos Preliminares (ETP) no âmbito do Tribunal Superior Eleitoral, alinhando o processo às exigências da Lei 14.133/2021 (Licitações e Contratos).</p>
             <hr>
 
-            <h4>Manual de Elaboração de ETP</h4>
-            <p>Para uma referência doutrinária e prática completa, com o conceito, a forma de preenchimento e a fundamentação legal de cada campo do ETP, consulte o manual completo.</p>
-            <div style="text-align: center; margin: 20px 0;">
-                <button class="etp-tool-button" id="btnAbrirManualEtp">
-                    Acessar o Manual de Elaboração <i class="fas fa-external-link-alt" style="margin-left: 8px; font-size: 0.8em;"></i>
-                </button>
-            </div>
-            <hr>
-			
-			<h4>Guia Rápido</h4>
-            <p>Para um passo a passo detalhado sobre como usar todas as funcionalidades do aplicativo, consulte o guia completo.</p>
-            <div style="text-align: center; margin: 20px 0;">
-                <button class="etp-tool-button" id="btnAbrirGuiaRapido">
-                    Ver o Guia Rápido <i class="fas fa-external-link-alt" style="margin-left: 8px; font-size: 0.8em;"></i>
-                </button>
-            </div>
-            <hr>
+            <!-- TABELA DE DOCUMENTAÇÃO -->
+            <table class="about-resources-table">
+                <thead>
+                    <tr>
+                        <th>Recurso</th>
+                        <th>Descrição</th>
+                        <th>Acesso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Manual de Elaboração de ETP</strong></td>
+                        <td>Referência doutrinária e prática completa, com conceito, forma de preenchimento e fundamentação legal de cada campo do ETP.</td>
+                        <td>
+                            <button class="etp-tool-button" id="btnAbrirManualEtp">
+                                Manual <i class="fas fa-external-link-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Guia Rápido</strong></td>
+                        <td>Passo a passo detalhado sobre como usar todas as funcionalidades e recursos do aplicativo.</td>
+                        <td>
+                            <button class="etp-tool-button" id="btnAbrirGuiaRapido">
+                                Guia <i class="fas fa-external-link-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Documentação Técnica</strong></td>
+                        <td>Detalhes sobre a arquitetura do sistema, dicionário de dados (config.js) e lógica de integração com IA.</td>
+                        <td>
+                            <button class="etp-tool-button" id="btnAbrirDocTecnica">
+                                Doc. Técnica <i class="fas fa-code"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
+            <hr>
             <h4>Fundamentação</h4>
-            <p>Os campos e a estrutura deste aplicativo foram baseados nos seguintes normativos e documentos:</p>
             <ul>
                 <li>Lei nº 14.133, de 1º de abril de 2021</li>
                 <li>Instrução Normativa TSE nº 11, de 29 de setembro de 2021</li>
                 <li>Manual de Elaboração de ETP do Tribunal Superior Eleitoral</li>
             </ul>
             <hr>
-			
-			<h4>Responsáveis pelo Projeto</h4>
+            
+            <h4>Responsáveis pelo Projeto</h4>
             <p>O desenvolvimento desta solução foi uma iniciativa da Secretaria de Administração do TSE, com a colaboração das seguintes pessoas:</p>
             <p><strong>Apoio Institucional:</strong></p>
             <ul>
                 <li>Juliana Milagres de Loyola Fleury<br><em>Secretária de Administração do TSE.</em></li>
             </ul>
             <p><strong>Desenvolvimento:</strong></p>
-			<ul>
+            <ul>
                 <li>Rodrigo Novaes Gonçalves (Núcleo de Pesquisa e Desenvolvimento - NPD/SAD)<br><em>Responsável pelo planejamento, arquitetura, desenvolvimento do código-fonte e coautoria do modelo de ETP.</em></li>
                 <li>Ana Paula Muniz da Silva (Núcleo de Apoio ao Planejamento das Contratações - NAPC/SAD)<br><em>Responsável pela construção e redação do modelo de ETP que estrutura os campos do aplicativo.</em></li>
             </ul>
@@ -1282,17 +1303,17 @@
             <h4>Tecnologias e Agradecimentos</h4>
             <p>Este aplicativo foi construído com o uso de tecnologias de código aberto e serviços de terceiros, aos quais estendemos nossos agradecimentos:</p>
             <ul>
-                <li><strong>Groq.com:</strong> Pelo acesso aos modelos de linguagem de alta velocidade, que tornaram possível o processamento de IA no projeto.</li>
-                <li><strong>Docx.js.org:</strong> Pela biblioteca de código aberto, que viabilizou a exportação dos ETPs criados no aplicativo para o formato Microsoft Word (.docx).</li>
+                <li><strong>Groq.com:</strong> Pelo acesso aos modelos de linguagem de alta velocidade.</li>
+                <li><strong>Docx.js.org:</strong> Pela biblioteca de exportação para Word (.docx).</li>
                 <li><strong>Fontawesome.com:</strong> Pelos ícones utilizados na interface.</li>
-                <li><strong>Aistudio.google.com:</strong> Pelo acesso aos modelos de IA utilizados como assistentes inteligentes no processo de desenvolvimento do código.</li>
+                <li><strong>Aistudio.google.com:</strong> Pelo acesso aos modelos de IA utilizados como assistentes inteligentes no desenvolvimento.</li>
             </ul>
             <hr>
 
             <h4>Aviso de Responsabilidade</h4>
             <p class="warning-text" style="font-size: 0.95em;">⚠️ As sugestões de texto fornecidas pelos modelos de inteligência artificial deste aplicativo têm caráter auxiliar e podem conter imprecisões. A responsabilidade pelo conteúdo final é exclusivamente do usuário, que deve revisar, validar e adaptar as informações conforme o contexto e as exigências normativas aplicáveis.</p>
-            <div style="text-align: center; font-size: 0.9em; color: #6c757d; margin-top: 25px;">Secretaria de Administração do Tribunal Superior Eleitoral - 2025</div>
-			
+            <div style="text-align: center; font-size: 0.9em; color: #6c757d; margin-top: 25px;">Secretaria de Administração do Tribunal Superior Eleitoral</div>
+            
         </div>
     </div>
 

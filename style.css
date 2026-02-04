@@ -1064,6 +1064,58 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
     line-height: 1.6;
 }
 
+.about-resources-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.95em;
+}
+
+.about-resources-table th {
+    text-align: left;
+    background-color: #f8f9fa;
+    color: #004080;
+    padding: 12px;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.about-resources-table td {
+    padding: 15px 12px;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+
+.about-resources-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Coluna 1: Título */
+.about-resources-table td:nth-child(1) {
+    width: 25%;
+    color: #0056b3;
+}
+
+/* Coluna 2: Descrição */
+.about-resources-table td:nth-child(2) {
+    width: 50%;
+    color: #495057;
+    line-height: 1.4;
+}
+
+/* Coluna 3: Botão */
+.about-resources-table td:nth-child(3) {
+    width: 25%;
+    text-align: center;
+}
+
+/* Ajuste dos botões dentro da tabela para não ficarem muito grandes */
+.about-resources-table .etp-tool-button {
+    width: 130px;
+    justify-content: center;
+    padding: 6px 10px;
+    font-size: 0.85em;
+}
+
 /* --- NOVOS ESTILOS PARA O CONTEÚDO DO MANUAL NO MODAL --- */
 
 /* Estilo aplicado aos containers de conteúdo no modal */

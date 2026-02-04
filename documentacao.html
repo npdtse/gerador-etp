@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação Técnica - Gerador Inteligente de ETP</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    <style>
+        :root {
+            --cor-primaria: #004080;
+            --cor-secundaria: #0056b3;
+            --cor-destaque: #28a745;
+            --cor-bg: #f4f7f9;
+            --cor-texto: #333;
+            --cor-borda: #dee2e6;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--cor-texto);
+            background-color: var(--cor-bg);
+            margin: 0;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background-color: var(--cor-primaria);
+            color: white;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar a {
+            color: #bdc3c7;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: 0.2s;
+        }
+
+        .sidebar a:hover {
+            color: white;
+        }
+
+        /* Content */
+        .content {
+            flex: 1;
+            padding: 40px;
+            max-width: 1000px;
+        }
+
+        header {
+            border-bottom: 3px solid var(--cor-primaria);
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: var(--cor-primaria);
+            margin-bottom: 10px;
+        }
+
+        section {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            border-left: 5px solid var(--cor-secundaria);
+        }
+
+        h2 {
+            color: var(--cor-primaria);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: var(--cor-secundaria);
+            border-bottom: 1px solid var(--cor-borda);
+            padding-bottom: 5px;
+            margin-top: 25px;
+        }
+
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            font-size: 0.9rem;
+            color: #d63384;
+        }
+
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 0.85rem;
+        }
+
+        .file-list {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .file-name {
+            font-weight: bold;
+            color: var(--cor-secundaria);
+        }
+
+        .badge {
+            background: var(--cor-secundaria);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .info-box {
+            background-color: #e7f3ff;
+            border: 1px solid #b8daff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <h2>Documentação</h2>
+        <ul>
+            <li><a href="#arquitetura"><i class="fas fa-sitemap"></i> Arquitetura Geral</a></li>
+            <li><a href="#arquivos"><i class="fas fa-files"></i> Estrutura de Arquivos</a></li>
+            <li><a href="#ia-engine"><i class="fas fa-brain"></i> Mecanismo de IA</a></li>
+            <li><a href="#configuracao"><i class="fas fa-cogs"></i> Dicionário de Config</a></li>
+            <li><a href="#dinamismo"><i class="fas fa-plus-circle"></i> Itens Dinâmicos</a></li>
+            <li><a href="#persistencia"><i class="fas fa-database"></i> Persistência de Dados</a></li>
+            <li><a href="#manutencao"><i class="fas fa-tools"></i> Manutenção do Manual</a></li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        <header>
+            <h1>Documentação Técnica do Sistema</h1>
+            <p><strong>Aplicação:</strong> Gerador Inteligente de ETP (TSE)</p>
+            <p><strong>Versão:</strong> 1.1.0 | <strong>Tecnologia:</strong> Front-end Vanilla (HTML/JS/CSS)</p>
+        </header>
+
+        <section id="arquitetura">
+            <h2><i class="fas fa-sitemap"></i> Arquitetura Geral</h2>
+            <p>A aplicação funciona como uma <strong>Single Page Application (SPA)</strong> sem servidor, processada inteiramente no lado do cliente. A persistência é realizada via <code>LocalStorage</code> e a inteligência via integração com a API da <strong>Groq (Cloud LLM)</strong>.</p>
+            <div class="info-box">
+                <strong>Fluxo de Dados:</strong><br>
+                1. Entrada do Usuário -> 2. Validação reativa (script.js) -> 3. Persistência Local -> 4. Geração de Prompt Enriquecido (Contexto + Manual) -> 5. Retorno da IA -> 6. Exportação DOCX.
+            </div>
+        </section>
+
+        <section id="arquivos">
+            <h2><i class="fas fa-file-code"></i> Estrutura de Arquivos</h2>
+            <div class="file-list">
+                <span class="file-name">index.html</span>
+                <span>Estrutura principal, abas e modais.</span>
+
+                <span class="file-name">script.js</span>
+                <span>Cérebro do app: Manipulação do DOM, chamadas de API e lógica de exportação.</span>
+
+                <span class="file-name">config.js</span>
+                <span>Mapeamento de dependências e templates de itens dinâmicos.</span>
+
+                <span class="file-name">manual_content.js</span>
+                <span>Base de dados estática com o conteúdo do Manual do TSE.</span>
+
+                <span class="file-name">prompts.js</span>
+                <span>Templates de instruções (personas) enviados para a IA.</span>
+
+                <span class="file-name">style.css</span>
+                <span>Identidade visual e controle de estados (Simplificado vs. Completo).</span>
+            </div>
+        </section>
+
+        <section id="ia-engine">
+            <h2><i class="fas fa-brain"></i> Mecanismo de Inteligência Artificial</h2>
+            <p>O diferencial do sistema é o <strong>Prompt Enriquecido</strong>. Quando o usuário solicita ajuda, o <code>script.js</code> não envia apenas o campo atual, mas constrói uma carga de dados completa:</p>
+            
+            <h3>Normalização de IDs</h3>
+            <p>Para garantir que a IA use o manual correto, IDs dinâmicos (ex: <code>c6_risco3_impacto</code>) são convertidos em IDs genéricos (ex: <code>c6_risco_impacto</code>) antes da consulta ao <code>manual_content.js</code>.</p>
+
+            <h3>Composição do Prompt (FIELD_EVALUATION_TEMPLATE)</h3>
+            <pre>
+- Persona: Especialista sênior TSE (prompts.js)
+- Contexto Atual: O que o usuário já preencheu nos Cap. 1 e 3.
+- Manual Oficial: Conceito, Como Preencher e Fundamentação (manual_content.js).
+- Input: O texto atual inserido pelo usuário.
+            </pre>
+            <p>Isso permite que a IA identifique, por exemplo, se a "Solução Escolhida" no Capítulo 3 é coerente com o "Problema" descrito no Capítulo 1.</p>
+        </section>
+
+        <section id="configuracao">
+            <h2><i class="fas fa-cogs"></i> Dicionário de Configuração (config.js)</h2>
+            <p>O arquivo <code>config.js</code> centraliza o comportamento lógico da interface.</p>
+            
+            <h3>Campos Condicionais (<code>conditionalFieldIds</code>)</h3>
+            <p>Objeto que mapeia gatilhos para exibição de campos. Exemplo:</p>
+            <pre>
+natureza_continua: ['conditional_c3_7_natureza_continua']
+// Se o valor for "Sim", exibe o elemento com este ID.
+            </pre>
+
+            <h3>Prioridade de Modelos (Fallback)</h3>
+            <p>O sistema tenta realizar a chamada na ordem definida em <code>LLM_MODELS_PRIORITY</code>. Se um modelo estiver sobrecarregado (Erro 429 ou 500), o sistema tenta automaticamente o próximo da lista.</p>
+        </section>
+
+        <section id="dinamismo">
+            <h2><i class="fas fa-plus-circle"></i> Gerenciador de Itens Dinâmicos</h2>
+            <p>Utiliza a classe <code>DynamicItemManager</code> para gerenciar listas expansíveis (Soluções, Riscos, Anexos). Esta classe garante:</p>
+            <ul>
+                <li><strong>Renumeração Automática:</strong> Ao excluir o Risco 2, o Risco 3 torna-se automaticamente o 2.</li>
+                <li><strong>Consistência de IDs:</strong> Atualiza os atributos <code>id</code>, <code>for</code> e <code>data-target</code> de todos os subcampos.</li>
+                <li><strong>Integração com IA:</strong> Cada novo botão gerado dinamicamente é vinculado à função <code>getAIHelp()</code>.</li>
+            </ul>
+        </section>
+
+        <section id="persistencia">
+            <h2><i class="fas fa-database"></i> Persistência de Dados</h2>
+            <p>Os dados são salvos no <code>LocalStorage</code> sob a chave definida em <code>ETP_DATA_KEY</code>.</p>
+            <ul>
+                <li><strong>Auto-save:</strong> Acionado via <code>debounce</code> de 750ms após qualquer input.</li>
+                <li><strong>Formato:</strong> JSON estruturado por abas e arrays de objetos para itens dinâmicos.</li>
+                <li><strong>Backup:</strong> A função de "Salvar" gera um arquivo físico <code>.etp.json</code> que pode ser movido entre computadores.</li>
+            </ul>
+        </section>
+
+        <section id="manutencao">
+            <h2><i class="fas fa-tools"></i> Manutenção do Manual</h2>
+            <p>Se as normas do TSE mudarem, a atualização deve ser feita preferencialmente no <code>manual_content.js</code>.</p>
+            <div class="info-box">
+                <strong>Importante:</strong> Se você adicionar um novo campo no <code>index.html</code>, certifique-se de que o <code>id</code> do campo exista como chave no objeto <code>manualContent</code>. Se o campo for dinâmico, use o prefixo genérico definido na lógica de normalização do <code>script.js</code>.
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // Lógica simples de navegação para destacar o item ativo na sidebar
+        document.addEventListener('DOMContentLoaded', () => {
+            const links = document.querySelectorAll('.sidebar a');
+            const sections = document.querySelectorAll('section');
+
+            window.addEventListener('scroll', () => {
+                let current = "";
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (pageYOffset >= sectionTop - 60) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                links.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

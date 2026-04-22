@@ -168,12 +168,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
     function resetAuthChoice() {
-        const simRadio = document.getElementById('etp_auth_sim');
-        const naoRadio = document.getElementById('etp_auth_nao');
-        if (simRadio && naoRadio) {
-            simRadio.checked = false;
-            naoRadio.checked = false;
-            simRadio.dispatchEvent(new Event('change', { 'bubbles': true }));
+        const authSelect = document.getElementById('etp_auth');
+        if (authSelect) {
+            authSelect.value = '';
+            authSelect.dispatchEvent(new Event('change', { 'bubbles': true }));
         }
     }
 
@@ -263,9 +261,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateChapterAccess() {
-        const isCompleto = document.getElementById('etp_tipo_completo')?.checked;
-        const isSimplificado = document.getElementById('etp_tipo_simplificado')?.checked;
-        const hasAuth = document.getElementById('etp_auth_sim')?.checked;
+        const tipoEtpSelect = document.getElementById('etp_tipo');
+        const authSelect = document.getElementById('etp_auth');
+        
+        const isCompleto = tipoEtpSelect?.value === 'completo';
+        const isSimplificado = tipoEtpSelect?.value === 'simplificado';
+        const hasAuth = authSelect?.value === 'sim';
         const seiNumber = document.getElementById('etp_auth_sei_number')?.value.trim();
         
         // Verifica se SRP foi selecionado no Capítulo 8 (item 8.2)
@@ -375,9 +376,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (groupKey === 'etp_auth') {
             if (selectedValue === 'nao') {
                 alert("Para prosseguir com um ETP Simplificado, é obrigatório possuir a autorização prévia da Secretaria de Administração ou da Diretoria-Geral. O formulário foi redefinido para 'ETP Completo'.");
-                const completoRadio = document.getElementById('etp_tipo_completo');
-                completoRadio.checked = true;
-                completoRadio.dispatchEvent(new Event('change', { 'bubbles': true }));
+                const tipoEtpSelect = document.getElementById('etp_tipo');
+                if (tipoEtpSelect) {
+                    tipoEtpSelect.value = 'completo';
+                    tipoEtpSelect.dispatchEvent(new Event('change', { 'bubbles': true }));
+                }
                 return;
             }
             
@@ -794,6 +797,16 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeAboutModal() {
         const aboutModal = document.getElementById('aboutModal');
         if (aboutModal) aboutModal.style.display = "none";
+    }
+
+    function openVideoTutorialModal() {
+        const modal = document.getElementById('videoTutorialModal');
+        if(modal) modal.style.display = 'block';
+    }
+
+    function closeVideoTutorialModal() {
+        const modal = document.getElementById('videoTutorialModal');
+        if(modal) modal.style.display = 'none';
     }
 
     // --- GERENCIADOR DE ITENS DINÂMICOS ---
@@ -2072,8 +2085,10 @@ document.addEventListener('DOMContentLoaded', () => {
         applyAiFeatureState(aiConfig.useAI === 'yes');
     }
 
-    // NOVO CÓDIGO para a função applyAiFeatureState
     function applyAiFeatureState(isEnabled) {
+        // Adiciona ou remove a classe no body para controlar a cor dos botões
+        document.body.classList.toggle('ai-features-disabled', !isEnabled);
+
         const generateTitleButton = document.querySelector('[data-action="generate-title-ai"]');
         const titleField = document.getElementById('etp_titulo');
         const titleHelperText = document.getElementById('etp_titulo_ai_helper_text');
@@ -2083,7 +2098,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (titleField) {
-            // A linha que tornava o campo somente leitura foi REMOVIDA.
             titleField.placeholder = isEnabled
                 ? "Digite ou clique na varinha mágica para uma sugestão da IA"
                 : "Digite o título identificador do ETP";
@@ -2180,6 +2194,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'export-etp': exportETP(actionTarget.dataset.format); break;
                 case 'close-ai-settings-modal': closeAiSettingsModal(); break;
                 case 'close-about-modal': closeAboutModal(); break;
+                case 'close-video-modal': closeVideoTutorialModal(); break;
             }
         });
 
@@ -2280,6 +2295,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Listener para fechar modais
         window.onclick = function(event) {
             const aboutModal = document.getElementById('aboutModal');
+            const videoModal = document.getElementById('videoTutorialModal');
             if (event.target == aiModal) {
                 closeAIModal();
             }
@@ -2288,6 +2304,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (event.target == aboutModal) {
                 closeAboutModal();
+            }
+            if (event.target == videoModal) {
+                closeVideoTutorialModal();
             }
         }
 
@@ -2324,26 +2343,37 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         // --- FIM: Listeners do Modal de Configurações de IA ---
 
-        // --- INÍCIO: Listeners do Modal Sobre ---
-        const aboutModal = document.getElementById('aboutModal');
+        // --- INÍCIO: Listeners de Recursos e Ajuda ---
         document.getElementById('btnAbrirSobre').addEventListener('click', () => {
+            const aboutModal = document.getElementById('aboutModal');
             if (aboutModal) aboutModal.style.display = 'block';
         });
-        document.getElementById('btnAbrirGuiaRapido').addEventListener('click', () => {
+        
+        // Botão do Guia Rápido (agora dentro do modal de tutorial)
+        document.getElementById('btnGuiaRapidoModal').addEventListener('click', () => {
             window.open('guia_rapido.html', '_blank');
         });
+
+        // Botão do Manual (na barra de ferramentas principal)
         document.getElementById('btnAbrirManualEtp').addEventListener('click', () => {
             window.open('manual_etp.html', '_blank');
         });
-        document.getElementById('btnAbrirDocTecnica').addEventListener('click', () => {
-            window.open('documentacao.html', '_blank');
-        });
-        // --- FIM: Listeners do Modal Sobre ---
+
+        // Botão do Tutorial (na barra de ferramentas principal)
+        document.getElementById('btnAbrirTutorial').addEventListener('click', openVideoTutorialModal);
+        
+        // Botão de documentação técnica (sem elemento visual na UI principal, mas mantido para o modal "Sobre")
+        const btnDocTecnica = document.getElementById('btnAbrirDocTecnica');
+        if(btnDocTecnica) {
+            btnDocTecnica.addEventListener('click', () => {
+                window.open('documentacao.html', '_blank');
+            });
+        }
+        // --- FIM: Listeners de Recursos e Ajuda ---
 
         // --- INÍCIO: Listeners para controle de acesso aos capítulos ---
-        document.querySelectorAll('input[name="etp_tipo"], input[name="etp_auth"]').forEach(radio => {
-            radio.addEventListener('change', updateChapterAccess);
-        });
+        document.getElementById('etp_tipo')?.addEventListener('change', updateChapterAccess);
+        document.getElementById('etp_auth')?.addEventListener('change', updateChapterAccess);
         document.getElementById('etp_auth_sei_number')?.addEventListener('input', updateChapterAccess);
         // --- FIM: Listeners para controle de acesso aos capítulos ---
 

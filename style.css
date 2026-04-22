@@ -76,7 +76,7 @@ header h1 {
     display: flex;
     flex-direction: row;
     align-items: stretch; /* Faz a barra lateral e o conteúdo terem a mesma altura */
-    width: 90%;
+    width: 75%;
     max-width: 1600px;
     min-height: 80vh;
     margin: 25px auto;
@@ -297,55 +297,30 @@ header h1 {
     color: #495057;
 }
 
-.label-with-help {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
-}
-
-.label-with-help label {
-    margin-bottom: 0;
-}
-
 .input-with-ai {
     display: flex;
-    align-items: stretch;
+    align-items: flex-start; /* Mantém os botões no topo caso o textarea cresça verticalmente */
+    gap: 10px;
+    width: 100%;
 }
 
-/* Estilos comuns para todos os campos de formulário */
+/* Estilos comuns para os inputs */
 .input-with-ai textarea,
 .input-with-ai input[type="text"],
 .input-with-ai input[type="number"],
 .input-with-ai select,
 .full-width-input {
+    flex-grow: 1; /* Faz o campo ocupar todo o espaço restante */
+    width: 100%;
+    max-width: none; /* Sobrescreve limitações antigas */
     padding: 10px 12px;
     border: 1px solid #ced4da;
     border-radius: 4px;
     font-size: 1em;
     box-sizing: border-box;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: border-color 0.15s, box-shadow 0.15s;
     margin-bottom: 0;
     background-color: #fff;
-    max-width:94%;
-}
-
-/* Campos que estão DENTRO de um contêiner com botão devem crescer para preencher o espaço */
-.input-with-ai textarea,
-.input-with-ai input[type="text"],
-.input-with-ai input[type="number"],
-.input-with-ai select {
-    flex-grow: 1;
-    width: auto; /* Permite que o flex-grow funcione corretamente */
-}
-
-/* Campos que devem ocupar a largura total QUANDO sozinhos */
-.full-width-input {
-    width: 95%;
-}
-
-select.full-width-input {
-    width: 95%;
 }
 
 .input-with-ai textarea:focus,
@@ -364,14 +339,6 @@ input[type="text"].full-width-input[readonly],
     background-color: #e9ecef;
     color: #495057;
     cursor: default;
-    border-color: #ced4da;
-    box-shadow: none;
-}
-.input-with-ai input[type="text"][readonly]:focus,
-input[type="text"].full-width-input[readonly]:focus,
-.input-with-ai textarea[readonly]:focus {
-    border-color: #ced4da;
-    box-shadow: none;
 }
 
 .input-with-ai textarea,
@@ -380,72 +347,55 @@ textarea.full-width-input {
     resize: vertical;
 }
 
-.form-group > .full-width-input {
-    flex-grow: 0;
-}
-
+/* Estilo unificado para TODOS os botões de IA */
 .ai-help-button {
-    margin-left: 10px;
-    margin-right: 10px;
-    padding: 8px 12px;
     background-color: #28a745;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.9em;
-    /*display: flex;*/
-    align-items: center;
-    gap: 5px;
+    font-size: 1.1em;
     transition: background-color 0.2s;
-    flex-shrink: 0;
-    box-sizing: border-box;
-    width: 40px;
-    height: auto;
-    height: 40px;
-    float: right;
-}
-
-.ai-help-button-checkbox{
-    margin-left: 10px;
-    padding: 8px 12px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.9em;
+    flex-shrink: 0; /* Impede que o botão encolha */
+    width: 42px; /* Garante que o botão seja um quadrado perfeito */
+    height: 42px;
     display: flex;
-    align-items: right;
-    gap: 5px;
-    transition: background-color 0.2s;
-    flex-shrink: 0;
-    box-sizing: border-box;
-    width: 40px;
-    height: auto;
-    min-height: 40px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
 }
 
-.ai-help-button:hover, .ai-help-button-select:hover {
+.ai-help-button:hover {
     background-color: #218838;
 }
 
-.ai-help-button i, .ai-help-button-select i {
-    font-size: 1.1em;
-}
-
-.label-with-help .ai-help-button {
-    padding: 4px 10px;
-    /*height: auto;*/
-    line-height: 1;
-}
-
+/* Exceção: Botão de gerar título (pois ele recebe texto via JS, precisa ser mais largo) */
 button[data-action="generate-title-ai"] {
-    padding: 8px 12px;
+    width: auto !important;
+    padding: 0 15px !important;
+    gap: 8px;
 }
 
-button[data-action="generate-title-ai"] i.fa-wand-magic-sparkles {
-    color: #ffdd57;
+/* Estilo para Radio Buttons e Checkboxes com botão IA ao lado do título */
+.label-with-help {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Centraliza o label e o botão verticalmente */
+    margin-bottom: 8px;
+    gap: 15px;
+}
+
+.label-with-help label {
+    margin-bottom: 0;
+    flex-grow: 1; /* Faz o label ocupar o espaço */
+}
+
+/* Botões da IA específicos dentro do label-with-help não precisam de altura forçada */
+.label-with-help .ai-help-button {
+    width: 36px; /* Levemente menor para caber melhor na linha do título */
+    height: 36px;
+    font-size: 1em;
 }
 
 .form-group small {
@@ -453,17 +403,6 @@ button[data-action="generate-title-ai"] i.fa-wand-magic-sparkles {
     margin-top: 6px;
     font-size: 0.875em;
     color: #6c757d;
-}
-
-.placeholder-text {
-    color: #6c757d;
-    font-style: italic;
-    text-align: center;
-    padding: 20px;
-    border: 1px dashed #ced4da;
-    border-radius: 4px;
-    margin-top: 20px;
-    background-color: #f8f9fa;
 }
 
 /* --- ESTILOS PARA ITENS DINÂMICOS (SOLUÇÕES, RISCOS, ETC.) --- */
@@ -1253,4 +1192,90 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
 
 .tab-nav .tab-button.inactive i {
     color: #adb5bd !important;
+}
+
+/* --- ESTILOS PARA A NOVA BARRA DE FERRAMENTAS --- */
+.toolbar-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.toolbar-separator {
+    width: 1px;
+    height: 25px;
+    background-color: #004080;
+    margin: 0 10px;
+}
+
+/* --- ESTILOS PARA O MODAL DE VÍDEO --- */
+#videoTutorialModal .modal-content {
+    max-width: 900px;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* Proporção 16:9 */
+    background-color: #000;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+.video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.video-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #ccc;
+    background-color: #2c2c2c;
+    text-align: center;
+}
+
+.video-placeholder i {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.video-placeholder p {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.btn-export-primary {
+    background-color: #1c7e13 !important; /* Azul característico do Microsoft Word */
+}
+
+.btn-tool-help{
+    background-color: #66717a !important; /* Azul característico do Microsoft Word */
+}
+
+/* --- ESTILO PARA BOTÕES DE AJUDA COM A IA DESATIVADA --- */
+
+body.ai-features-disabled .ai-help-button {
+    background-color: #007bff; /* Um azul informativo, mas não primário */
+}
+
+body.ai-features-disabled .ai-help-button:hover {
+    background-color: #0056b3; /* Tom mais escuro para o hover */
+}
+
+body:not(.ai-features-disabled) .ai-help-button i.fa-brain::before {
+    content: '\f544'; /* Este é o código Unicode para o ícone 'robot' do Font Awesome */
 }

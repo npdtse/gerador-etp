@@ -88,11 +88,13 @@
 			</div>
 
             <!-- Banner de Contexto (UX) -->
-            <div id="contextBanner" class="context-banner"></div>
+            <!--<div id="contextBanner" class="context-banner"></div>-->
 
             <!-- Conteúdo das Abas -->
             <div id="identificacao" class="tab-content">
                 <h2><i class="fas fa-id-badge chapter-icon" aria-hidden="true"></i>Identificação do Estudo Técnico Preliminar</h2>
+                
+                
                 <div class="form-group">
                     <label for="etp_unidade_demandante">I.1 Unidade Demandante</label>
                     <div class="input-with-ai">
@@ -152,14 +154,15 @@
             </div>
 
             <div id="cap1" class="tab-content">
-                <h2><i class="fas fa-bullseye chapter-icon" aria-hidden="true"></i>Capítulo 1: Definição da Necessidade ou Problema a ser Resolvido</h2>
+                <h2><i class="fas fa-bullseye chapter-icon" aria-hidden="true"></i>Capítulo 1: Necessidade ou Problema a ser Resolvido</h2>
+                <p class="warning-text">Neste capítulo, a necessidade não deve ser confundida com a solução pretendida. O foco deve ser na "dor" da Administração, e não na "receita" (a solução).</p>
                 <div class="form-group">
                     <label for="c1_1_indicacao_necessidade">1.1 Indicação da necessidade</label>
                     <div class="input-with-ai">
                         <textarea id="c1_1_indicacao_necessidade" rows="4" placeholder="Registre de forma clara e objetiva qual é a necessidade..."></textarea>
                         <button class="ai-help-button" data-action="get-ai-help" data-target-field="c1_1_indicacao_necessidade"><i class="fas fa-brain" aria-hidden="true"></i></button>
                     </div>
-                    <small><i>Ressalta-se que a necessidade não deve ser confundida com a solução pretendida...</i></small>
+                    <!--<small><i>Ressalta-se que a necessidade não deve ser confundida com a solução pretendida...</i></small>-->
                 </div>
                 <div class="form-group">
                     <label for="c1_2_situacoes_problemas">1.2 Situações, problemas, dificuldades enfrentadas</label>
@@ -219,7 +222,7 @@
 
             <div id="cap2" class="tab-content simplificado-hide">
                 <h2><i class="fas fa-search-dollar chapter-icon" aria-hidden="true"></i>Capítulo 2: Levantamento e Análise de Soluções de Mercado</h2>
-                <p class="warning-text">Deve-se realizar pesquisa de mercado para identificar e analisar as alternativas possíveis de soluções que possam atender à necessidade.</p>
+                <p class="warning-text">Neste capítulo, deve-se registrar as alternativas de soluções encontradas na pesquisa de mercado, as quais possam atender à necessidade levantada.</p>
                 <div id="solucoes_mercado_container">
                     <!-- Soluções dinâmicas serão adicionadas aqui via JavaScript -->
                 </div>
@@ -236,6 +239,7 @@
 
             <div id="cap3" class="tab-content">
                 <h2><i class="fas fa-check-circle chapter-icon" aria-hidden="true"></i>Capítulo 3: Detalhamento da Solução Escolhida</h2>
+                <p class="warning-text">Após a análise comparativa das alternativas de mercado, este capítulo formaliza qual foi a solução considerada a mais vantajosa para atender à necessidade da Administração.</p>
                 <div class="form-group">
                     <div id="c3_1_completo_wrapper">
                         <label for="c3_1_solucao_escolhida">3.1 Solução escolhida</label>
@@ -512,6 +516,7 @@
 
             <div id="cap4" class="tab-content">
                 <h2><i class="fas fa-coins chapter-icon" aria-hidden="true"></i>Capítulo 4: Detalhamento do Valor Estimado da Contratação</h2>
+                <p class="warning-text">Neste capítulo, devem ser feitas as descrições da pesquisa de preços realizada e do modo como se chegou a um valor estimado da contratação.</p>
                 <div class="form-group">
                     <label for="c4_1_metodologia_estimativa">4.1 Pesquisa de Preços</label>
                     <div class="input-with-ai">
@@ -540,6 +545,7 @@
 
             <div id="cap5" class="tab-content simplificado-hide">
                 <h2><i class="fas fa-history chapter-icon" aria-hidden="true"></i>Capítulo 5: Análise de Contratações Anteriores</h2>
+                <p class="warning-text">Neste capítulo, é feita uma análise crítica de contratações anteriores relacionadas à necessidade atual levantada.</p>
                 <div class="form-group label-with-help">
                     <div style="display: flex; align-items: center;">
                         <input type="checkbox" id="c5_nao_se_aplica" data-action="toggle-cap5"> 
@@ -587,6 +593,7 @@
 
             <div id="cap6" class="tab-content">
                 <h2><i class="fas fa-shield-alt chapter-icon" aria-hidden="true"></i>Capítulo 6: Análise dos Riscos</h2>
+                <p class="warning-text">Neste capítulo, é levantado aquilo que pode dar errado nas fases de planejamento, seleção do fornecedor e execução do contrato, com o objetivo de prevenção e contingência.</p>
                 <div id="riscos_container">
                     <!-- Riscos dinâmicos -->
                 </div>
@@ -603,7 +610,7 @@
 
             <div id="cap7" class="tab-content">
                 <h2><i class="fas fa-th-large chapter-icon" aria-hidden="true"></i>Capítulo 7: Parcelamento da Solução</h2>
-                <p class="warning-text">O parcelamento é a divisão do objeto da contratação em partes, com o objetivo de ampliar a competitividade e possibilitar a participação de mais licitantes, desde que haja viabilidade técnica e vantagem econômica.</p>
+                <p class="warning-text">Neste capítulo, define-se a forma de parcelamento do objeto da contratação, com o objetivo de ampliar a competitividade e possibilitar a participação de mais licitantes, desde que haja viabilidade técnica e vantagem econômica.</p>
                 <div class="form-group">
                     <label for="c7_1_forma_parcelamento">7.1 Como será feito o parcelamento desta contratação?</label>
                     <div class="input-with-ai">
@@ -648,7 +655,7 @@
 
             <div id="cap8" class="tab-content">
                 <h2><i class="fas fa-gavel chapter-icon" aria-hidden="true"></i>Capítulo 8: Aspectos Administrativos</h2>
-                
+                <p class="warning-text">Neste capítulo, são definidos aspectos administrativos importantes tanto para a Administração quanto para os licitantes.</p>
                 <div class="form-group">
                     <label for="c8_1_modalidade_contratacao">8.1 Modalidade da contratação</label>
                     <div class="input-with-ai">

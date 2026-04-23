@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (hasHiddenItems) {
             const modeName = isSimplificado ? "ETP Simplificado" : "ETP Completo";
             banner.style.display = 'block';
-            banner.innerHTML = `<i class="fas fa-info-circle"></i> <strong>Modo ${modeName}:</strong> Um ou mais itens desta seção foram ocultados automaticamente, pois não são exigidos nesta modalidade.`;
+            banner.innerHTML = `<i class="fas fa-info-circle"></i> <strong>Modo ${modeName}:</strong> Um ou mais itens desta seção foram ocultados automaticamente, pois não são exigidos neste tipo de ETP.`;
         }
     }
 

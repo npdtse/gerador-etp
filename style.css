@@ -1279,3 +1279,48 @@ body.ai-features-disabled .ai-help-button:hover {
 body:not(.ai-features-disabled) .ai-help-button i.fa-brain::before {
     content: '\f544'; /* Este é o código Unicode para o ícone 'robot' do Font Awesome */
 }
+
+/* --- ESTILOS DA BARRA DE NAVEGAÇÃO INFERIOR --- */
+.bottom-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 45px;
+    margin-bottom: 45px;
+    padding-top: 15px;
+    /*border-top: 1px solid #dee2e6;*/
+}
+
+.btn-nav-chapter {
+    padding: 12px 20px;
+    font-size: 1em;
+    font-weight: 500;
+    color: #ffffff;
+    background-color: #0056b3;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, opacity 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-nav-chapter:hover:not(:disabled) {
+    background-color: #004080;
+}
+
+.btn-nav-prev {
+    background-color: #6c757d;
+}
+
+.btn-nav-prev:hover:not(:disabled) {
+    background-color: #5a6268;
+}
+
+.btn-nav-chapter:disabled {
+    background-color: #a0c4e8;
+    color: #f1f1f1;
+    cursor: not-allowed;
+    opacity: 0.7;
+}

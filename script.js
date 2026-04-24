@@ -215,6 +215,39 @@ document.addEventListener('DOMContentLoaded', () => {
             updateContextBanner();
         }
     }
+
+    function navigateToChapter(direction) {
+        const tabOrder = ['identificacao', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6', 'cap7', 'cap8', 'cap9', 'anexos', 'consolidacao'];
+        const currentTab = document.querySelector('.tab-content.active');
+        if (!currentTab) return;
+
+        let currentIndex = tabOrder.indexOf(currentTab.id);
+        if (currentIndex === -1) return;
+
+        let step = direction === 'next' ? 1 : -1;
+        let targetIndex = currentIndex + step;
+
+        // Loop para pular capítulos ocultos/inativos
+        while (targetIndex >= 0 && targetIndex < tabOrder.length) {
+            const targetId = tabOrder[targetIndex];
+            const navButton = document.querySelector(`.tab-button[data-tab-target="${targetId}"]`);
+            
+            const isInactive = navButton && navButton.classList.contains('inactive');
+            const isHidden = navButton && window.getComputedStyle(navButton).display === 'none';
+
+            if (!isInactive && !isHidden) {
+                openTab(targetId);
+                
+                // CORREÇÃO DEFINITIVA: Rola a janela inteira (window) para o topo.
+                setTimeout(() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }, 0);
+
+                break;
+            }
+            targetIndex += step;
+        }
+    }
     
     function applyEtpMode(mode) {
         const isSimplificado = mode === 'simplificado';
@@ -323,6 +356,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         updateAllProgressBars();
+
+        // Controle do botão "Próximo" na aba de Identificação
+        const btnNextIdentificacao = document.getElementById('btnNext_identificacao');
+        if (btnNextIdentificacao) {
+            // Habilita se for Completo OU se for Simplificado preenchido corretamente
+            btnNextIdentificacao.disabled = !(enableCompleto || enableSimplificado);
+        }
     }
 
     function toggleVigenciaBenefitsField(inputElement) {
@@ -2195,6 +2235,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'close-ai-settings-modal': closeAiSettingsModal(); break;
                 case 'close-about-modal': closeAboutModal(); break;
                 case 'close-video-modal': closeVideoTutorialModal(); break;
+                case 'next-chapter': navigateToChapter('next'); break;
+                case 'prev-chapter': navigateToChapter('prev'); break;
             }
         });
 

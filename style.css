@@ -1392,3 +1392,41 @@ body:not(.ai-features-disabled) .ai-help-button i.fa-book-open::before {
     cursor: not-allowed;
     opacity: 0.7;
 }
+
+/* --- ESTILOS PARA NOTIFICAÇÃO (TOAST) DE CÓPIA PARA O SEI --- */
+.toast-notification {
+    visibility: hidden;
+    min-width: 280px;
+    background-color: #28a745;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 16px;
+    position: fixed;
+    z-index: 10000;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    font-size: 1.1em;
+    font-weight: 500;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+}
+
+.toast-notification i {
+    margin-right: 8px;
+}
+
+.toast-notification.show {
+    visibility: visible;
+    animation: fadein 0.5s, fadeout 0.5s 3.5s;
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;} 
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;} 
+    to {bottom: 0; opacity: 0;}
+}

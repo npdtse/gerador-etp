@@ -1977,6 +1977,98 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.removeChild(element);
     }
 
+    // --- FUNÇÕES DE EXPORTAÇÃO DIRETA PARA A ÁREA DE TRANSFERÊNCIA (SEI) ---
+
+    function generateHtmlForSei(data, etpTitle) {
+        const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
+        const mainDocTitle = isSimplificado ? "Estudo Técnico Preliminar Simplificado" : "Estudo Técnico Preliminar";
+
+        // Estilos embutidos mínimos e seguros para o SEI
+        let html = `<div style="font-family: Arial, sans-serif; font-size: 11pt; color: #000000; line-height: 1.5;">`;
+        
+        // Títulos Principais: Usamos <p> para forçar a quebra de linha absoluta no SEI
+        html += `<p style="text-align: center; margin-bottom: 5px; display: block;"><span style="font-size: 15pt; font-weight: bold; text-transform: uppercase;">${mainDocTitle}</span></p>`;
+        html += `<p style="text-align: center; margin-top: 0; margin-bottom: 30px; display: block;"><span style="font-size: 13pt; font-weight: bold;">${etpTitle}</span></p>`;
+
+        data.forEach(chapter => {
+            // Títulos dos Capítulos: Usamos <p> com borda inferior
+            html += `<p style="margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid #000000; padding-bottom: 5px; display: block;"><span style="font-size: 12pt; font-weight: bold; text-transform: uppercase;">${chapter.title}</span></p>`;
+
+            if (chapter.isSkipped) {
+                html += `<p style="display: block;"><i>Não se aplica ao ETP Simplificado.</i></p>`;
+                return;
+            }
+
+            // Geração de Tabelas de Resumo
+            if (chapter.summaryTable) {
+                html += `<p style="display: block;"><b>${chapter.summaryTable.title}</b></p>`;
+                html += `<table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-bottom: 15px;"><thead><tr>`;
+                chapter.summaryTable.headers.forEach(h => html += `<th style="background-color: #f2f2f2; text-align: left;">${h}</th>`);
+                html += `</tr></thead><tbody>`;
+                chapter.summaryTable.rows.forEach(row => {
+                    html += `<tr>`;
+                    row.forEach(cell => html += `<td>${cell}</td>`);
+                    html += `</tr>`;
+                });
+                html += `</tbody></table>`;
+            }
+
+            // Geração dos Campos
+            chapter.fields.filter(field => field.status !== 'inactive').forEach(field => {
+                if (field.isDynamic) {
+                    html += `<p style="margin-top: 15px; margin-bottom: 5px; display: block;"><b><i>${field.label}</i></b></p>`;
+                    html += `<ul style="list-style-type: none; padding-left: 20px; margin-top: 0;">`;
+                    field.subFields.forEach(sub => {
+                        // Substitui quebras de linha de textarea por <br> para manter no HTML
+                        const safeValue = sub.value ? sub.value.replace(/\n/g, '<br>') : '';
+                        html += `<li style="margin-bottom: 10px;"><b>${sub.label}</b><br>${safeValue}</li>`;
+                    });
+                    html += `</ul>`;
+                } else {
+                    const safeValue = field.value ? field.value.replace(/\n/g, '<br>') : '';
+                    html += `<p style="margin-bottom: 15px; display: block;"><b>${field.label}</b><br>${safeValue}</p>`;
+                }
+            });
+        });
+
+        html += `</div>`;
+        return html;
+    }
+
+    async function copyETPtoClipboardSEI() {
+        const data = getConsolidatedDataForExport();
+        if (data.length === 0) {
+            alert("Não há dados preenchidos para exportar.");
+            return;
+        }
+
+        const etpTitle = document.getElementById('etp_titulo')?.value || "ETP sem título";
+        const htmlContent = generateHtmlForSei(data, etpTitle);
+
+        try {
+            // A API Clipboard moderna permite gravar tipos MIME específicos.
+            // Gravando como text/html, o SEI entende a formatação nativamente.
+            const blobHtml = new Blob([htmlContent], { type: "text/html" });
+            const blobText = new Blob([htmlContent.replace(/<[^>]*>?/gm, '')], { type: "text/plain" }); // Fallback sem formatação
+            
+            const clipboardItem = new ClipboardItem({
+                "text/html": blobHtml,
+                "text/plain": blobText,
+            });
+
+            await navigator.clipboard.write([clipboardItem]);
+            
+            // Exibe a mensagem de sucesso
+            const toast = document.getElementById("toastNotification");
+            toast.className = "toast-notification show";
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3900);
+
+        } catch (err) {
+            console.error('Falha ao copiar para a área de transferência:', err);
+            alert("Não foi possível copiar automaticamente. Seu navegador pode estar bloqueando o acesso à área de transferência.");
+        }
+    }
+
     // --- LÓGICA DINÂMICA DO CAPÍTULO 8 ---
     function handleModalidadeChange() {
         const modalidadeSelect = document.getElementById('c8_1_modalidade_contratacao');
@@ -2231,10 +2323,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'remove-contratacao': contratacaoManager.remove(actionTarget.closest('.contratacao-item')); break;
                 case 'add-anexo': anexoManager.add(); break;
                 case 'remove-anexo': anexoManager.remove(actionTarget.closest('.anexo-item')); break;
-                case 'export-etp': exportETP(actionTarget.dataset.format); break;
                 case 'close-ai-settings-modal': closeAiSettingsModal(); break;
                 case 'close-about-modal': closeAboutModal(); break;
                 case 'close-video-modal': closeVideoTutorialModal(); break;
+                case 'add-anexo': anexoManager.add(); break;
+                case 'remove-anexo': anexoManager.remove(actionTarget.closest('.anexo-item')); break;
+                case 'export-etp': exportETP(actionTarget.dataset.format); break;
+                case 'copy-to-sei': copyETPtoClipboardSEI(); break;
+                case 'export-etp': exportETP(actionTarget.dataset.format); break;
                 case 'next-chapter': navigateToChapter('next'); break;
                 case 'prev-chapter': navigateToChapter('prev'); break;
             }

@@ -50,8 +50,8 @@
         </div>
         <div class="toolbar-separator"></div>
         <div class="toolbar-group">
-            <button class="etp-tool-button btn-export-primary" data-action="export-etp" data-format="docx-text"><i
-                    class="fas fa-file-alt" aria-hidden="true"></i> Gerar Documento Word</button>
+            <button class="etp-tool-button btn-export-primary" data-action="export-etp" data-format="docx-text"><i class="fas fa-file-word" aria-hidden="true"></i> Gerar Documento Word</button>
+            <button class="etp-tool-button btn-export-primary" data-action="copy-to-sei"><i class="fas fa-clipboard" aria-hidden="true"></i> Copiar Documento para o SEI</button>
         </div>
     </div>
 
@@ -1628,9 +1628,8 @@
                 <div class="bottom-nav-bar">
                     <button class="btn-nav-chapter btn-nav-prev" data-action="prev-chapter"><i
                             class="fas fa-arrow-left"></i> Capítulo Anterior</button>
-                    <button class="etp-tool-button btn-export-primary" data-action="export-etp" data-format="docx-text"
-                        style="font-size: 1em; padding: 12px 20px;"><i class="fas fa-file-alt" aria-hidden="true"></i>
-                        Gerar Documento Word</button>
+                    <button class="etp-tool-button btn-export-primary" data-action="export-etp" data-format="docx-text" style="font-size: 1em; padding: 12px 20px;"><i class="fas fa-file-alt" aria-hidden="true"></i>Gerar Documento Word</button>
+                    <button class="etp-tool-button btn-export-primary" data-action="copy-to-sei" style="font-size: 1em; padding: 12px 20px;"><i class="fas fa-clipboard" aria-hidden="true"></i> Copiar Documento para o SEI</button>
                 </div>
             </div>
         </div>
@@ -1887,6 +1886,7 @@
             </div>
         </div>
     </div>
+    <div id="toastNotification" class="toast-notification"><i class="fas fa-check-circle"></i> Conteúdo copiado! Vá no SEI e aperte Ctrl+V.</div>
 
     <script src="manual_content.js"></script>
     <script src="prompts.js"></script>

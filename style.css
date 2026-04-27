@@ -1430,3 +1430,15 @@ body:not(.ai-features-disabled) .ai-help-button i.fa-book-open::before {
     from {bottom: 30px; opacity: 1;} 
     to {bottom: 0; opacity: 0;}
 }
+
+/* --- EFEITO DE DESTAQUE PARA O CAMPO TIPO DE ETP --- */
+@keyframes pulseGlow {
+    0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.6); border-color: #80bdff; }
+    70% { box-shadow: 0 0 0 8px rgba(0, 123, 255, 0); border-color: #007bff; }
+    100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); border-color: #ced4da; }
+}
+
+.highlight-pulse {
+    animation: pulseGlow 2s infinite !important;
+    border: 2px solid #007bff !important;
+}

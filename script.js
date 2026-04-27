@@ -297,6 +297,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const tipoEtpSelect = document.getElementById('etp_tipo');
         const authSelect = document.getElementById('etp_auth');
 
+        if (tipoEtpSelect) {
+            if (tipoEtpSelect.value === '') {
+                tipoEtpSelect.classList.add('highlight-pulse');
+            } else {
+                tipoEtpSelect.classList.remove('highlight-pulse');
+            }
+        }
+
         const isCompleto = tipoEtpSelect?.value === 'completo';
         const isSimplificado = tipoEtpSelect?.value === 'simplificado';
         const hasAuth = authSelect?.value === 'sim';

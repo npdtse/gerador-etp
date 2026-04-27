@@ -11,7 +11,7 @@ header {
     color: white;
     padding: 1rem 1rem;
     text-align: center;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 header h1 {
@@ -37,7 +37,7 @@ header h1 {
 .etp-toolbar {
     background-color: #0056b3;
     padding: 10px 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     display: flex;
     gap: 10px;
     align-items: center;
@@ -77,11 +77,11 @@ header h1 {
     background-color: #2ba91f;
 }
 
-.btn-tool-help{
+.btn-tool-help {
     background-color: #66717a;
 }
 
-.btn-tool-help:hover{
+.btn-tool-help:hover {
     background-color: #82888f;
 }
 
@@ -90,19 +90,22 @@ header h1 {
 .tab-container {
     display: flex;
     flex-direction: row;
-    align-items: stretch; /* Faz a barra lateral e o conteúdo terem a mesma altura */
+    align-items: stretch;
+    /* Faz a barra lateral e o conteúdo terem a mesma altura */
     width: 75%;
     max-width: 1600px;
     min-height: 80vh;
     margin: 25px auto;
     background-color: white;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    overflow: hidden; /* Mantém tudo dentro das bordas arredondadas */
+    overflow: hidden;
+    /* Mantém tudo dentro das bordas arredondadas */
 }
 
 .tab-nav {
-    flex: 0 0 310px; /* Largura da barra lateral: não cresce, não encolhe, base de 310px */
+    flex: 0 0 310px;
+    /* Largura da barra lateral: não cresce, não encolhe, base de 310px */
     display: flex;
     flex-direction: column;
     background-color: #e2eef8;
@@ -114,7 +117,8 @@ header h1 {
 .tab-button {
     display: flex;
     align-items: center;
-    gap: 12px; /* Espaço entre ícone e texto */
+    gap: 12px;
+    /* Espaço entre ícone e texto */
     width: 100%;
     padding: 12px 20px;
     cursor: pointer;
@@ -124,7 +128,8 @@ header h1 {
     font-weight: 500;
     color: #495057;
     text-align: left;
-    border-left: 4px solid transparent; /* Indicador de aba ativa */
+    border-left: 4px solid transparent;
+    /* Indicador de aba ativa */
     transition: all 0.2s ease-in-out;
     box-sizing: border-box;
     border-bottom: 1px solid #c0d4e5;
@@ -132,7 +137,8 @@ header h1 {
 
 .tab-button i {
     font-size: 1.1em;
-    width: 20px; /* Largura fixa para alinhamento dos ícones */
+    width: 20px;
+    /* Largura fixa para alinhamento dos ícones */
     text-align: center;
     color: #888;
     transition: color 0.2s ease-in-out;
@@ -170,7 +176,7 @@ header h1 {
 }
 
 .tab-button.completed i {
-    color: #0056b3; 
+    color: #0056b3;
 }
 
 .tab-button.completed {
@@ -178,19 +184,19 @@ header h1 {
 }
 
 .tab-button.completed::after {
-    content: '\f00c'; 
+    content: '\f00c';
     font-family: 'Font Awesome 6 Free';
-    font-weight: 900; 
+    font-weight: 900;
     font-size: 1em;
     color: #0056b3;
-    opacity: 0.5; 
-    margin-left: auto; 
-    padding-left: 10px; 
+    opacity: 0.5;
+    margin-left: auto;
+    padding-left: 10px;
 }
 
 /* Container para o conteúdo principal e a barra de progresso */
 .main-content-wrapper {
-    flex: 1; 
+    flex: 1;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
@@ -201,14 +207,14 @@ header h1 {
 .progress-bar-container,
 .tab-progress-container {
     width: 100%;
-    background-color: #f8f9fa; 
+    background-color: #f8f9fa;
     /* O padding 30px nas laterais alinha as barras perfeitamente com os campos do formulário */
-    padding: 8px 30px; 
+    padding: 8px 30px;
     border-bottom: 1px solid #dee2e6;
     flex-shrink: 0;
-    display: flex; 
+    display: flex;
     align-items: center;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
 .progress-bar {
@@ -222,35 +228,35 @@ header h1 {
     font-weight: bold;
     border-radius: 0 3px 3px 0;
     transition: width 0.4s ease;
-    box-shadow: inset 0 -1px 1px rgba(0,0,0,0.15);
+    box-shadow: inset 0 -1px 1px rgba(0, 0, 0, 0.15);
 }
 
 .main-progress-track {
     flex-grow: 1;
     background-color: #e9ecef;
     border-radius: 3px;
-    height: 20px; 
+    height: 20px;
     overflow: hidden;
 }
 
 .tab-progress-track {
-    flex-grow: 1; 
-    background-color: #e9ecef; 
+    flex-grow: 1;
+    background-color: #e9ecef;
     border-radius: 3px;
     height: 20px;
-    overflow: hidden; 
+    overflow: hidden;
 }
 
 .tab-progress-container .progress-bar {
-    height: 100%; 
+    height: 100%;
     line-height: 20px;
-    background-color: #17a2b8; 
+    background-color: #17a2b8;
 }
 
 .tab-content {
     padding: 25px 30px;
     display: none;
-    flex-grow: 1; 
+    flex-grow: 1;
 }
 
 .tab-content.active {
@@ -264,6 +270,7 @@ header h1 {
     margin-top: 0;
     margin-bottom: 15px;
 }
+
 .tab-content h2 {
     font-size: 1.5em;
     border-bottom: 1px solid #eee;
@@ -271,6 +278,7 @@ header h1 {
     display: flex;
     align-items: center;
 }
+
 .tab-content h3 {
     font-size: 1.3em;
     margin-top: 25px;
@@ -280,6 +288,7 @@ header h1 {
     justify-content: space-between;
     align-items: center;
 }
+
 .tab-content h4 {
     font-size: 1.1em;
     color: #333;
@@ -307,7 +316,8 @@ header h1 {
 
 .input-with-ai {
     display: flex;
-    align-items: flex-start; /* Mantém os botões no topo caso o textarea cresça verticalmente */
+    align-items: flex-start;
+    /* Mantém os botões no topo caso o textarea cresça verticalmente */
     gap: 10px;
     width: 100%;
 }
@@ -318,9 +328,11 @@ header h1 {
 .input-with-ai input[type="number"],
 .input-with-ai select,
 .full-width-input {
-    flex-grow: 1; /* Faz o campo ocupar todo o espaço restante */
+    flex-grow: 1;
+    /* Faz o campo ocupar todo o espaço restante */
     width: 100%;
-    max-width: none; /* Sobrescreve limitações antigas */
+    max-width: none;
+    /* Sobrescreve limitações antigas */
     padding: 10px 12px;
     border: 1px solid #ced4da;
     border-radius: 4px;
@@ -364,8 +376,10 @@ textarea.full-width-input {
     cursor: pointer;
     font-size: 1.1em;
     transition: background-color 0.2s;
-    flex-shrink: 0; /* Impede que o botão encolha */
-    width: 42px; /* Garante que o botão seja um quadrado perfeito */
+    flex-shrink: 0;
+    /* Impede que o botão encolha */
+    width: 42px;
+    /* Garante que o botão seja um quadrado perfeito */
     height: 42px;
     display: flex;
     align-items: center;
@@ -389,19 +403,22 @@ button[data-action="generate-title-ai"] {
 .label-with-help {
     display: flex;
     justify-content: space-between;
-    align-items: center; /* Centraliza o label e o botão verticalmente */
+    align-items: center;
+    /* Centraliza o label e o botão verticalmente */
     margin-bottom: 8px;
     gap: 15px;
 }
 
 .label-with-help label {
     margin-bottom: 0;
-    flex-grow: 1; /* Faz o label ocupar o espaço */
+    flex-grow: 1;
+    /* Faz o label ocupar o espaço */
 }
 
 /* Botões da IA específicos dentro do label-with-help não precisam de altura forçada */
 .label-with-help .ai-help-button {
-    width: 36px; /* Levemente menor para caber melhor na linha do título */
+    width: 36px;
+    /* Levemente menor para caber melhor na linha do título */
     height: 36px;
     font-size: 1em;
 }
@@ -415,7 +432,10 @@ button[data-action="generate-title-ai"] {
 
 /* --- ESTILOS PARA ITENS DINÂMICOS (SOLUÇÕES, RISCOS, ETC.) --- */
 
-.solucao-item, .risco-item, .anexo-item, .contratacao-item {
+.solucao-item,
+.risco-item,
+.anexo-item,
+.contratacao-item {
     border: 1px solid #e0e0e0;
     padding: 20px;
     margin-bottom: 20px;
@@ -438,14 +458,19 @@ button[data-action="generate-title-ai"] {
     gap: 6px;
     font-size: 1em;
 }
+
 .add-button:hover {
     background-color: #0056b3;
 }
+
 .add-button i {
     font-size: 0.9em;
 }
 
-.remove-solucao-button, .remove-risco-button, .remove-anexo-button, .remove-contratacao-button {
+.remove-solucao-button,
+.remove-risco-button,
+.remove-anexo-button,
+.remove-contratacao-button {
     background-color: #dc3545;
     color: white;
     border: none;
@@ -459,10 +484,18 @@ button[data-action="generate-title-ai"] {
     align-items: center;
     gap: 5px;
 }
-.remove-solucao-button:hover, .remove-risco-button:hover, .remove-anexo-button:hover, .remove-contratacao-button:hover {
+
+.remove-solucao-button:hover,
+.remove-risco-button:hover,
+.remove-anexo-button:hover,
+.remove-contratacao-button:hover {
     background-color: #c82333;
 }
-.remove-solucao-button i, .remove-risco-button i, .remove-anexo-button i, .remove-contratacao-button i {
+
+.remove-solucao-button i,
+.remove-risco-button i,
+.remove-anexo-button i,
+.remove-contratacao-button i {
     font-size: 0.9em;
 }
 
@@ -499,6 +532,7 @@ hr {
     gap: 12px;
     flex-wrap: wrap;
 }
+
 .export-buttons button {
     padding: 10px 18px;
     background-color: #6c757d;
@@ -512,9 +546,11 @@ hr {
     align-items: center;
     gap: 6px;
 }
+
 .export-buttons button:hover {
     background-color: #5a6268;
 }
+
 .export-buttons button i {
     font-size: 0.9em;
 }
@@ -527,7 +563,8 @@ hr {
     width: 16px;
     height: 16px;
 }
-.form-group input[type="checkbox"] + label {
+
+.form-group input[type="checkbox"]+label {
     font-weight: normal;
     display: inline;
     color: #495057;
@@ -538,16 +575,19 @@ hr {
     flex-direction: column;
     gap: 10px;
 }
+
 .checkbox-group span {
     display: inline-flex;
     align-items: center;
     margin-right: 15px;
 }
+
 .checkbox-group input[type="checkbox"],
 .checkbox-group input[type="radio"] {
     margin-right: 5px;
     flex-shrink: 0;
 }
+
 .checkbox-group label {
     font-weight: normal;
     margin-bottom: 0;
@@ -561,7 +601,7 @@ hr {
     padding: 10px;
     border-radius: 4px;
     background-color: #f8f9fa;
-    width:93%;
+    width: 93%;
 }
 
 
@@ -576,7 +616,7 @@ hr {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
@@ -587,7 +627,7 @@ hr {
     width: 75%;
     max-width: 750px;
     border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     position: relative;
 }
 
@@ -614,6 +654,7 @@ hr {
     padding-bottom: 10px;
     font-size: 1.4em;
 }
+
 .modal-content h3 i {
     margin-right: 8px;
 }
@@ -625,6 +666,7 @@ hr {
     margin-bottom: 15px;
     font-style: italic;
 }
+
 #aiModelName {
     font-weight: bold;
 }
@@ -673,7 +715,7 @@ hr {
 
 .summary-table-container {
     width: 100%;
-    overflow-x: auto; 
+    overflow-x: auto;
     border: 1px solid #dee2e6;
     border-radius: 4px;
     margin-top: 8px;
@@ -690,7 +732,7 @@ hr {
 
 table.summary-table {
     width: 100%;
-    min-width: 600px; 
+    min-width: 600px;
     border-collapse: collapse;
     font-size: 0.9em;
     table-layout: auto;
@@ -702,7 +744,7 @@ table.summary-table td {
     padding: 8px 10px;
     text-align: left;
     vertical-align: top;
-    white-space: pre-wrap; 
+    white-space: pre-wrap;
 }
 
 table.summary-table th {
@@ -743,7 +785,7 @@ summary.consolidation-title {
     color: #004080;
     background-color: #f0f6fc;
     cursor: pointer;
-    list-style: none; 
+    list-style: none;
     display: flex;
     align-items: center;
     transition: background-color 0.2s ease;
@@ -754,11 +796,11 @@ summary.consolidation-title:hover {
 }
 
 summary.consolidation-title::-webkit-details-marker {
-    display: none; 
+    display: none;
 }
 
 summary.consolidation-title::before {
-    content: '\f0da'; 
+    content: '\f0da';
     font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-right: 12px;
@@ -766,7 +808,7 @@ summary.consolidation-title::before {
     font-size: 0.9em;
 }
 
-details[open] > summary.consolidation-title::before {
+details[open]>summary.consolidation-title::before {
     transform: rotate(90deg);
 }
 
@@ -829,7 +871,8 @@ table.consolidation-sub-table td:first-child {
 */
 .etp-simplificado-mode .form-group.simplificado-hide,
 body:not(.etp-simplificado-mode) .form-group.completo-hide {
-    display: block !important; /* Garante visibilidade */
+    display: block !important;
+    /* Garante visibilidade */
     opacity: 0.45;
     filter: grayscale(100%);
     pointer-events: none;
@@ -851,6 +894,7 @@ body:not(.etp-simplificado-mode) .form-group.completo-hide * {
 .etp-simplificado-mode #c3_1_completo_wrapper.form-group {
     display: none !important;
 }
+
 .etp-simplificado-mode #c3_1_simplificado_wrapper.form-group {
     display: block !important;
 }
@@ -922,7 +966,8 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
 #testConnectionResult {
     padding: 10px;
     border-radius: 4px;
-    display: none; /* Começa oculto */
+    display: none;
+    /* Começa oculto */
 }
 
 #testConnectionResult.testing {
@@ -963,18 +1008,21 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px; /* Espaçamento entre os itens */
+    gap: 15px;
+    /* Espaçamento entre os itens */
     margin-top: 8px;
     color: #e0e0e0;
 }
 
-.app-version, .update-date {
+.app-version,
+.update-date {
     font-size: 1em;
 }
 
 .about-icon {
     font-size: 0.8em;
-    color: #b0c4de; /* Cor sutil */
+    color: #b0c4de;
+    /* Cor sutil */
     cursor: pointer;
     transition: color 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
@@ -987,7 +1035,8 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
 /* --- ESTILOS PARA O MODAL SOBRE --- */
 
 #aboutModal .modal-content {
-    max-width: 850px; /* Um pouco maior para caber o texto */
+    max-width: 850px;
+    /* Um pouco maior para caber o texto */
     max-height: 90vh;
     overflow-y: auto;
 }
@@ -1120,16 +1169,22 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
     align-items: center;
     justify-content: space-between;
     padding: 12px 20px;
-    background-color: #fff3cd; /* Tom de amarelo para alerta */
-    color: #856404; /* Cor de texto que contrasta com o fundo */
+    background-color: #fff3cd;
+    /* Tom de amarelo para alerta */
+    color: #856404;
+    /* Cor de texto que contrasta com o fundo */
     border-bottom: 1px solid #ffeeba;
     font-size: 0.9em;
     width: 90%;
     max-width: 1600px;
-    margin: 0 auto; /* Centraliza o banner */
-    margin-top: 0px; /* Puxa o banner para cima para remover o espaço extra */
-    margin-bottom: -25px; /* Puxa a área de conteúdo para cima para remover o espaço extra */
-    border-radius: 0 0 8px 8px; /* Arredonda apenas os cantos inferiores */
+    margin: 0 auto;
+    /* Centraliza o banner */
+    margin-top: 0px;
+    /* Puxa o banner para cima para remover o espaço extra */
+    margin-bottom: -25px;
+    /* Puxa a área de conteúdo para cima para remover o espaço extra */
+    border-radius: 0 0 8px 8px;
+    /* Arredonda apenas os cantos inferiores */
     box-sizing: border-box;
 }
 
@@ -1152,7 +1207,7 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
     color: #5a4202;
 }
 
-.alert_link{
+.alert_link {
     color: rgb(74, 74, 236);
     text-decoration: none;
 }
@@ -1168,7 +1223,8 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
     margin-bottom: 25px;
     border-radius: 4px;
     font-size: 0.95em;
-    display: none; /* Oculto por padrão, JS controla */
+    display: none;
+    /* Oculto por padrão, JS controla */
     animation: fadeIn 0.3s ease-in;
 }
 
@@ -1178,14 +1234,22 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* 3. Ajuste da Barra Lateral (Botões Inativos) */
 /* Sobrescreve regra anterior para garantir que o botão apareça, mas 'apagado' */
 .tab-nav .tab-button.inactive {
-    display: flex !important; /* Força a exibição */
+    display: flex !important;
+    /* Força a exibição */
     opacity: 0.5;
     background-color: #f1f3f5;
     color: #adb5bd;
@@ -1225,7 +1289,8 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
 .video-container {
     position: relative;
     width: 100%;
-    padding-top: 56.25%; /* Proporção 16:9 */
+    padding-top: 56.25%;
+    /* Proporção 16:9 */
     background-color: #000;
     border-radius: 6px;
     overflow: hidden;
@@ -1269,15 +1334,18 @@ body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
 /* --- ESTILO PARA BOTÕES DE AJUDA COM A IA DESATIVADA --- */
 
 body.ai-features-disabled .ai-help-button {
-    background-color: #007bff; /* Um azul informativo, mas não primário */
+    background-color: #007bff;
+    /* Um azul informativo, mas não primário */
 }
 
 body.ai-features-disabled .ai-help-button:hover {
-    background-color: #0056b3; /* Tom mais escuro para o hover */
+    background-color: #0056b3;
+    /* Tom mais escuro para o hover */
 }
 
-body:not(.ai-features-disabled) .ai-help-button i.fa-brain::before {
-    content: '\f544'; /* Este é o código Unicode para o ícone 'robot' do Font Awesome */
+body:not(.ai-features-disabled) .ai-help-button i.fa-book-open::before {
+    content: '\f544';
+    /* Este é o código Unicode para o ícone 'robot' do Font Awesome */
 }
 
 /* --- ESTILOS DA BARRA DE NAVEGAÇÃO INFERIOR --- */

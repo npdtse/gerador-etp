@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const aiModal = document.getElementById('aiResponseModal');
     const aiComplianceAnalysisEl = document.getElementById('aiComplianceAnalysis');
     const aiModelNameEl = document.getElementById('aiModelName');
-    
+
     // Barras de Progresso
     const mainProgressBarEl = document.getElementById('etpProgressBar');
     const mainProgressTextEl = document.getElementById('etpProgressText');
@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 1. Verifica se o CAPÍTULO INTEIRO está inativo no modo Simplificado
         if (isSimplificado && activeTab.classList.contains('simplificado-hide')) {
-             banner.style.display = 'block';
-             banner.innerHTML = `<i class="fas fa-exclamation-triangle"></i> <strong>Atenção:</strong> Este capítulo não é aplicável ao <strong>ETP Simplificado</strong> e não precisa ser preenchido.`;
-             return;
+            banner.style.display = 'block';
+            banner.innerHTML = `<i class="fas fa-exclamation-triangle"></i> <strong>Atenção:</strong> Este capítulo não é aplicável ao <strong>ETP Simplificado</strong> e não precisa ser preenchido.`;
+            return;
         }
 
         // 2. Verifica se há ITENS ESPECÍFICOS ocultos dentro do capítulo ativo
@@ -143,29 +143,29 @@ document.addEventListener('DOMContentLoaded', () => {
             else field.value = "";
         }
     }
-	
-	function initializeConditionalFields() {
-		document.querySelectorAll('[data-action="toggle-conditional"]').forEach(el => {
+
+    function initializeConditionalFields() {
+        document.querySelectorAll('[data-action="toggle-conditional"]').forEach(el => {
             const event = new Event('change', { 'bubbles': true });
             if (el.type === 'radio') {
                 const checkedRadio = document.querySelector(`input[name="${el.name}"]:checked`);
-                if(checkedRadio) checkedRadio.dispatchEvent(event);
+                if (checkedRadio) checkedRadio.dispatchEvent(event);
                 else el.dispatchEvent(event);
             } else {
-			    el.dispatchEvent(event);
+                el.dispatchEvent(event);
             }
-		});
+        });
 
-		const cap5Checkbox = document.getElementById('c5_nao_se_aplica');
-		if (cap5Checkbox) {
-			cap5Checkbox.dispatchEvent(new Event('change', { 'bubbles': true }));
-		}
+        const cap5Checkbox = document.getElementById('c5_nao_se_aplica');
+        if (cap5Checkbox) {
+            cap5Checkbox.dispatchEvent(new Event('change', { 'bubbles': true }));
+        }
 
-		const vigenciaInput = document.getElementById('c3_8_vigencia_meses');
-		if (vigenciaInput) {
-			toggleVigenciaBenefitsField(vigenciaInput);
-		}
-	}
+        const vigenciaInput = document.getElementById('c3_8_vigencia_meses');
+        if (vigenciaInput) {
+            toggleVigenciaBenefitsField(vigenciaInput);
+        }
+    }
 
     function resetAuthChoice() {
         const authSelect = document.getElementById('etp_auth');
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openTab(tabName) {
         const tabButton = document.querySelector(`.tab-button[data-tab-target="${tabName}"]`);
-        
+
         // NOVO: Impede a abertura se o botão não existir, estiver invisível ou estiver desativado (inactive)
         if (!tabButton || window.getComputedStyle(tabButton).display === 'none' || tabButton.classList.contains('inactive')) {
             return;
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
             activeTab.style.display = "block";
             activeTab.classList.add("active");
         }
-        
+
         tabButton.classList.add("active");
 
         if (tabName === 'consolidacao') {
@@ -208,9 +208,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             tabProgressWrapper.style.display = 'flex';
         }
-        
+
         updateAllProgressBars();
-        
+
         if (typeof updateContextBanner === "function") {
             updateContextBanner();
         }
@@ -231,13 +231,13 @@ document.addEventListener('DOMContentLoaded', () => {
         while (targetIndex >= 0 && targetIndex < tabOrder.length) {
             const targetId = tabOrder[targetIndex];
             const navButton = document.querySelector(`.tab-button[data-tab-target="${targetId}"]`);
-            
+
             const isInactive = navButton && navButton.classList.contains('inactive');
             const isHidden = navButton && window.getComputedStyle(navButton).display === 'none';
 
             if (!isInactive && !isHidden) {
                 openTab(targetId);
-                
+
                 // CORREÇÃO DEFINITIVA: Rola a janela inteira (window) para o topo.
                 setTimeout(() => {
                     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -248,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
             targetIndex += step;
         }
     }
-    
+
     function applyEtpMode(mode) {
         const isSimplificado = mode === 'simplificado';
         document.body.classList.toggle('etp-simplificado-mode', isSimplificado);
@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.form-group.completo-hide').forEach(container => {
             container.querySelectorAll('input, textarea, select, button').forEach(input => {
                 // Se NÃO for simplificado (ou seja, modo Completo), o campo deve ser desabilitado
-                input.disabled = !isSimplificado; 
+                input.disabled = !isSimplificado;
             });
         });
 
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (activeNavButton && activeNavButton.classList.contains('inactive')) {
             openTab('identificacao');
         }
-        
+
         updateAllProgressBars();
         updateAllSummariesAndDropDowns();
         updateContextBanner();
@@ -296,12 +296,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateChapterAccess() {
         const tipoEtpSelect = document.getElementById('etp_tipo');
         const authSelect = document.getElementById('etp_auth');
-        
+
         const isCompleto = tipoEtpSelect?.value === 'completo';
         const isSimplificado = tipoEtpSelect?.value === 'simplificado';
         const hasAuth = authSelect?.value === 'sim';
         const seiNumber = document.getElementById('etp_auth_sei_number')?.value.trim();
-        
+
         // Verifica se SRP foi selecionado no Capítulo 8 (item 8.2)
         const isSrpSelected = document.getElementById('c8_2_procedimentos_auxiliares')?.value === 'srp';
 
@@ -322,13 +322,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     shouldBeActive = true;
                 }
             }
-            
+
             // 2. Regra Específica do Capítulo 9 (Registro de Preços)
             // Só é ativado e clicável se (Completo ou Simplificado Habilitado) E for SRP.
             if (button.dataset.tabTarget === 'cap9') {
                 if ((enableCompleto || enableSimplificado) && isSrpSelected) {
                     button.style.display = 'flex';
-                    shouldBeActive = true; 
+                    shouldBeActive = true;
                 } else {
                     // Se não for SRP, o botão some para não confundir o usuário
                     button.style.display = 'none';
@@ -341,20 +341,20 @@ document.addEventListener('DOMContentLoaded', () => {
             // Aplica o estado visual e lógico de inatividade
             button.classList.toggle('inactive', !shouldBeActive);
         });
-        
+
         // Se a aba atual tornou-se inativa, volta para identificação
         const activeNavButton = document.querySelector('.tab-button.active');
         if (activeNavButton && activeNavButton.classList.contains('inactive')) {
             openTab('identificacao');
         }
-        
+
         // Aplica o estilo visual dos campos (cinza/desabilitado)
         if (enableSimplificado) {
             applyEtpMode('simplificado');
         } else {
             applyEtpMode('completo');
         }
-        
+
         updateAllProgressBars();
 
         // Controle do botão "Próximo" na aba de Identificação
@@ -376,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!showBenefits) {
             const fieldToClear = document.getElementById('c3_8_1_beneficios_vigencia_superior');
-            if(fieldToClear) clearField(fieldToClear.id);
+            if (fieldToClear) clearField(fieldToClear.id);
         }
         updateAllProgressBars();
     }
@@ -423,7 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return;
             }
-            
+
             const showSeiField = selectedValue === 'sim';
             toggle(conditionalFieldIds.etp_auth, showSeiField);
             if (!showSeiField) {
@@ -451,7 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggle(conditionalFieldIds.pessoa_fisica_proibicao, selectedValue === 'nao');
         } else {
             const condition = (groupKey.includes('justificativa')) ? selectedValue === 'nao'
-                            : selectedValue === 'sim';
+                : selectedValue === 'sim';
             toggle(conditionalFieldIds[groupKey], condition);
         }
         updateAllProgressBars();
@@ -485,7 +485,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const isSimplificadoMode = document.body.classList.contains('etp-simplificado-mode');
-        
+
         if (isSimplificadoMode && input.closest('.simplificado-hide')) {
             return false;
         }
@@ -507,17 +507,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function calculateProgress(scopeElement) {
         if (!scopeElement) return { filled: 0, total: 0, percentage: 0 };
-    
+
         const inputs = scopeElement.querySelectorAll('input[type="text"]:not([readonly]), input[type="number"]:not([readonly]), textarea:not([readonly]), select, input[type="checkbox"], input[type="radio"]');
         let total = 0;
         let filled = 0;
         const processedRadioGroups = new Set();
-    
+
         inputs.forEach(input => {
             if (input.id === 'c5_nao_se_aplica') {
                 return;
             }
-    
+
             if (isFieldLogicallyActive(input)) {
                 if (input.type === 'radio') {
                     const groupName = input.name;
@@ -530,7 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     total++;
                     let isFilled = (input.type === 'checkbox') ? input.checked : (input.value && input.value.trim() !== '');
-    
+
                     if (isFilled) {
                         if (input.id === 'etp_titulo' && input.value.startsWith("Será gerado")) return;
                         filled++;
@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-    
+
         const percentage = total > 0 ? (filled / total) * 100 : 0;
         return { filled, total, percentage };
     }
@@ -547,19 +547,19 @@ document.addEventListener('DOMContentLoaded', () => {
         let totalFields = 0;
         let filledFields = 0;
         const processedRadioGroups = new Set();
-    
+
         document.querySelectorAll('.tab-content:not(#consolidacao)').forEach(tab => {
             const navButton = document.querySelector(`.tab-button[data-tab-target="${tab.id}"]`);
             if (navButton && navButton.classList.contains('inactive')) {
                 return;
             }
-    
+
             if (tab.id === 'cap5' && document.getElementById('c5_nao_se_aplica')?.checked) return;
-    
+
             const inputs = tab.querySelectorAll('input[type="text"]:not([readonly]), input[type="number"]:not([readonly]), textarea:not([readonly]), select, input[type="checkbox"], input[type="radio"]');
             inputs.forEach(input => {
                 if (input.id === 'c5_nao_se_aplica') return;
-    
+
                 if (isFieldLogicallyActive(input)) {
                     if (input.type === 'radio') {
                         const groupName = input.name;
@@ -580,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         });
-    
+
         const percentage = totalFields > 0 ? (filledFields / totalFields) * 100 : 0;
         mainProgressBarEl.style.width = percentage + '%';
         mainProgressTextEl.textContent = Math.round(percentage) + '%';
@@ -592,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tabProgressWrapper.style.display = 'none';
             return;
         }
-        
+
         tabProgressWrapper.style.display = 'flex';
         const progress = calculateProgress(activeTab);
 
@@ -604,7 +604,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tabProgressTextEl.textContent = Math.round(progress.percentage) + '%';
         }, 50);
     }
-    
+
     function updateAllProgressBars() {
         updateMainProgressBar();
         updateTabProgressBar();
@@ -696,7 +696,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Monta o prompt usando os dados do usuário + o sufixo definido em prompts.js
         const userContext = `Unidade Demandante: "${etpUnidade || 'Não informada'}"\nIndicação da Necessidade: "${cap1_1 || 'Não preenchido'}"\nSituações/Problemas enfrentados: "${cap1_2 || 'Não preenchido'}"\nPublico Alvo: "${cap1_5 || 'Não preenchido'}"\n`;
-        
+
         const titlePrompt = userContext + TITLE_GENERATION_PROMPT_SUFFIX;
 
         try {
@@ -715,9 +715,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-	async function getAIHelp(fieldId) {
-		const field = document.getElementById(fieldId);
-		const currentButton = document.querySelector(`button[data-target-field="${fieldId}"]`);
+    async function getAIHelp(fieldId) {
+        const field = document.getElementById(fieldId);
+        const currentButton = document.querySelector(`button[data-target-field="${fieldId}"]`);
         const loadingText = '<p class="placeholder-text">Carregando...</p>';
 
         // Seletores dos elementos do modal
@@ -727,14 +727,14 @@ document.addEventListener('DOMContentLoaded', () => {
         const manualFundamentacaoEl = document.getElementById('manualFundamentacaoContent');
         const aiSectionContainer = document.getElementById('aiHelpSectionContainer');
 
-		if (currentButton) currentButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-		
+        if (currentButton) currentButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+
         // Reset e abertura do modal
         manualItemTitleEl.textContent = 'Carregando...';
         manualConceitoEl.innerHTML = loadingText;
         manualComoPreencherEl.innerHTML = loadingText;
-        if(manualFundamentacaoEl) manualFundamentacaoEl.innerHTML = loadingText;
-		aiModal.style.display = "block";
+        if (manualFundamentacaoEl) manualFundamentacaoEl.innerHTML = loadingText;
+        aiModal.style.display = "block";
 
         // Identifica o título do campo
         const labelElement = document.querySelector(`label[for="${fieldId}"]`) || currentButton.closest('.form-group, .label-with-help').querySelector('label');
@@ -742,10 +742,10 @@ document.addEventListener('DOMContentLoaded', () => {
         manualItemTitleEl.textContent = fieldLabelText;
 
         // --- 1. NORMALIZAÇÃO DE ID E CARREGAMENTO DO MANUAL ---
-        
+
         // Lógica para converter IDs específicos (ex: c6_risco1_impacto) em IDs genéricos do manual (ex: c6_risco_impacto)
         let normalizedFieldId = fieldId;
-        
+
         // Remove números de IDs dinâmicos para encontrar a chave no manual_content.js
         if (fieldId.includes('sol') && fieldId.includes('_')) normalizedFieldId = fieldId.replace(/sol\d+_/, 'sol_');
         else if (fieldId.includes('risco') && fieldId.includes('_')) normalizedFieldId = fieldId.replace(/risco\d+_/, 'risco_');
@@ -754,7 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Acessa o objeto global manualContent usando o ID normalizado
         const manualEntry = window.manualContent && window.manualContent[normalizedFieldId];
-        
+
         let conceitoClean = "Não disponível.";
         let comoPreencherClean = "Não disponível.";
         let fundamentacaoClean = "Não disponível.";
@@ -762,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (manualEntry) {
             manualConceitoEl.innerHTML = manualEntry.conceito || '<p>Conteúdo não disponível.</p>';
             manualComoPreencherEl.innerHTML = manualEntry.comoPreencher || '<p>Conteúdo não disponível.</p>';
-            if(manualFundamentacaoEl) manualFundamentacaoEl.innerHTML = manualEntry.fundamentacao || '<p>Conteúdo não disponível.</p>';
+            if (manualFundamentacaoEl) manualFundamentacaoEl.innerHTML = manualEntry.fundamentacao || '<p>Conteúdo não disponível.</p>';
 
             // Prepara textos para a IA (remove HTML)
             conceitoClean = stripHtml(manualEntry.conceito);
@@ -772,14 +772,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const defaultText = '<p>Não foi encontrada uma orientação específica para este campo no manual.</p>';
             manualConceitoEl.innerHTML = defaultText;
             manualComoPreencherEl.innerHTML = defaultText;
-            if(manualFundamentacaoEl) manualFundamentacaoEl.innerHTML = defaultText;
+            if (manualFundamentacaoEl) manualFundamentacaoEl.innerHTML = defaultText;
         }
 
-		// --- 2. CONSULTAR A IA (MÁQUINA) ---
+        // --- 2. CONSULTAR A IA (MÁQUINA) ---
         if (aiConfig.useAI === 'yes') {
             aiSectionContainer.style.display = 'block';
             aiModelNameEl.textContent = "Carregando...";
-            
+
             // Verifica se o campo é apropriado para análise de texto
             const isTextField = field && (field.tagName === 'TEXTAREA' || field.type === 'text' || field.tagName === 'SELECT');
             const userText = isTextField ? field.value.trim() : "";
@@ -791,9 +791,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     aiModelNameEl.textContent = "Aguardando";
                 } else {
                     aiComplianceAnalysisEl.textContent = "Aguardando avaliação...";
-                    
+
                     // --- MONTAGEM DO PROMPT ENRIQUECIDO ---
-                    
+
                     // 1. Captura o contexto atual do ETP (Necessidade, Solução, etc.)
                     const etpContext = getEtpContext();
 
@@ -807,7 +807,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         .replace('{{USER_TEXT}}', userText || "[Campo vazio]");
 
                     try {
-                        const result = await makeAIRequest(prompt, 0.3, 1500); 
+                        const result = await makeAIRequest(prompt, 0.3, 1500);
                         aiComplianceAnalysisEl.textContent = result.data.choices[0]?.message?.content.trim() || "Não foi possível realizar a avaliação.";
                         aiModelNameEl.textContent = result.modelUsed;
                     } catch (error) {
@@ -827,8 +827,8 @@ document.addEventListener('DOMContentLoaded', () => {
             aiSectionContainer.style.display = 'none';
         }
 
-        if (currentButton) currentButton.innerHTML = '<i class="fas fa-brain"></i>';
-	}
+        if (currentButton) currentButton.innerHTML = '<i class="fas fa-book-open"></i>';
+    }
 
     function closeAIModal() {
         if (aiModal) aiModal.style.display = "none";
@@ -841,12 +841,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openVideoTutorialModal() {
         const modal = document.getElementById('videoTutorialModal');
-        if(modal) modal.style.display = 'block';
+        if (modal) modal.style.display = 'block';
     }
 
     function closeVideoTutorialModal() {
         const modal = document.getElementById('videoTutorialModal');
-        if(modal) modal.style.display = 'none';
+        if (modal) modal.style.display = 'none';
     }
 
     // --- GERENCIADOR DE ITENS DINÂMICOS ---
@@ -871,7 +871,7 @@ document.addEventListener('DOMContentLoaded', () => {
             newItemDiv.setAttribute(this.config.indexAttribute, this.count);
             newItemDiv.innerHTML = this.config.template(this.count, this.container.children.length > 0 || this.count > 1);
             this.container.appendChild(newItemDiv);
-            
+
             if (this.config.onAdd) {
                 this.config.onAdd(newItemDiv);
             }
@@ -893,7 +893,7 @@ document.addEventListener('DOMContentLoaded', () => {
             remainingItems.forEach(item => {
                 this.count++;
                 item.setAttribute(this.config.indexAttribute, this.count);
-                
+
                 const h3 = item.querySelector('h3');
                 let removeBtn = h3.querySelector(`.${this.config.removeClass}`);
                 h3.firstChild.nodeValue = `${this.count}${this.config.titleSuffix} `;
@@ -1064,20 +1064,20 @@ document.addEventListener('DOMContentLoaded', () => {
             container.innerHTML = '<small><i>Selecione um capítulo acima para ver os itens.</i></small>';
             return;
         }
-    
+
         let itemsGenerated = false;
-        
+
         const dynamicChapters = {
             'cap2': { itemSelector: '.solucao-item', idSelector: '[id*="_a_descricao_sucinta"]', prefix: 'Solução', indexAttr: 'data-solucao-index', emptyMsg: 'Nenhuma solução com título preenchido no Capítulo 2.' },
             'cap5': { itemSelector: '.contratacao-item', idSelector: '[id*="_contrato_ne"]', prefix: 'Contratação', indexAttr: 'data-contratacao-index', emptyMsg: 'Nenhuma contratação anterior preenchida no Capítulo 5.' },
             'cap6': { itemSelector: '.risco-item', idSelector: '[id*="_identificacao"]', prefix: 'Risco', indexAttr: 'data-risco-index', emptyMsg: 'Nenhum risco preenchido no Capítulo 6.' }
         };
-    
+
         if (dynamicChapters[chapterId]) {
             const config = dynamicChapters[chapterId];
             const dynamicItems = document.querySelectorAll(config.itemSelector);
             let hasContent = false;
-    
+
             dynamicItems.forEach(item => {
                 const titleField = item.querySelector(config.idSelector);
                 const titleText = titleField ? titleField.value.trim() : '';
@@ -1086,14 +1086,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const itemIndex = item.getAttribute(config.indexAttr);
                     const checkboxId = `anexo${anexoIndex}_item_${titleField.id}`;
                     const labelText = `${config.prefix} ${itemIndex}: ${smartSubstring(titleText, 60)}`;
-                    
+
                     const span = document.createElement('span');
                     span.innerHTML = `<input type="checkbox" id="${checkboxId}" value="${titleField.id}"><label for="${checkboxId}">${labelText}</label>`;
                     container.appendChild(span);
                     itemsGenerated = true;
                 }
             });
-    
+
             if (!hasContent) {
                 container.innerHTML = `<small><i>${config.emptyMsg}</i></small>`;
                 return;
@@ -1101,7 +1101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             const chapterElement = document.getElementById(chapterId);
             if (!chapterElement) return;
-    
+
             const labels = Array.from(chapterElement.querySelectorAll('label[for]'));
             labels.forEach(label => {
                 const forId = label.getAttribute('for');
@@ -1115,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
-    
+
         if (!itemsGenerated) {
             container.innerHTML = '<small><i>Nenhum item numerado ou dinâmico encontrado neste capítulo.</i></small>';
         }
@@ -1149,7 +1149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateAllSummariesAndDropDowns(){
+    function updateAllSummariesAndDropDowns() {
         updateSolutionSummary();
         updateRiskSummary();
         updateContratacaoSummary();
@@ -1171,14 +1171,14 @@ document.addEventListener('DOMContentLoaded', () => {
             tabElement.querySelectorAll('textarea, input[type="text"], input[type="number"], input[type="checkbox"], input[type="radio"], select').forEach(input => {
                 if (!input.closest('.solucao-item, .risco-item, .anexo-item, .contratacao-item')) {
                     if (input.type === 'checkbox' || input.type === 'radio') {
-                         etpData[tabId][input.id] = input.checked;
+                        etpData[tabId][input.id] = input.checked;
                     } else {
-                         etpData[tabId][input.id] = input.value;
+                        etpData[tabId][input.id] = input.value;
                     }
                 }
             });
         });
-        
+
         etpData.cap2.solucoesMercado = Array.from(document.querySelectorAll('.solucao-item')).map(item => Object.fromEntries(Array.from(item.querySelectorAll('textarea')).map(input => [input.id, input.value])));
         etpData.cap6.riscos = Array.from(document.querySelectorAll('.risco-item')).map(item => Object.fromEntries(Array.from(item.querySelectorAll('textarea, select')).map(input => [input.id, input.value])));
         etpData.cap5.contratacoesAnteriores = Array.from(document.querySelectorAll('.contratacao-item')).map(item => Object.fromEntries(Array.from(item.querySelectorAll('textarea, input')).map(input => [input.id, input.value])));
@@ -1198,50 +1198,50 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function debounce(func, delay) {
         let timeout;
-        return function(...args) {
+        return function (...args) {
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(this, args), delay);
         };
     }
 
     function loadAllData() {
-		const etpDataString = localStorage.getItem(ETP_DATA_KEY);
-		
-		solucaoManager.reset();
-		riscoManager.reset();
-		contratacaoManager.reset();
-		anexoManager.reset();
+        const etpDataString = localStorage.getItem(ETP_DATA_KEY);
 
-		if (!etpDataString) {
+        solucaoManager.reset();
+        riscoManager.reset();
+        contratacaoManager.reset();
+        anexoManager.reset();
+
+        if (!etpDataString) {
             applyEtpMode('completo');
-			solucaoManager.add();
-			riscoManager.add();
-			contratacaoManager.add();
-			anexoManager.add();
-			
-			initializeConditionalFields();
-			
-			updateAllSummariesAndDropDowns();
-			updateAllProgressBars();
-			return;
-		}
+            solucaoManager.add();
+            riscoManager.add();
+            contratacaoManager.add();
+            anexoManager.add();
 
-		const etpData = JSON.parse(etpDataString);
-		Object.keys(etpData).forEach(tabId => {
-			if (tabId !== 'consolidacao') loadTabData(tabId, etpData);
-		});
+            initializeConditionalFields();
 
-		if (document.getElementById('solucoes_mercado_container').children.length === 0) solucaoManager.add();
-		if (document.getElementById('riscos_container').children.length === 0) riscoManager.add();
-		if (document.getElementById('contratacoes_anteriores_container').children.length === 0) contratacaoManager.add();
-		if (document.getElementById('anexos_container').children.length === 0) anexoManager.add();
+            updateAllSummariesAndDropDowns();
+            updateAllProgressBars();
+            return;
+        }
 
-		initializeConditionalFields();
+        const etpData = JSON.parse(etpDataString);
+        Object.keys(etpData).forEach(tabId => {
+            if (tabId !== 'consolidacao') loadTabData(tabId, etpData);
+        });
+
+        if (document.getElementById('solucoes_mercado_container').children.length === 0) solucaoManager.add();
+        if (document.getElementById('riscos_container').children.length === 0) riscoManager.add();
+        if (document.getElementById('contratacoes_anteriores_container').children.length === 0) contratacaoManager.add();
+        if (document.getElementById('anexos_container').children.length === 0) anexoManager.add();
+
+        initializeConditionalFields();
         handleModalidadeChange();
-		updateAllSummariesAndDropDowns();
+        updateAllSummariesAndDropDowns();
         updateChapterAccess();
-		updateAllProgressBars();
-	}
+        updateAllProgressBars();
+    }
 
     function loadTabData(tabId, allData) {
         const tabSavedData = allData[tabId];
@@ -1252,9 +1252,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const input = document.getElementById(fieldId);
                 if (input) {
                     if (input.type === 'checkbox' || input.type === 'radio') {
-                         input.checked = tabSavedData[fieldId];
+                        input.checked = tabSavedData[fieldId];
                     } else {
-                         input.value = tabSavedData[fieldId] || '';
+                        input.value = tabSavedData[fieldId] || '';
                     }
                 }
             }
@@ -1300,7 +1300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const capSelect = newItem.querySelector(`[id$="_capitulo_relacionado"]`);
                     capSelect.value = anexoData.capitulo || '';
                     newItem.querySelector(`[id$="_numero_sei"]`).value = anexoData.numero_sei || '';
-                    
+
                     if (capSelect.value) {
                         populateAnexoItems(anexoManager.count, capSelect.value);
                         if (anexoData.itens) {
@@ -1326,12 +1326,12 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     function getFieldData(input) {
-        if (!input) { return { value: '[Campo não encontrado]', status: 'inactive' };}
-        
+        if (!input) { return { value: '[Campo não encontrado]', status: 'inactive' }; }
+
         if (!isFieldLogicallyActive(input)) {
             return { value: '[Campo inativo]', status: 'inactive' };
         }
-    
+
         let value = '';
         let isFilled = false;
 
@@ -1340,7 +1340,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isFilled = true;
         } else if (input.type === 'radio') {
             const radioGroup = document.querySelectorAll(`input[name="${input.name}"]:checked`);
-            if(radioGroup.length > 0) {
+            if (radioGroup.length > 0) {
                 const label = document.querySelector(`label[for="${radioGroup[0].id}"]`);
                 value = label ? label.textContent.trim() : 'Sim';
                 isFilled = true;
@@ -1361,21 +1361,21 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-        function updateConsolidatedETP() {
+    function updateConsolidatedETP() {
         const container = document.getElementById('consolidation_container');
         if (!container) return;
         container.innerHTML = '<p class="placeholder-text">Gerando visualização consolidada...</p>';
         container.innerHTML = '';
-    
+
         const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
         const tabOrder = ['identificacao', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6', 'cap7', 'cap8', 'cap9', 'anexos'];
-    
+
         tabOrder.forEach(tabId => {
             const chapterElement = document.getElementById(tabId);
             if (!chapterElement) return;
 
             const navButton = document.querySelector(`.tab-button[data-tab-target="${tabId}"]`);
-            
+
             // --- INÍCIO DA LÓGICA MODIFICADA ---
             const isInactive = navButton && navButton.classList.contains('inactive');
 
@@ -1387,7 +1387,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const details = document.createElement('details');
             details.className = 'consolidation-chapter';
             details.open = true;
-    
+
             const summary = document.createElement('summary');
             summary.className = 'consolidation-title';
             const h2 = chapterElement.querySelector('h2');
@@ -1395,7 +1395,7 @@ document.addEventListener('DOMContentLoaded', () => {
             h2Clone.querySelector('.chapter-icon')?.remove();
             summary.textContent = h2Clone.textContent.trim();
             details.appendChild(summary);
-    
+
             const contentDiv = document.createElement('div');
             contentDiv.className = 'consolidation-content';
 
@@ -1409,7 +1409,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return; // Pula para o próximo capítulo do loop
             }
             // --- FIM DA LÓGICA MODIFICADA ---
-            
+
             const table = document.createElement('table');
             table.className = 'consolidation-table';
             const tbody = document.createElement('tbody');
@@ -1417,14 +1417,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tabId === 'cap3') {
                 const tr = document.createElement('tr');
                 const labelText = "3.1 Solução escolhida";
-                const input = isSimplificado 
-                    ? document.getElementById('c3_1_solucao_escolhida_simplificada') 
+                const input = isSimplificado
+                    ? document.getElementById('c3_1_solucao_escolhida_simplificada')
                     : document.getElementById('c3_1_solucao_escolhida');
                 const fieldData = getFieldData(input);
                 tr.innerHTML = `<td>${labelText}</td><td><span class="consolidation-value-${fieldData.status}">${fieldData.value}</span></td>`;
                 tbody.appendChild(tr);
             }
-    
+
             if (tabId === 'cap5' && document.getElementById('c5_nao_se_aplica')?.checked) {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `<td>Análise de Contratações Anteriores</td><td>Não se aplica / Primeira Contratação</td>`;
@@ -1434,7 +1434,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const processedRadioGroups = new Set();
 
                 formGroups.forEach(group => {
-                     if (!isFieldLogicallyActive(group)) return;
+                    if (!isFieldLogicallyActive(group)) return;
 
                     const labelElement = group.querySelector('label');
                     if (!labelElement) return;
@@ -1445,24 +1445,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     let fieldId;
                     let labelText = labelElement.textContent.trim();
 
-                    if(firstInput.type === 'radio') {
+                    if (firstInput.type === 'radio') {
                         const groupName = firstInput.name;
-                        if(processedRadioGroups.has(groupName)) return;
+                        if (processedRadioGroups.has(groupName)) return;
                         processedRadioGroups.add(groupName);
                         fieldId = document.querySelector(`input[name="${groupName}"]`)?.id;
                     } else {
                         fieldId = labelElement.getAttribute('for');
                     }
-                    
-                    if(!fieldId) return;
+
+                    if (!fieldId) return;
 
                     if (fieldId === 'c3_1_solucao_escolhida' || fieldId === 'c3_1_solucao_escolhida_simplificada') {
                         return;
                     }
-                    
+
                     const input = document.getElementById(fieldId);
                     if (!input || input.closest('.solucao-item, .risco-item, .contratacao-item, .anexo-item')) return;
-                    
+
                     const tr = document.createElement('tr');
                     const fieldData = getFieldData(input);
                     tr.innerHTML = `<td>${labelText}</td><td><span class="consolidation-value-${fieldData.status}">${fieldData.value}</span></td>`;
@@ -1475,20 +1475,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     'cap6': { selector: '.risco-item', titlePrefix: 'º Risco' },
                     'anexos': { selector: '.anexo-item', titlePrefix: 'º Anexo' }
                 };
-    
+
                 if (dynamicConfigs[tabId]) {
                     const config = dynamicConfigs[tabId];
                     chapterElement.querySelectorAll(config.selector).forEach((item, index) => {
-                         if (!isFieldLogicallyActive(item)) return;
+                        if (!isFieldLogicallyActive(item)) return;
                         const tr = document.createElement('tr');
                         const tdLabel = document.createElement('td');
                         tdLabel.textContent = `${index + 1}${config.titlePrefix}`;
-                        
+
                         const tdValue = document.createElement('td');
                         const subTable = document.createElement('table');
                         subTable.className = 'consolidation-sub-table';
                         const subTbody = document.createElement('tbody');
-    
+
                         item.querySelectorAll('label[for]').forEach(subLabel => {
                             if (subLabel.closest('.scrollable-checkbox-group')) return;
 
@@ -1498,7 +1498,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const subTr = document.createElement('tr');
                                 const subTdLabel = document.createElement('td');
                                 subTdLabel.textContent = subLabel.textContent.trim().replace(/^(\d+\.[\d\.]*|\w\.[\d\.]+)\s/, '');
-                                
+
                                 const subTdValue = document.createElement('td');
                                 if (subInput.id.includes('itens_relacionados')) {
                                     const checkedItems = Array.from(subInput.querySelectorAll('input:checked'))
@@ -1514,7 +1514,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 subTbody.appendChild(subTr);
                             }
                         });
-                        
+
                         subTable.appendChild(subTbody);
                         tdValue.appendChild(subTable);
                         tr.appendChild(tdLabel);
@@ -1523,7 +1523,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
             }
-    
+
             if (tbody.children.length > 0) {
                 table.appendChild(tbody);
                 contentDiv.appendChild(table);
@@ -1534,19 +1534,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function getConsolidatedDataForExport() {
-		const data = [];
-		const tabOrder = ['identificacao', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6', 'cap7', 'cap8', 'cap9', 'anexos'];
+        const data = [];
+        const tabOrder = ['identificacao', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6', 'cap7', 'cap8', 'cap9', 'anexos'];
         const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
 
-		const summaryTableConfigs = {
-			'cap2': { id: 'c2_X_resumo_comparativo_table_container', title: 'Resumo Comparativo das Soluções' },
-			'cap5': { id: 'c5_Z_resumo_contratacoes_table_container', title: 'Resumo das Contratações Anteriores' },
-			'cap6': { id: 'c6_X_resumo_riscos_table_container', title: 'Resumo dos Riscos' },
-			'anexos': { id: 'anexos_lista_texto_table_container', title: 'Lista de Anexos' }
-		};
+        const summaryTableConfigs = {
+            'cap2': { id: 'c2_X_resumo_comparativo_table_container', title: 'Resumo Comparativo das Soluções' },
+            'cap5': { id: 'c5_Z_resumo_contratacoes_table_container', title: 'Resumo das Contratações Anteriores' },
+            'cap6': { id: 'c6_X_resumo_riscos_table_container', title: 'Resumo dos Riscos' },
+            'anexos': { id: 'anexos_lista_texto_table_container', title: 'Lista de Anexos' }
+        };
 
-		tabOrder.forEach(tabId => {
-			const chapterElement = document.getElementById(tabId);
+        tabOrder.forEach(tabId => {
+            const chapterElement = document.getElementById(tabId);
             if (!chapterElement) return;
 
             const navButton = document.querySelector(`.tab-button[data-tab-target="${tabId}"]`);
@@ -1558,11 +1558,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             // --- FIM DA LÓGICA MODIFICADA ---
 
-			const h2 = chapterElement.querySelector('h2');
-			const h2Clone = h2.cloneNode(true);
-			h2Clone.querySelector('.chapter-icon')?.remove();
-			const chapterTitle = h2Clone.textContent.trim();
-			const chapterData = { title: chapterTitle, fields: [], summaryTable: null };
+            const h2 = chapterElement.querySelector('h2');
+            const h2Clone = h2.cloneNode(true);
+            h2Clone.querySelector('.chapter-icon')?.remove();
+            const chapterTitle = h2Clone.textContent.trim();
+            const chapterData = { title: chapterTitle, fields: [], summaryTable: null };
 
             // --- INÍCIO DA LÓGICA MODIFICADA ---
             if (isInactive && isSimplificado) {
@@ -1574,30 +1574,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (tabId === 'cap3') {
                 const labelText = "3.1 Solução escolhida";
-                const input = isSimplificado 
-                    ? document.getElementById('c3_1_solucao_escolhida_simplificada') 
+                const input = isSimplificado
+                    ? document.getElementById('c3_1_solucao_escolhida_simplificada')
                     : document.getElementById('c3_1_solucao_escolhida');
                 chapterData.fields.push({ label: labelText, ...getFieldData(input) });
             }
 
-			if (summaryTableConfigs[tabId]) {
-				const config = summaryTableConfigs[tabId];
-				const tableContainer = document.getElementById(config.id);
+            if (summaryTableConfigs[tabId]) {
+                const config = summaryTableConfigs[tabId];
+                const tableContainer = document.getElementById(config.id);
                 if (isFieldLogicallyActive(tableContainer)) {
                     const table = tableContainer?.querySelector('table');
                     if (table) {
                         const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent.trim());
-                        const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr => 
+                        const rows = Array.from(table.querySelectorAll('tbody tr')).map(tr =>
                             Array.from(tr.querySelectorAll('td')).map(td => td.textContent.trim())
                         );
                         chapterData.summaryTable = { title: config.title, headers, rows };
                     }
                 }
-			}
+            }
 
-			if (tabId === 'cap5' && document.getElementById('c5_nao_se_aplica')?.checked) {
-				chapterData.fields.push({ label: "Análise de Contratações Anteriores", value: "Não se aplica / Primeira Contratação" });
-			} else {
+            if (tabId === 'cap5' && document.getElementById('c5_nao_se_aplica')?.checked) {
+                chapterData.fields.push({ label: "Análise de Contratações Anteriores", value: "Não se aplica / Primeira Contratação" });
+            } else {
                 const formGroups = chapterElement.querySelectorAll('.form-group');
                 const processedRadioGroups = new Set();
 
@@ -1633,83 +1633,83 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
-				const dynamicConfigs = {
-					'cap2': { selector: '.solucao-item', titlePrefix: 'ª Solução de Mercado' },
-					'cap5': { selector: '.contratacao-item', titlePrefix: 'ª Contratação Anterior' },
-					'cap6': { selector: '.risco-item', titlePrefix: 'º Risco' },
-					'anexos': { selector: '.anexo-item', titlePrefix: 'º Anexo' }
-				};
+                const dynamicConfigs = {
+                    'cap2': { selector: '.solucao-item', titlePrefix: 'ª Solução de Mercado' },
+                    'cap5': { selector: '.contratacao-item', titlePrefix: 'ª Contratação Anterior' },
+                    'cap6': { selector: '.risco-item', titlePrefix: 'º Risco' },
+                    'anexos': { selector: '.anexo-item', titlePrefix: 'º Anexo' }
+                };
 
-				if (dynamicConfigs[tabId]) {
-					const config = dynamicConfigs[tabId];
-					chapterElement.querySelectorAll(config.selector).forEach((item, index) => {
+                if (dynamicConfigs[tabId]) {
+                    const config = dynamicConfigs[tabId];
+                    chapterElement.querySelectorAll(config.selector).forEach((item, index) => {
                         if (!isFieldLogicallyActive(item)) return;
-						const subFields = [];
-						item.querySelectorAll('label[for]').forEach(subLabel => {
+                        const subFields = [];
+                        item.querySelectorAll('label[for]').forEach(subLabel => {
                             if (subLabel.closest('.scrollable-checkbox-group')) return;
 
-							const subInput = document.getElementById(subLabel.getAttribute('for'));
-							if (subInput) {
-								const labelText = subLabel.textContent.trim().replace(/^(\d+\.[\d\.]*|\w\.[\d\.]+)\s/, '');
-								let value;
-								if (subInput.id.includes('itens_relacionados')) {
-									const checkedItems = Array.from(subInput.querySelectorAll('input:checked')).map(cb => subInput.querySelector(`label[for="${cb.id}"]`).textContent.trim()).join('; ');
-									value = checkedItems || '[Nenhum item selecionado]';
-								} else {
-									value = getFieldData(subInput).value;
-								}
-								subFields.push({ label: labelText, value });
-							}
-						});
-						chapterData.fields.push({
-							label: `${index + 1}${config.titlePrefix}`,
-							isDynamic: true,
-							subFields: subFields
-						});
-					});
-				}
-			}
-			if (chapterData.fields.length > 0 || chapterData.summaryTable) {
-				data.push(chapterData);
-			}
-		});
-		return data;
-	}
+                            const subInput = document.getElementById(subLabel.getAttribute('for'));
+                            if (subInput) {
+                                const labelText = subLabel.textContent.trim().replace(/^(\d+\.[\d\.]*|\w\.[\d\.]+)\s/, '');
+                                let value;
+                                if (subInput.id.includes('itens_relacionados')) {
+                                    const checkedItems = Array.from(subInput.querySelectorAll('input:checked')).map(cb => subInput.querySelector(`label[for="${cb.id}"]`).textContent.trim()).join('; ');
+                                    value = checkedItems || '[Nenhum item selecionado]';
+                                } else {
+                                    value = getFieldData(subInput).value;
+                                }
+                                subFields.push({ label: labelText, value });
+                            }
+                        });
+                        chapterData.fields.push({
+                            label: `${index + 1}${config.titlePrefix}`,
+                            isDynamic: true,
+                            subFields: subFields
+                        });
+                    });
+                }
+            }
+            if (chapterData.fields.length > 0 || chapterData.summaryTable) {
+                data.push(chapterData);
+            }
+        });
+        return data;
+    }
 
-	function generateDocx(data, etpTitle, filename) {
+    function generateDocx(data, etpTitle, filename) {
         // --- INÍCIO DA LÓGICA MODIFICADA ---
         const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
         const mainDocTitle = isSimplificado ? "Estudo Técnico Preliminar Simplificado" : "Estudo Técnico Preliminar";
         // --- FIM DA LÓGICA MODIFICADA ---
 
-		const FONT_STYLE = { font: "Helvetica", color: "000000" };
-		const CELL_MARGINS = { left: 120, right: 120, top: 100, bottom: 100 };
-		const ROW_HEIGHT = { value: 450, rule: HeightRule.AT_LEAST };
-		const BORDERS = {
-			top: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
-			bottom: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
-			left: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
-			right: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
-			insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
-			insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
-		};
+        const FONT_STYLE = { font: "Helvetica", color: "000000" };
+        const CELL_MARGINS = { left: 120, right: 120, top: 100, bottom: 100 };
+        const ROW_HEIGHT = { value: 450, rule: HeightRule.AT_LEAST };
+        const BORDERS = {
+            top: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
+            bottom: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
+            left: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
+            right: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
+            insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
+            insideVertical: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
+        };
 
-		const docChildren = [];
+        const docChildren = [];
 
-		docChildren.push(new Paragraph({
-			alignment: "center", spacing: { after: 100 },
-			children: [new TextRun({ text: mainDocTitle, size: 44, bold: true, ...FONT_STYLE })]
-		}));
-		docChildren.push(new Paragraph({
-			alignment: "center", spacing: { after: 400 },
-			children: [new TextRun({ text: etpTitle, size: 32, ...FONT_STYLE })]
-		}));
+        docChildren.push(new Paragraph({
+            alignment: "center", spacing: { after: 100 },
+            children: [new TextRun({ text: mainDocTitle, size: 44, bold: true, ...FONT_STYLE })]
+        }));
+        docChildren.push(new Paragraph({
+            alignment: "center", spacing: { after: 400 },
+            children: [new TextRun({ text: etpTitle, size: 32, ...FONT_STYLE })]
+        }));
 
-		data.forEach(chapter => {
-			docChildren.push(new Paragraph({
-				spacing: { before: 400, after: 150 },
-				children: [new TextRun({ text: chapter.title, size: 28, bold: true, ...FONT_STYLE })]
-			}));
+        data.forEach(chapter => {
+            docChildren.push(new Paragraph({
+                spacing: { before: 400, after: 150 },
+                children: [new TextRun({ text: chapter.title, size: 28, bold: true, ...FONT_STYLE })]
+            }));
 
             // --- INÍCIO DA LÓGICA MODIFICADA ---
             if (chapter.isSkipped) {
@@ -1721,118 +1721,118 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             // --- FIM DA LÓGICA MODIFICADA ---
 
-			if (chapter.summaryTable) {
-				docChildren.push(new Paragraph({
-					spacing: { after: 100 },
-					children: [new TextRun({ text: chapter.summaryTable.title, size: 24, bold: true, italics: true, ...FONT_STYLE })]
-				}));
+            if (chapter.summaryTable) {
+                docChildren.push(new Paragraph({
+                    spacing: { after: 100 },
+                    children: [new TextRun({ text: chapter.summaryTable.title, size: 24, bold: true, italics: true, ...FONT_STYLE })]
+                }));
 
-				const summaryHeader = new TableRow({
-					tableHeader: true, height: ROW_HEIGHT,
-					children: chapter.summaryTable.headers.map(headerText => new TableCell({
-						children: [new Paragraph({ 
-							children: [new TextRun({ text: headerText, bold: true, size: 20, ...FONT_STYLE })],
-							keepLines: true,
-						})],
-						shading: { type: "clear", fill: "EAEAEA" }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
-					})),
-				});
+                const summaryHeader = new TableRow({
+                    tableHeader: true, height: ROW_HEIGHT,
+                    children: chapter.summaryTable.headers.map(headerText => new TableCell({
+                        children: [new Paragraph({
+                            children: [new TextRun({ text: headerText, bold: true, size: 20, ...FONT_STYLE })],
+                            keepLines: true,
+                        })],
+                        shading: { type: "clear", fill: "EAEAEA" }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
+                    })),
+                });
 
-				const summaryRows = chapter.summaryTable.rows.map((row, index) => new TableRow({
-					height: ROW_HEIGHT,
-					shading: index % 2 !== 0 ? { type: "clear", fill: "F5F5F5" } : undefined,
-					children: row.map(cellText => new TableCell({
-						children: [new Paragraph({ children: [new TextRun({ text: cellText, size: 22, ...FONT_STYLE })] })],
-						verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
-					})),
-				}));
-				
-				const summaryTable = new Table({ rows: [summaryHeader, ...summaryRows], width: { size: 100, type: WidthType.PERCENTAGE }, borders: BORDERS });
-				docChildren.push(summaryTable);
-				docChildren.push(new Paragraph({ spacing: { after: 200 } }));
-			}
+                const summaryRows = chapter.summaryTable.rows.map((row, index) => new TableRow({
+                    height: ROW_HEIGHT,
+                    shading: index % 2 !== 0 ? { type: "clear", fill: "F5F5F5" } : undefined,
+                    children: row.map(cellText => new TableCell({
+                        children: [new Paragraph({ children: [new TextRun({ text: cellText, size: 22, ...FONT_STYLE })] })],
+                        verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
+                    })),
+                }));
 
-			const headerRow = new TableRow({
-				tableHeader: true, height: ROW_HEIGHT,
-				children: [
-					new TableCell({
-						children: [new Paragraph({ children: [new TextRun({ text: "Campo", bold: true, size: 22, ...FONT_STYLE })] })],
-						shading: { type: "clear", fill: "EAEAEA" }, width: { size: 35, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
-					}),
-					new TableCell({
-						children: [new Paragraph({ children: [new TextRun({ text: "Valor", bold: true, size: 22, ...FONT_STYLE })] })],
-						shading: { type: "clear", fill: "EAEAEA" }, width: { size: 65, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
-					}),
-				],
-			});
+                const summaryTable = new Table({ rows: [summaryHeader, ...summaryRows], width: { size: 100, type: WidthType.PERCENTAGE }, borders: BORDERS });
+                docChildren.push(summaryTable);
+                docChildren.push(new Paragraph({ spacing: { after: 200 } }));
+            }
 
-			const dataRows = chapter.fields.filter(field => field.status !== 'inactive').map((field, index) => {
-				const rowProperties = { height: ROW_HEIGHT, shading: index % 2 !== 0 ? { type: "clear", fill: "F5F5F5" } : undefined };
-				const labelCell = new TableCell({
-					children: [new Paragraph({ children: [new TextRun({ text: field.label, bold: true, size: 22, ...FONT_STYLE })] })],
-					width: { size: 35, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
-				});
+            const headerRow = new TableRow({
+                tableHeader: true, height: ROW_HEIGHT,
+                children: [
+                    new TableCell({
+                        children: [new Paragraph({ children: [new TextRun({ text: "Campo", bold: true, size: 22, ...FONT_STYLE })] })],
+                        shading: { type: "clear", fill: "EAEAEA" }, width: { size: 35, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
+                    }),
+                    new TableCell({
+                        children: [new Paragraph({ children: [new TextRun({ text: "Valor", bold: true, size: 22, ...FONT_STYLE })] })],
+                        shading: { type: "clear", fill: "EAEAEA" }, width: { size: 65, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
+                    }),
+                ],
+            });
 
-				let valueCell;
-				if (field.isDynamic) {
-					const subTableRows = field.subFields.map(subField => new TableRow({
-						height: ROW_HEIGHT,
-						children: [
-							new TableCell({
-								children: [new Paragraph({ children: [new TextRun({ text: subField.label, bold: true, size: 22, ...FONT_STYLE })] })],
-								width: { size: 30, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
-							}),
-							new TableCell({
-								children: [new Paragraph({ children: [new TextRun({ text: subField.value, size: 22, ...FONT_STYLE })] })],
-								width: { size: 70, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
-							})
-						]
-					}));
-					const subTable = new Table({
-						rows: subTableRows, width: { size: 100, type: WidthType.PERCENTAGE },
-						borders: {
-							top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" }, bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-							left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" }, right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-							insideVertical: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
-							insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
-						}
-					});
-					valueCell = new TableCell({ children: [subTable], width: { size: 65, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER });
-				} else {
-					valueCell = new TableCell({
-						children: [new Paragraph({ children: [new TextRun({ text: field.value, size: 22, ...FONT_STYLE })] })],
-						width: { size: 65, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
-					});
-				}
-				return new TableRow({ ...rowProperties, children: [labelCell, valueCell] });
-			});
+            const dataRows = chapter.fields.filter(field => field.status !== 'inactive').map((field, index) => {
+                const rowProperties = { height: ROW_HEIGHT, shading: index % 2 !== 0 ? { type: "clear", fill: "F5F5F5" } : undefined };
+                const labelCell = new TableCell({
+                    children: [new Paragraph({ children: [new TextRun({ text: field.label, bold: true, size: 22, ...FONT_STYLE })] })],
+                    width: { size: 35, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
+                });
 
-			if (dataRows.length > 0) {
-				const table = new Table({ rows: [headerRow, ...dataRows], width: { size: 100, type: WidthType.PERCENTAGE }, borders: BORDERS });
-				docChildren.push(table);
-			}
-		});
+                let valueCell;
+                if (field.isDynamic) {
+                    const subTableRows = field.subFields.map(subField => new TableRow({
+                        height: ROW_HEIGHT,
+                        children: [
+                            new TableCell({
+                                children: [new Paragraph({ children: [new TextRun({ text: subField.label, bold: true, size: 22, ...FONT_STYLE })] })],
+                                width: { size: 30, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
+                            }),
+                            new TableCell({
+                                children: [new Paragraph({ children: [new TextRun({ text: subField.value, size: 22, ...FONT_STYLE })] })],
+                                width: { size: 70, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
+                            })
+                        ]
+                    }));
+                    const subTable = new Table({
+                        rows: subTableRows, width: { size: 100, type: WidthType.PERCENTAGE },
+                        borders: {
+                            top: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" }, bottom: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                            left: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" }, right: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                            insideVertical: { style: BorderStyle.NONE, size: 0, color: "FFFFFF" },
+                            insideHorizontal: { style: BorderStyle.SINGLE, size: 1, color: "BFBFBF" },
+                        }
+                    });
+                    valueCell = new TableCell({ children: [subTable], width: { size: 65, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER });
+                } else {
+                    valueCell = new TableCell({
+                        children: [new Paragraph({ children: [new TextRun({ text: field.value, size: 22, ...FONT_STYLE })] })],
+                        width: { size: 65, type: WidthType.PERCENTAGE }, verticalAlign: VerticalAlign.CENTER, margins: CELL_MARGINS,
+                    });
+                }
+                return new TableRow({ ...rowProperties, children: [labelCell, valueCell] });
+            });
 
-		const doc = new Document({
-			sections: [{
-				properties: {
-					page: {
-						margin: {
-							top: 1440,
-							bottom: 1440,
-							left: 720,
-							right: 720,
-						},
-					},
-				},
-				children: docChildren,
-			}],
-		});
+            if (dataRows.length > 0) {
+                const table = new Table({ rows: [headerRow, ...dataRows], width: { size: 100, type: WidthType.PERCENTAGE }, borders: BORDERS });
+                docChildren.push(table);
+            }
+        });
 
-		Packer.toBlob(doc).then(blob => {
-			saveAs(blob, `${filename}.docx`);
-		});
-	}
+        const doc = new Document({
+            sections: [{
+                properties: {
+                    page: {
+                        margin: {
+                            top: 1440,
+                            bottom: 1440,
+                            left: 720,
+                            right: 720,
+                        },
+                    },
+                },
+                children: docChildren,
+            }],
+        });
+
+        Packer.toBlob(doc).then(blob => {
+            saveAs(blob, `${filename}.docx`);
+        });
+    }
 
     function generateDocxText(data, etpTitle, filename) {
         const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
@@ -1894,9 +1894,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     })),
                 }));
 
-                docChildren.push(new Table({ 
-                    rows: [summaryHeader, ...summaryRows], 
-                    width: { size: 100, type: WidthType.PERCENTAGE } 
+                docChildren.push(new Table({
+                    rows: [summaryHeader, ...summaryRows],
+                    width: { size: 100, type: WidthType.PERCENTAGE }
                 }));
             }
 
@@ -1948,7 +1948,7 @@ document.addEventListener('DOMContentLoaded', () => {
             saveAs(blob, `${filename}.docx`);
         });
     }
-    
+
     function exportETP(format) {
         const data = getConsolidatedDataForExport();
         if (data.length === 0) {
@@ -1982,13 +1982,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const modalidadeSelect = document.getElementById('c8_1_modalidade_contratacao');
         const procAuxiliaresSelect = document.getElementById('c8_2_procedimentos_auxiliares');
         const criterioJulgamentoSelect = document.getElementById('c8_3_criterio_julgamento');
-    
+
         if (!modalidadeSelect || !procAuxiliaresSelect || !criterioJulgamentoSelect) {
             return;
         }
-    
+
         const selectedModalidade = modalidadeSelect.value;
-    
+
         // Mapeamento de opções válidas para "Procedimentos Auxiliares" (8.2) - ATUALIZADO
         const procAuxiliaresOptions = {
             'licitacao': ['pre_qualificacao', 'pmi', 'registro_cadastral', 'srp', 'nao_se_aplica'],
@@ -1997,14 +1997,14 @@ document.addEventListener('DOMContentLoaded', () => {
             'leilao': ['registro_cadastral', 'nao_se_aplica'],
             'default': ['credenciamento', 'pre_qualificacao', 'pmi', 'srp', 'registro_cadastral', 'nao_se_aplica']
         };
-    
+
         // Mapeamento de opções válidas para "Critério de Julgamento" (8.3) - ATUALIZADO
         const criterioJulgamentoOptions = {
             'licitacao': ['menor_preco', 'maior_desconto', 'melhor_tecnica_ou_conteudo_artistico', 'tecnica_e_preco', 'maior_retorno_economico'],
             'dispensa': ['menor_preco', 'maior_desconto'],
             'default': ['menor_preco', 'maior_desconto', 'melhor_tecnica_ou_conteudo_artistico', 'tecnica_e_preco', 'maior_lance', 'maior_retorno_economico', 'nao_se_aplica']
         };
-    
+
         // Filtrar opções para Procedimentos Auxiliares (8.2)
         const validProcAux = procAuxiliaresOptions[selectedModalidade] || procAuxiliaresOptions['default'];
         Array.from(procAuxiliaresSelect.options).forEach(option => {
@@ -2017,7 +2017,7 @@ document.addEventListener('DOMContentLoaded', () => {
             procAuxiliaresSelect.value = '';
             procAuxiliaresSelect.dispatchEvent(new Event('change', { 'bubbles': true }));
         }
-    
+
         // Lógica para Critério de Julgamento (8.3)
         criterioJulgamentoSelect.disabled = false;
         if (selectedModalidade === 'inexigibilidade') {
@@ -2054,19 +2054,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function addCustomModelInput(modelName = '') {
         const div = document.createElement('div');
         div.className = 'dynamic-model-input';
-        
+
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'full-width-input';
         input.placeholder = 'Ex: llama3-70b-8192';
         input.value = modelName;
-        
+
         const removeBtn = document.createElement('button');
         removeBtn.className = 'remove-model-button';
         removeBtn.innerHTML = '<i class="fas fa-times"></i>';
         removeBtn.type = 'button';
         removeBtn.addEventListener('click', () => div.remove());
-        
+
         div.appendChild(input);
         div.appendChild(removeBtn);
         customModelsList.appendChild(div);
@@ -2093,8 +2093,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function saveAiSettings() {
         const customModels = Array.from(customModelsList.querySelectorAll('input'))
-                                  .map(input => input.value.trim())
-                                  .filter(value => value);
+            .map(input => input.value.trim())
+            .filter(value => value);
 
         aiConfig = {
             useAI: useAiRadioYes.checked ? 'yes' : 'no',
@@ -2155,7 +2155,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const modelsToTest = modelModeCustom.checked 
+        const modelsToTest = modelModeCustom.checked
             ? Array.from(customModelsList.querySelectorAll('input')).map(input => input.value.trim()).filter(Boolean)
             : LLM_MODELS_PRIORITY;
 
@@ -2169,20 +2169,20 @@ document.addEventListener('DOMContentLoaded', () => {
         testConnectionResult.style.display = 'block';
         testApiConnectionButton.disabled = true;
 
-        const testPromises = modelsToTest.map(model => 
+        const testPromises = modelsToTest.map(model =>
             fetch(GROQ_API_URL, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
                 body: JSON.stringify({ model: model, messages: [{ role: "user", content: "Olá" }], max_tokens: 2 })
             }).then(response => ({ model, success: response.ok, status: response.status }))
-              .catch(error => ({ model, success: false, status: 'Network Error' }))
+                .catch(error => ({ model, success: false, status: 'Network Error' }))
         );
 
         const results = await Promise.allSettled(testPromises);
 
         let successCount = 0;
         let resultHtml = '<strong>Resultado do Teste:</strong><ul>';
-        
+
         results.forEach(result => {
             if (result.status === 'fulfilled' && result.value.success) {
                 successCount++;
@@ -2255,29 +2255,29 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateChapterAccess();
             }
         });
-        
+
         // Listeners de 'input' e 'change' para salvamento automático
         const tabContainer = document.querySelector('.tab-container');
         tabContainer.addEventListener('input', (e) => {
             debouncedSave();
             if (e.target.matches('[data-action="toggle-vigencia-benefits"]')) {
-                 toggleVigenciaBenefitsField(e.target);
+                toggleVigenciaBenefitsField(e.target);
             }
         });
         tabContainer.addEventListener('change', debouncedSave);
         tabContainer.addEventListener('click', (e) => {
-             if (e.target.closest('.remove-solucao-button, .remove-risco-button, .remove-anexo-button, .remove-contratacao-button, .add-button')) {
+            if (e.target.closest('.remove-solucao-button, .remove-risco-button, .remove-anexo-button, .remove-contratacao-button, .add-button')) {
                 debouncedSave();
             }
         });
-        
+
         // Listeners da barra de ferramentas
         document.getElementById('btnNovoETP').addEventListener('click', () => {
             if (confirm("Tem certeza que deseja iniciar um novo ETP? Todo o progresso não salvo será perdido.")) {
                 localStorage.removeItem(ETP_DATA_KEY);
                 localStorage.removeItem('etpAiConfig');
                 currentEtpFilename = null;
-                window.location.reload(); 
+                window.location.reload();
             }
         });
         const etpFileInput = document.getElementById('etpFileInput');
@@ -2318,7 +2318,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 filename = `${sanitizedTitle}.etp.json`;
             }
             downloadFile(filename, etpDataString, "application/json");
-            currentEtpFilename = filename; 
+            currentEtpFilename = filename;
         });
 
         // Listener para fechar o banner de alerta beta
@@ -2335,7 +2335,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('etp_numero_processo_sei').addEventListener('input', (e) => formatSEIProcess(e.target));
 
         // Listener para fechar modais
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const aboutModal = document.getElementById('aboutModal');
             const videoModal = document.getElementById('videoTutorialModal');
             if (event.target == aiModal) {
@@ -2355,7 +2355,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- INÍCIO: Listeners do Modal de Configurações de IA ---
         document.getElementById('btnAbrirConfigIA').addEventListener('click', openAiSettingsModal);
         document.getElementById('saveAiSettingsButton').addEventListener('click', saveAiSettings);
-        
+
         useAiRadioYes.addEventListener('change', () => {
             aiSettingsContainer.style.display = 'block';
         });
@@ -2372,7 +2372,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         addModelButton.addEventListener('click', () => addCustomModelInput());
         testApiConnectionButton.addEventListener('click', testApiConnection);
-        
+
         const toggleButton = document.getElementById('toggleApiKeyVisibility');
         if (toggleButton) {
             toggleButton.addEventListener('click', () => {
@@ -2390,7 +2390,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const aboutModal = document.getElementById('aboutModal');
             if (aboutModal) aboutModal.style.display = 'block';
         });
-        
+
         // Botão do Guia Rápido (agora dentro do modal de tutorial)
         document.getElementById('btnGuiaRapidoModal').addEventListener('click', () => {
             window.open('guia_rapido.html', '_blank');
@@ -2403,10 +2403,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Botão do Tutorial (na barra de ferramentas principal)
         document.getElementById('btnAbrirTutorial').addEventListener('click', openVideoTutorialModal);
-        
+
         // Botão de documentação técnica (sem elemento visual na UI principal, mas mantido para o modal "Sobre")
         const btnDocTecnica = document.getElementById('btnAbrirDocTecnica');
-        if(btnDocTecnica) {
+        if (btnDocTecnica) {
             btnDocTecnica.addEventListener('click', () => {
                 window.open('documentacao.html', '_blank');
             });

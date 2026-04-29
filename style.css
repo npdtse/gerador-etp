@@ -1442,3 +1442,97 @@ body:not(.ai-features-disabled) .ai-help-button i.fa-book-open::before {
     animation: pulseGlow 2s infinite !important;
     border: 2px solid #007bff !important;
 }
+
+/* --- ESTILOS PARA A ABA DE INÍCIO --- */
+.home-tab-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    height: 100%;
+    padding-top: 25px;
+}
+
+.home-icon {
+    font-size: 4em;
+    color: var(--cor-primaria, #004080);
+    margin-bottom: 20px;
+}
+
+.home-title {
+    font-size: 2em;
+    color: var(--cor-texto, #343a40);
+    margin-bottom: 10px;
+}
+
+.home-subtitle {
+    font-size: 1.2em;
+    color: #6c757d;
+    max-width: 600px;
+    margin-bottom: 40px;
+}
+
+.home-main-button {
+    padding: 15px 35px;
+    font-size: 1.3em;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: var(--cor-secundaria, #0056b3);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.home-main-button:hover {
+    background-color: var(--cor-primaria, #004080);
+    transform: translateY(-2px);
+}
+
+/* --- ESTILOS PARA OS NOVOS BOTÕES DA ABA INÍCIO --- */
+.home-buttons-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.home-main-button.btn-start {
+    background-color: #0056b3; /* Azul */
+}
+
+.home-main-button.btn-start:hover {
+    background-color: #004080;
+}
+
+.home-main-button.btn-continue {
+    background-color: #28a745; /* Verde para indicar continuação segura */
+}
+
+.home-main-button.btn-continue:hover:not(:disabled) {
+    background-color: #218838;
+}
+
+/* Estilo para quando o botão estiver desabilitado (sem dados salvos) */
+.home-main-button:disabled {
+    background-color: #6c757d !important;
+    color: #ced4da !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.home-secondary-actions {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+}

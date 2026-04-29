@@ -67,8 +67,9 @@
 
     <div class="tab-container">
         <div class="tab-nav">
+            <button class="tab-button" data-tab-target="inicio"><i class="fas fa-home" aria-hidden="true"></i> Início</button>
             <button class="tab-button" data-tab-target="identificacao"><i class="fas fa-id-badge"
-                    aria-hidden="true"></i> Identificação</button>
+                    aria-hidden="true"></i> 0. Identificação</button>
             <button class="tab-button" data-tab-target="cap1"><i class="fas fa-bullseye" aria-hidden="true"></i> 1.
                 Necessidade</button>
             <button class="tab-button simplificado-hide" data-tab-target="cap2"><i class="fas fa-search-dollar"
@@ -116,11 +117,39 @@
             <!-- Banner de Contexto (UX) -->
             <!--<div id="contextBanner" class="context-banner"></div>-->
 
+            <!-- NOVO: Conteúdo da Aba Início -->
+            <div id="inicio" class="tab-content">
+                <div class="home-tab-content">
+                    <div class="home-icon"><i class="fas fa-robot"></i></div>
+                    <h2 class="home-title">Bem-vindo ao Gerador Inteligente de ETP</h2>
+                    <p class="home-subtitle">Sua ferramenta para criar Estudos Técnicos Preliminares de forma guiada, segura e alinhada à Lei 14.133/2021.</p>
+                    
+                    <!-- BOTOES DA ABA INÍCIO -->
+                    <div class="home-buttons-container">
+                        <button class="home-main-button btn-start" data-action="start-new-etp-home">
+                            <i class="fas fa-file-medical"></i>
+                            <span>Começar Novo ETP</span>
+                        </button>
+                        
+                        <button class="home-main-button btn-continue" id="btnContinueEtpHome" data-action="continue-etp-home">
+                            <i class="fas fa-play-circle"></i>
+                            <span>Continuar ETP Salvo</span>
+                        </button>
+                    </div>
+
+                    <!--<div class="home-secondary-actions">
+                        <button class="etp-tool-button btn-tool-help" id="btnAbrirTutorial_home"><i class="fas fa-video" aria-hidden="true"></i> Assistir ao Tutorial</button>
+                        <button class="etp-tool-button btn-tool-help" id="btnAbrirManualEtp_home"><i class="fas fa-book-open" aria-hidden="true"></i> Consultar o Manual</button>
+                        <button class="etp-tool-button btn-tool-help" id="btnAbrirSobre_home"><i class="fas fa-info-circle" aria-hidden="true"></i> Sobre a Ferramenta</button>
+                    </div>-->
+                </div>
+            </div>
+            
             <!-- Conteúdo das Abas -->
             <div id="identificacao" class="tab-content">
                 <h2><i class="fas fa-id-badge chapter-icon" aria-hidden="true"></i>Identificação do Estudo Técnico
                     Preliminar</h2>
-                <p class="warning-text">Esta aplicação guiará você na elaboração do seu ETP de acordo com a <strong>Lei 14.133/2021</strong> e com o Manual de Elaboração de Estudos Técnicos Preliminares do TSE. Nesta primeira tela, ao selecionar o Tipo de ETP abaixo, você irá destravar os próximos capítulos no menu lateral.</p>
+                <p class="warning-text">Comece por aqui! Preencha os dados de identificação a seg e selecione o <strong>Tipo de ETP</strong> abaixo para liberar o preenchimento dos demais capítulos.</p>
 
                 <div class="form-group">
                     <label for="etp_unidade_demandante">I.1 Unidade Demandante</label>

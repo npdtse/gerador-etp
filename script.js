@@ -40,8 +40,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FUNÇÕES AUXILIARES ---
 
-    // --- FUNÇÕES DE UX (Novas) ---
+    // --- FUNÇÕES DE UX ---
 
+    function updateHomeTab() {
+        const btnContinue = document.getElementById('btnContinueEtpHome');
+        const etpDataString = localStorage.getItem(ETP_DATA_KEY);
+
+        if (btnContinue) {
+            if (etpDataString) {
+                // Se tem dados salvos, habilita o botão de continuar
+                btnContinue.disabled = false;
+            } else {
+                // Se não tem dados, desabilita (fica cinza)
+                btnContinue.disabled = true;
+            }
+        }
+    }
+    
     function updateContextBanner() {
         const activeTab = document.querySelector('.tab-content.active');
         const banner = document.getElementById('contextBanner');
@@ -202,12 +217,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tabButton.classList.add("active");
 
+        // --- INÍCIO DA CORREÇÃO ---
         if (tabName === 'consolidacao') {
-            updateConsolidatedETP();
+            updateConsolidatedETP(); // Isso só deve rodar para a consolidação
             tabProgressWrapper.style.display = 'none';
+        } else if (tabName === 'inicio') {
+            tabProgressWrapper.style.display = 'none'; // Para o início, apenas escondemos a barra
         } else {
             tabProgressWrapper.style.display = 'flex';
         }
+        // --- FIM DA CORREÇÃO ---
 
         updateAllProgressBars();
 
@@ -296,7 +315,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateChapterAccess() {
         const tipoEtpSelect = document.getElementById('etp_tipo');
         const authSelect = document.getElementById('etp_auth');
+        const etpDataString = localStorage.getItem(ETP_DATA_KEY);
+        const activeTab = document.querySelector('.tab-content.active');
 
+        // --- BLOQUEIO DA ABA IDENTIFICAÇÃO ---
+        const btnIdentificacao = document.querySelector('.tab-button[data-tab-target="identificacao"]');
+        if (btnIdentificacao) {
+            // A aba Identificação só fica ativa se houver dados salvos OU se o usuário já estiver nela (onboarding)
+            const isCurrentlyOnIdentificacao = activeTab && activeTab.id === 'identificacao';
+            btnIdentificacao.classList.toggle('inactive', !etpDataString && !isCurrentlyOnIdentificacao);
+        }
+
+        // --- LÓGICA DE UX (PULSO VISUAL) ---
         if (tipoEtpSelect) {
             if (tipoEtpSelect.value === '') {
                 tipoEtpSelect.classList.add('highlight-pulse');
@@ -316,13 +346,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const enableCompleto = isCompleto;
         const enableSimplificado = isSimplificado && hasAuth && seiNumber !== '';
 
-        const chapterNavButtons = document.querySelectorAll('.tab-nav .tab-button:not([data-tab-target="identificacao"])');
+        // Seleciona apenas os botões de CAPÍTULOS (exclui Início e Identificação da regra geral)
+        const chapterNavButtons = document.querySelectorAll('.tab-nav .tab-button:not([data-tab-target="identificacao"]):not([data-tab-target="inicio"])');
 
         chapterNavButtons.forEach(button => {
             const isSimplificadoHidden = button.classList.contains('simplificado-hide');
             let shouldBeActive = false;
 
-            // 1. Regra Geral de Ativação
             if (enableCompleto) {
                 shouldBeActive = true;
             } else if (enableSimplificado) {
@@ -331,14 +361,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // 2. Regra Específica do Capítulo 9 (Registro de Preços)
-            // Só é ativado e clicável se (Completo ou Simplificado Habilitado) E for SRP.
             if (button.dataset.tabTarget === 'cap9') {
                 if ((enableCompleto || enableSimplificado) && isSrpSelected) {
                     button.style.display = 'flex';
                     shouldBeActive = true;
                 } else {
-                    // Se não for SRP, o botão some para não confundir o usuário
                     button.style.display = 'none';
                     shouldBeActive = false;
                 }
@@ -346,17 +373,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 button.style.display = 'flex';
             }
 
-            // Aplica o estado visual e lógico de inatividade
             button.classList.toggle('inactive', !shouldBeActive);
         });
 
-        // Se a aba atual tornou-se inativa, volta para identificação
+        // Se a aba atual for um capítulo bloqueado, volta para identificação (mas nunca expulsa da aba Início)
         const activeNavButton = document.querySelector('.tab-button.active');
         if (activeNavButton && activeNavButton.classList.contains('inactive')) {
-            openTab('identificacao');
+            if (activeNavButton.dataset.tabTarget !== 'inicio') {
+                openTab('identificacao');
+            }
         }
 
-        // Aplica o estilo visual dos campos (cinza/desabilitado)
         if (enableSimplificado) {
             applyEtpMode('simplificado');
         } else {
@@ -365,10 +392,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateAllProgressBars();
 
-        // Controle do botão "Próximo" na aba de Identificação
         const btnNextIdentificacao = document.getElementById('btnNext_identificacao');
         if (btnNextIdentificacao) {
-            // Habilita se for Completo OU se for Simplificado preenchido corretamente
             btnNextIdentificacao.disabled = !(enableCompleto || enableSimplificado);
         }
     }
@@ -1200,6 +1225,7 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem(ETP_DATA_KEY, JSON.stringify(etpData));
         updateAllProgressBars();
         updateAllSummariesAndDropDowns();
+        updateHomeTab(); // <--- NOVA LINHA ADICIONADA AQUI (Atualiza os botões do Início)
     }
 
     const debouncedSave = debounce(saveAllDataToLocalStorage, 750);
@@ -1221,6 +1247,15 @@ document.addEventListener('DOMContentLoaded', () => {
         anexoManager.reset();
 
         if (!etpDataString) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.querySelectorAll('textarea, input[type="text"], input[type="number"], select').forEach(input => {
+                    input.value = '';
+                });
+                tab.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(input => {
+                    input.checked = false;
+                });
+            });
+
             applyEtpMode('completo');
             solucaoManager.add();
             riscoManager.add();
@@ -1235,6 +1270,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const etpData = JSON.parse(etpDataString);
+        
+        // 1. Carrega os dados das abas (Isso reconstrói os itens dinâmicos do Cap 2)
         Object.keys(etpData).forEach(tabId => {
             if (tabId !== 'consolidacao') loadTabData(tabId, etpData);
         });
@@ -1244,11 +1281,44 @@ document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('contratacoes_anteriores_container').children.length === 0) contratacaoManager.add();
         if (document.getElementById('anexos_container').children.length === 0) anexoManager.add();
 
+        // 2. Atualiza os componentes (Isso preenche as opções do Select da Solução Escolhida)
+        updateAllSummariesAndDropDowns();
+
+        // 3. --- CORREÇÃO: REAPLICAÇÃO DO VALOR DA SOLUÇÃO ESCOLHIDA ---
+        // Agora que o Select já tem opções, forçamos a aplicação do valor salvo
+        const savedSolucao = etpData.cap3?.c3_1_solucao_escolhida;
+        if (savedSolucao) {
+            const dropdown = document.getElementById('c3_1_solucao_escolhida');
+            if (dropdown) dropdown.value = savedSolucao;
+        }
+        // -------------------------------------------------------------
+
         initializeConditionalFields();
         handleModalidadeChange();
-        updateAllSummariesAndDropDowns();
         updateChapterAccess();
         updateAllProgressBars();
+    }
+
+    function resetETPToIdentificacao() {
+        // 1. Limpa o armazenamento local
+        localStorage.removeItem(ETP_DATA_KEY);
+        // localStorage.removeItem('etpAiConfig'); // Opcional: descomente se quiser limpar a chave de IA também
+        currentEtpFilename = null;
+
+        // 2. Reinicializa todo o estado da aplicação (DOM e variáveis)
+        // Chamamos loadAllData pois ela já possui a lógica de resetar os Managers 
+        // e limpar os campos caso não encontre dados no LocalStorage.
+        loadAllData();
+
+        // 3. Destrava manualmente a aba Identificação para permitir a entrada via openTab
+        const btnIdentificacao = document.querySelector('.tab-button[data-tab-target="identificacao"]');
+        if (btnIdentificacao) btnIdentificacao.classList.remove('inactive');
+
+        // 4. Navega diretamente para a Identificação, pulando a aba Início
+        openTab('identificacao');
+        
+        // 5. Atualiza os botões da aba Início (para quando o usuário voltar lá)
+        updateHomeTab();
     }
 
     function loadTabData(tabId, allData) {
@@ -2304,7 +2374,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function initialize() {
         loadAiSettings();
         loadAllData();
-        openTab('identificacao');
+        openTab('inicio');
+        updateHomeTab();
 
         // Listener de cliques principal
         document.body.addEventListener('click', (e) => {
@@ -2318,6 +2389,46 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!actionTarget) return;
 
             const action = actionTarget.dataset.action;
+
+            // --- Ações para os botões da aba Início ---
+            
+            // Botão: Continuar ETP Salvo
+            if (action === 'continue-etp-home') {
+                openTab('identificacao');
+                return;
+            }
+
+            // Botão: Começar Novo ETP
+            if (action === 'start-new-etp-home') {
+                const etpDataString = localStorage.getItem(ETP_DATA_KEY);
+                if (etpDataString) {
+                    // Se já existir dado, usa a função de reset inteligente
+                    if (confirm("Você já tem um ETP em andamento. Tem certeza que deseja iniciar um novo? Todo o progresso atual será perdido.")) {
+                        resetETPToIdentificacao();
+                    }
+                } else {
+                    // Se o sistema já estiver vazio, apenas destrava a aba e navega
+                    const btnIdentificacao = document.querySelector('.tab-button[data-tab-target="identificacao"]');
+                    if (btnIdentificacao) btnIdentificacao.classList.remove('inactive');
+                    openTab('identificacao');
+                }
+                return;
+            }
+
+            // Ações para os botões secundários da aba Início
+            if (actionTarget.id === 'btnAbrirTutorial_home') {
+                openVideoTutorialModal();
+                return;
+            }
+            if (actionTarget.id === 'btnAbrirManualEtp_home') {
+                window.open('manual_etp.html', '_blank');
+                return;
+            }
+            if (actionTarget.id === 'btnAbrirSobre_home') {
+                const aboutModal = document.getElementById('aboutModal');
+                if (aboutModal) aboutModal.style.display = 'block';
+                return;
+            }
 
             switch (action) {
                 case 'generate-title-ai': generateTitleWithAI(); break;
@@ -2377,11 +2488,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Listeners da barra de ferramentas
         document.getElementById('btnNovoETP').addEventListener('click', () => {
-            if (confirm("Tem certeza que deseja iniciar um novo ETP? Todo o progresso não salvo será perdido.")) {
-                localStorage.removeItem(ETP_DATA_KEY);
-                localStorage.removeItem('etpAiConfig');
-                currentEtpFilename = null;
-                window.location.reload();
+            if (confirm("Tem certeza que deseja iniciar um novo ETP? Todo o progresso atual será perdido.")) {
+                resetETPToIdentificacao();
             }
         });
         const etpFileInput = document.getElementById('etpFileInput');

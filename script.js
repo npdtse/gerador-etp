@@ -229,10 +229,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- FIM DA CORREÇÃO ---
 
         updateAllProgressBars();
-
-        if (typeof updateContextBanner === "function") {
-            updateContextBanner();
-        }
     }
 
     function navigateToChapter(direction) {
@@ -309,7 +305,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateAllProgressBars();
         updateAllSummariesAndDropDowns();
-        updateContextBanner();
     }
 
     function updateChapterAccess() {
@@ -350,30 +345,47 @@ document.addEventListener('DOMContentLoaded', () => {
         const chapterNavButtons = document.querySelectorAll('.tab-nav .tab-button:not([data-tab-target="identificacao"]):not([data-tab-target="inicio"])');
 
         chapterNavButtons.forEach(button => {
+            const tabTarget = button.dataset.tabTarget;
             const isSimplificadoHidden = button.classList.contains('simplificado-hide');
             let shouldBeActive = false;
+            let tooltipText = "";
 
             if (enableCompleto) {
                 shouldBeActive = true;
             } else if (enableSimplificado) {
                 if (!isSimplificadoHidden) {
                     shouldBeActive = true;
+                } else {
+                    tooltipText = "Este capítulo não se aplica ao ETP Simplificado.";
                 }
+            } else {
+                tooltipText = "Preencha a aba Identificação e o Tipo de ETP para liberar este capítulo.";
             }
 
-            if (button.dataset.tabTarget === 'cap9') {
+            // Lógica específica para o Capítulo 9 (Registro de Preços)
+            if (tabTarget === 'cap9') {
+                // Para o tooltip funcionar, o botão deve estar visível na tela
+                button.style.display = 'flex'; 
+                
                 if ((enableCompleto || enableSimplificado) && isSrpSelected) {
-                    button.style.display = 'flex';
                     shouldBeActive = true;
-                } else {
-                    button.style.display = 'none';
+                    tooltipText = ""; // Limpa a tooltip pois a aba está ativa
+                } else if (enableCompleto || enableSimplificado) {
                     shouldBeActive = false;
+                    tooltipText = "Requer a seleção de Sistema de Registro de Preços (SRP) no item 8.2.";
                 }
             } else {
                 button.style.display = 'flex';
             }
 
             button.classList.toggle('inactive', !shouldBeActive);
+            
+            // Aplica a tooltip (se vazio, remove o atributo title)
+            if (tooltipText) {
+                button.setAttribute('title', tooltipText);
+            } else {
+                button.removeAttribute('title');
+            }
         });
 
         // Se a aba atual for um capítulo bloqueado, volta para identificação (mas nunca expulsa da aba Início)

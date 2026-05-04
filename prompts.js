@@ -82,7 +82,7 @@ DIRETRIZES DE RESPOSTA (Siga estritamente):
    - Verifique a **coerência**: Se o texto do usuário contradizer o "Contexto do ETP" (ex: citar um objeto diferente da necessidade), aponte isso como um ponto de atenção prioritário.
    - Se estiver incompleto ou vago, cite expressamente qual ponto do "Como Preencher" ou do "Conceito" não foi atendido. Use a "Fundamentação Legal" para reforçar a necessidade da informação.
    - Pule uma linha.
-   - **CASO A RESPOSTA DO USUÁRIO NÃO SEJA SATISFATÓRIA**: Inicie um novo parágrafo com "Sugestão de Melhoria:". Escreva um exemplo de como o texto poderia ficar para atender plenamente ao Manual. A sugestão deve ser adaptada ao contexto do texto original do usuário (não invente dados, apenas melhore a redação e a estrutura). 
+   - **CASO A RESPOSTA DO USUÁRIO NÃO SEJA SATISFATÓRIA**: Inicie um novo parágrafo com "Sugestão de Melhoria:". Escreva diretamente um exemplo de como o texto poderia ficar para atender plenamente ao Manual. A sugestão deve ser adaptada ao contexto do texto original do usuário (não invente dados, apenas melhore a redação e a estrutura). 
    - **CASO A RESPOSTA DO USUÁRIO SEJA SATISFATÓRIA**: Inicie um novo parágrafo com o seguinte texto: "Não há sugestões de melhoria no momento."
 
 Não inclua saudações ou conclusões genéricas. Vá direto ao ponto.

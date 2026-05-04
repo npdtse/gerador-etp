@@ -872,9 +872,7 @@ table.consolidation-sub-table td:first-child {
 .etp-simplificado-mode .form-group.simplificado-hide,
 body:not(.etp-simplificado-mode) .form-group.completo-hide {
     display: block !important;
-    /* Garante visibilidade */
     opacity: 0.45;
-    filter: grayscale(100%);
     pointer-events: none;
     user-select: none;
     background-color: #f8f9fa;
@@ -902,6 +900,36 @@ body:not(.etp-simplificado-mode) .form-group.completo-hide * {
 /* Garantia de que o wrapper simplificado do 3.1 não apareça no modo completo */
 body:not(.etp-simplificado-mode) #c3_1_simplificado_wrapper {
     display: none !important;
+}
+
+/* --- INÍCIO: ETIQUETAS DE EXPLICAÇÃO DOS CAMPOS DESABILITADOS --- */
+
+.etp-simplificado-mode .form-group.simplificado-hide label::after {
+    content: 'Não aplicável ao ETP Simplificado';
+    background-color: #ffc107;
+    color: #000;
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 12px;
+    font-style: normal;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+body:not(.etp-simplificado-mode) .form-group.completo-hide label::after {
+    content: 'Não aplicável ao ETP Completo';
+    background-color: #ffc107;
+    color: #856404;
+    font-size: 0.8em;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 12px;
+    font-style: normal;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 /* --- NOVOS ESTILOS: MODAL DE CONFIGURAÇÕES DE IA --- */

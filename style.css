@@ -761,6 +761,23 @@ table.summary-table tbody tr:hover {
     background-color: #f0f0f0;
 }
 
+.summary-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #e2eef8;
+    color: #004080;
+    border: 1px solid #b8daff;
+    font-size: 0.78em;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-left: 10px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* --- ESTILOS PARA A ABA DE CONSOLIDAÇÃO --- */
 
 #consolidation_container {
@@ -1162,7 +1179,7 @@ body:not(.etp-simplificado-mode) .form-group.completo-hide label::after {
     padding-bottom: 8px;
 }
 
-/* Resetando o estilo do <pre> da IA para que ele não pareça uma "caixa" dentro da outra */
+/* Estilização da resposta formatada da IA */
 #aiComplianceAnalysis {
     background-color: transparent;
     border: none;
@@ -1170,9 +1187,40 @@ body:not(.etp-simplificado-mode) .form-group.completo-hide label::after {
     margin: 0;
     font-size: 0.95em;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    white-space: pre-wrap;
-    word-wrap: break-word;
-    color: #495057;
+    line-height: 1.6;
+    color: #343a40;
+    white-space: normal;
+}
+
+#aiComplianceAnalysis strong {
+    color: #004080;
+    font-weight: 700;
+}
+
+#aiComplianceAnalysis p {
+    margin: 0 0 12px 0;
+}
+
+#aiComplianceAnalysis blockquote {
+    margin: 14px 0;
+    padding: 12px 18px;
+    background-color: #f0f6fc;
+    border-left: 4px solid #0056b3;
+    border-radius: 0 6px 6px 0;
+    color: #1a3959;
+    font-style: italic;
+    font-size: 0.98em;
+    line-height: 1.6;
+}
+
+#aiComplianceAnalysis ul,
+#aiComplianceAnalysis ol {
+    margin: 8px 0 14px 20px;
+    padding-left: 10px;
+}
+
+#aiComplianceAnalysis li {
+    margin-bottom: 6px;
 }
 
 .manual-content-block p,
@@ -1259,6 +1307,25 @@ body:not(.etp-simplificado-mode) .form-group.completo-hide label::after {
 .context-banner i {
     margin-right: 8px;
     font-size: 1.1em;
+}
+
+.conditional-dispensed-notice {
+    background-color: #f8f9fa;
+    border-left: 4px solid #6c757d;
+    border-radius: 4px;
+    padding: 10px 14px;
+    margin-top: 6px;
+    margin-bottom: 14px;
+    font-size: 0.88em;
+    color: #495057;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.conditional-dispensed-notice i {
+    color: #6c757d;
+    font-size: 1em;
 }
 
 @keyframes fadeIn {
@@ -1563,4 +1630,223 @@ body:not(.ai-features-disabled) .ai-help-button i.fa-book-open::before {
     gap: 15px;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+/* --- BOTÃO DE DESCONEXÃO DE IA E OPÇÃO DE SESSÃO --- */
+.api-key-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.api-key-input-wrapper {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.api-key-input-wrapper input {
+    padding-right: 40px !important;
+}
+
+/* Oculta o ícone nativo de revelação de senha do Microsoft Edge */
+.api-key-input-wrapper input::-ms-reveal,
+.api-key-input-wrapper input::-ms-clear {
+    display: none;
+}
+
+.api-key-input-wrapper #toggleApiKeyVisibility {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    color: #6c757d;
+    font-size: 1.05em;
+    z-index: 3;
+}
+
+.api-key-input-wrapper #toggleApiKeyVisibility:hover {
+    color: #004080;
+}
+
+.btn-disconnect-ai {
+    background-color: #dc3545;
+    border-color: #bd2130;
+    white-space: nowrap;
+    padding: 9px 14px;
+    flex-shrink: 0;
+}
+
+.btn-disconnect-ai:hover {
+    background-color: #c82333;
+    border-color: #b21f2d;
+}
+
+.ai-key-storage-options {
+    margin-top: 8px;
+}
+
+.checkbox-label-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.88em;
+    color: #495057;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* --- PRÉ-VISUALIZAÇÃO DE TABELAS DETECTADAS (OPÇÃO B) --- */
+.table-active-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+    font-size: 0.78em;
+    font-weight: bold;
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.table-detected-preview {
+    margin-top: 10px;
+    border: 1px solid #b8daff;
+    background-color: #f8fbfd;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 64, 128, 0.05);
+}
+
+.table-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 14px;
+    background-color: #e2eef8;
+    border-bottom: 1px solid #cce5ff;
+    font-size: 0.85em;
+    color: #004080;
+    font-weight: 600;
+}
+
+.table-preview-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.table-preview-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-table-remove {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.btn-table-remove:hover {
+    background-color: #f8d7da;
+}
+
+.table-preview-body {
+    padding: 12px;
+    max-height: 280px;
+    overflow: auto;
+}
+
+.table-rendered-content {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88em;
+    background-color: #ffffff;
+}
+
+.table-rendered-content th,
+.table-rendered-content td {
+    border: 1px solid #dee2e6;
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.table-rendered-content th {
+    background-color: #e9ecef;
+    color: #004080;
+    font-weight: 600;
+}
+
+.table-rendered-content tr:nth-child(even) {
+    background-color: #fdfdff;
+}
+
+/* --- ESTILOS DO CARD DE ERRO AMIGÁVEL DA IA --- */
+.ai-error-box {
+    background-color: #fff8f8;
+    border: 1px solid #f5c6cb;
+    border-left: 5px solid #dc3545;
+    border-radius: 6px;
+    padding: 16px 18px;
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(220, 53, 69, 0.08);
+}
+
+.ai-error-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.ai-error-header i {
+    font-size: 1.3em;
+    color: #dc3545;
+}
+
+.ai-error-title {
+    font-weight: 700;
+    font-size: 1.05em;
+    color: #721c24;
+}
+
+.ai-error-message {
+    font-size: 0.95em;
+    color: #495057;
+    line-height: 1.55;
+    margin-bottom: 12px;
+}
+
+.ai-error-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    font-size: 0.88em;
+    font-weight: 600;
+    color: #ffffff;
+    background-color: #0056b3;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.ai-error-action-btn:hover {
+    background-color: #004080;
 }

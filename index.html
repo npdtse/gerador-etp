@@ -1608,8 +1608,6 @@
                 <h2><i class="fas fa-paperclip chapter-icon" aria-hidden="true"></i>Anexos</h2>
                 <p class="warning-text">Liste aqui os documentos que serão anexados a este ETP no SEI.</p>
                 <div id="anexos_container">
-                    <button class="add-button" data-action="add-anexo"><i class="fas fa-plus-circle"
-                            aria-hidden="true"></i> Adicionar Outro Anexo</button>
                     <!-- Anexos dinâmicos -->
                 </div>
                 <button class="add-button" data-action="add-anexo"><i class="fas fa-plus-circle" aria-hidden="true"></i>
@@ -1741,11 +1739,22 @@
 
                 <div class="form-group">
                     <label for="apiKeyInput">Chave de API (Groq)</label>
-                    <div style="position: relative; display: flex; align-items: center;">
-                        <input type="password" id="apiKeyInput" class="full-width-input"
-                            placeholder="Cole sua chave de API aqui (ex: gsk_...)">
-                        <i class="fas fa-eye" id="toggleApiKeyVisibility"
-                            style="position: absolute; right: 15px; cursor: pointer; color: #6c757d;"></i>
+                    <div class="api-key-row">
+                        <div class="api-key-input-wrapper">
+                            <input type="password" id="apiKeyInput" class="full-width-input"
+                                placeholder="Cole sua chave de API aqui (ex: gsk_...)">
+                            <i class="fas fa-eye" id="toggleApiKeyVisibility" title="Mostrar/Ocultar chave"></i>
+                        </div>
+                        <button type="button" class="etp-tool-button btn-disconnect-ai" id="btnClearApiKey"
+                            title="Remover a chave do navegador imediatamente">
+                            <i class="fas fa-sign-out-alt" aria-hidden="true"></i> Desconectar
+                        </button>
+                    </div>
+                    <div class="ai-key-storage-options">
+                        <label class="checkbox-label-inline" for="chkSessionStorageOnly">
+                            <input type="checkbox" id="chkSessionStorageOnly">
+                            Modo computador compartilhado (apagar chave automaticamente ao fechar o navegador)
+                        </label>
                     </div>
                 </div>
 

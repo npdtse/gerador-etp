@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const tabProgressTextEl = document.getElementById('tabProgressText');
     const tabProgressWrapper = document.getElementById('tabProgressWrapper');
 
-    // Seletores do Modal de Configurações de IA ---
+    // --- INÍCIO: Seletores do Modal de Configurações de IA ---
     const aiSettingsModal = document.getElementById('aiSettingsModal');
     const useAiRadioYes = document.getElementById('useAiRadioYes');
     const useAiRadioNo = document.getElementById('useAiRadioNo');
@@ -27,18 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const addModelButton = document.getElementById('addModelButton');
     const testApiConnectionButton = document.getElementById('testApiConnectionButton');
     const testConnectionResult = document.getElementById('testConnectionResult');
-
-    // Recursos
-    const btnGuiaSobre = document.getElementById('btnAbrirGuiaRapido');
-    if (btnGuiaSobre) btnGuiaSobre.addEventListener('click', () => window.open('guia_rapido.html', '_blank'));
+    // --- FIM: Seletores do Modal de Configurações de IA ---
 
     // Bibliotecas externas
     const { Packer, Document, Paragraph, TextRun, Table, TableCell, TableRow, HeadingLevel, WidthType, BorderStyle, VerticalAlign, HeightRule } = window.docx;
 
-    // Variáveis Globais ---
+    // --- INÍCIO: Variáveis Globais ---
     let aiConfig = {}; // Será preenchida pela função loadAiSettings
     let currentEtpFilename = null; // Armazena o nome do arquivo atual
-    let isAppInitializing = false;
+    // --- FIM: Variáveis Globais ---
 
 
     // --- FUNÇÕES AUXILIARES ---
@@ -59,9 +56,46 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    
+    function updateContextBanner() {
+        const activeTab = document.querySelector('.tab-content.active');
+        const banner = document.getElementById('contextBanner');
+        if (!activeTab || !banner) return;
+
+        const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
+        banner.style.display = 'none'; // Começa oculto
+        banner.innerHTML = '';
+
+        // 1. Verifica se o CAPÍTULO INTEIRO está inativo no modo Simplificado
+        if (isSimplificado && activeTab.classList.contains('simplificado-hide')) {
+            banner.style.display = 'block';
+            banner.innerHTML = `<i class="fas fa-exclamation-triangle"></i> <strong>Atenção:</strong> Este capítulo não é aplicável ao <strong>ETP Simplificado</strong> e não precisa ser preenchido.`;
+            return;
+        }
+
+        // 2. Verifica se há ITENS ESPECÍFICOS ocultos dentro do capítulo ativo
+        let hasHiddenItems = false;
+        if (isSimplificado) {
+            // No modo simplificado, procura por itens marcados para sumir neste modo
+            if (activeTab.querySelector('.form-group.simplificado-hide')) hasHiddenItems = true;
+        } else {
+            // No modo completo, procura por itens marcados para sumir no completo (ex: item 1.4)
+            if (activeTab.querySelector('.form-group.completo-hide')) hasHiddenItems = true;
+        }
+
+        if (hasHiddenItems) {
+            const modeName = isSimplificado ? "ETP Simplificado" : "ETP Completo";
+            banner.style.display = 'block';
+            banner.innerHTML = `<i class="fas fa-info-circle"></i> <strong>Modo ${modeName}:</strong> Um ou mais itens desta seção foram ocultados automaticamente, pois não são exigidos neste tipo de ETP.`;
+        }
+    }
 
     function formatSEIProcess(input) {
+        if (!input) return;
         let value = input.value.replace(/\D/g, '');
+        if (value.length > 16) {
+            value = value.substring(0, 16);
+        }
         let formattedValue = '';
         if (value.length > 0) formattedValue = value.substring(0, 4);
         if (value.length > 4) formattedValue += '.' + value.substring(4, 6);
@@ -69,6 +103,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (value.length > 15) formattedValue += '-' + value.substring(15, 16);
         input.value = formattedValue;
     }
+    window.formatSEIProcess = formatSEIProcess;
+
+    function formatBRLCurrency(input) {
+        if (!input) return;
+        let value = input.value.replace(/\D/g, '');
+        if (!value) {
+            input.value = '';
+            return;
+        }
+        if (value.length > 14) {
+            value = value.substring(0, 14);
+        }
+        const floatVal = parseInt(value, 10) / 100;
+        input.value = floatVal.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+    }
+    window.formatBRLCurrency = formatBRLCurrency;
 
     function stripHtml(html) {
         if (!html) return "";
@@ -396,6 +449,26 @@ document.addEventListener('DOMContentLoaded', () => {
         updateAllProgressBars();
     }
 
+    function updateDispensationNotice(containerId, showNotice, noticeText) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        let noticeEl = container.parentElement.querySelector(`.dispensation-notice[data-for="${containerId}"]`);
+
+        if (showNotice && noticeText) {
+            if (!noticeEl) {
+                noticeEl = document.createElement('div');
+                noticeEl.className = 'conditional-dispensed-notice dispensation-notice';
+                noticeEl.setAttribute('data-for', containerId);
+                container.parentNode.insertBefore(noticeEl, container.nextSibling);
+            }
+            noticeEl.innerHTML = `<i class="fas fa-info-circle"></i> <span>${noticeText}</span>`;
+            noticeEl.style.display = 'flex';
+        } else if (noticeEl) {
+            noticeEl.style.display = 'none';
+        }
+    }
+
     function toggleConditionalFields(groupKey, selectedValue) {
         const toggle = (ids, condition) => {
             if (!ids) return;
@@ -444,29 +517,115 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!showSeiField) {
                 clearField('etp_auth_sei_number');
             }
+        } else if (groupKey === 'alinhamento_estrategico') {
+            toggle(conditionalFieldIds.alinhamento_estrategico, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c1_7_sim_alinhamento', selectedValue === 'nao', "Subitem 1.7.1 dispensado em razão da resposta negativa no item 1.7.");
+        } else if (groupKey === 'natureza_continua') {
+            toggle(conditionalFieldIds.natureza_continua, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c3_7_natureza_continua', selectedValue === 'nao', "Subitem 3.7.1 dispensado em razão de não se tratar de serviço contínuo no item 3.7.");
+        } else if (groupKey === 'garantia') {
+            toggle(conditionalFieldIds.garantia, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c3_9_1_prazo_garantia', selectedValue === 'nao', "Subitens 3.9.1 a 3.9.2.1 dispensados por não haver previsão de garantia no item 3.9.");
+        } else if (groupKey === 'justificativa_garantia') {
+            toggle(conditionalFieldIds.justificativa_garantia, selectedValue === 'nao');
+            updateDispensationNotice('conditional_c3_9_2_1_justificativa_garantia', selectedValue === 'sim', "Subitem 3.9.2.1 dispensado por estar de acordo com o padrão de mercado no item 3.9.2.");
+        } else if (groupKey === 'assistencia') {
+            toggle(conditionalFieldIds.assistencia, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c3_10_1_prazo_assistencia', selectedValue === 'nao', "Subitens 3.10.1 a 3.10.2.1 dispensados por não haver previsão de assistência técnica no item 3.10.");
+        } else if (groupKey === 'justificativa_assistencia') {
+            toggle(conditionalFieldIds.justificativa_assistencia, selectedValue === 'nao');
+            updateDispensationNotice('conditional_c3_10_2_1_justificativa_assistencia', selectedValue === 'sim', "Subitem 3.10.2.1 dispensado por estar de acordo com o padrão de mercado no item 3.10.2.");
+        } else if (groupKey === 'transferencia') {
+            toggle(conditionalFieldIds.transferencia, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c3_11_transferencia', selectedValue === 'nao', "Subitem 3.11.1 dispensado em razão da resposta negativa no item 3.11.");
+        } else if (groupKey === 'capacitacao') {
+            toggle(conditionalFieldIds.capacitacao, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c3_12_capacitacao', selectedValue === 'nao', "Subitem 3.12.1 dispensado em razão da resposta negativa no item 3.12.");
+        } else if (groupKey === 'contratacao_adicional') {
+            toggle(conditionalFieldIds.contratacao_adicional, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c3_13_contratacao_adicional', selectedValue === 'nao', "Subitem 3.13.1 dispensado em razão da resposta negativa no item 3.13.");
+        } else if (groupKey === 'ajuste_contratacoes') {
+            toggle(conditionalFieldIds.ajuste_contratacoes, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c3_14_ajuste_contratacoes', selectedValue === 'nao', "Subitem 3.14.1 dispensado em razão da resposta negativa no item 3.14.");
+        } else if (groupKey === 'acessibilidade') {
+            toggle(conditionalFieldIds.acessibilidade, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c3_15_acessibilidade', selectedValue === 'nao', "Subitem 3.15.1 dispensado em razão da resposta negativa no item 3.15.");
         } else if (groupKey === 'parcelamento') {
             toggle(conditionalFieldIds.parcelamento_grupo_unico, selectedValue === 'grupo_unico');
             toggle(conditionalFieldIds.parcelamento_grupos_separados, selectedValue === 'grupos_separados');
-        } else if (groupKey === 'alinhamento_estrategico') {
-            toggle(conditionalFieldIds.alinhamento_estrategico, selectedValue === 'sim');
+
+            updateDispensationNotice('conditional_c7_grupo_unico', selectedValue === 'grupos_separados', "Subitem 7.1.1 dispensado em razão da opção por 'Grupos Separados' no item 7.1.");
+            updateDispensationNotice('conditional_c7_grupos_separados', selectedValue === 'grupo_unico', "Subitens 7.1.2 e 7.1.3 dispensados em razão da opção por 'Grupo Único' no item 7.1.");
+            updateDispensationNotice('conditional_c7_grupo_unico', selectedValue === 'itens', "Subitens 7.1.1 a 7.1.3 dispensados em razão da opção por 'Itens Separados' no item 7.1.");
+            if (selectedValue !== 'itens') {
+                updateDispensationNotice('conditional_c7_grupo_unico', false);
+                if (selectedValue === 'grupos_separados') {
+                    updateDispensationNotice('conditional_c7_grupo_unico', true, "Subitem 7.1.1 dispensado em razão da opção por 'Grupos Separados' no item 7.1.");
+                }
+            }
         } else if (groupKey === 'modalidade_contratacao') {
             toggle(conditionalFieldIds.contratacao_dispensa, selectedValue === 'dispensa');
             toggle(conditionalFieldIds.contratacao_inexigibilidade, selectedValue === 'inexigibilidade');
+            updateDispensationNotice('conditional_c8_1_dispensa', selectedValue === 'licitacao' || selectedValue === 'leilao', "Subitens de justificativa de contratação direta dispensados em razão da opção no item 8.1.");
         } else if (groupKey === 'dispensa_outra_hipotese') {
             toggle(conditionalFieldIds.dispensa_outra_hipotese, selectedValue === 'outra');
+        } else if (groupKey === 'qualificacao_tecnica') {
+            toggle(conditionalFieldIds.qualificacao_tecnica, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c8_4_qualificacao_tecnica', selectedValue === 'nao', "Subitens 8.4.1 e 8.4.2 dispensados em razão da resposta negativa no item 8.4.");
+        } else if (groupKey === 'amostras') {
+            toggle(conditionalFieldIds.amostras, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c8_5_amostras', selectedValue === 'nao', "Subitem 8.5.1 dispensado em razão da resposta negativa no item 8.5.");
+        } else if (groupKey === 'vistoria') {
+            toggle(conditionalFieldIds.vistoria, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c8_6_vistoria', selectedValue === 'nao', "Subitem 8.6.1 dispensado em razão da resposta negativa no item 8.6.");
+        } else if (groupKey === 'confidencialidade') {
+            toggle(conditionalFieldIds.confidencialidade, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c8_7_confidencialidade', selectedValue === 'nao', "Subitem 8.7.1 dispensado em razão da resposta negativa no item 8.7.");
+        } else if (groupKey === 'subcontratacao') {
+            toggle(conditionalFieldIds.subcontratacao, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c8_8_subcontratacao', selectedValue === 'nao', "Subitem 8.8.1 dispensado por não ser permitida subcontratação no item 8.8.");
         } else if (groupKey === 'consorcio') {
             toggle(conditionalFieldIds.consorcio_permissao, selectedValue === 'sim');
             toggle(conditionalFieldIds.consorcio_proibicao, selectedValue === 'nao');
+            updateDispensationNotice('conditional_c8_9_proibicao_consorcio', selectedValue === 'sim', "Subitem 8.9.1 dispensado em razão da permissão de consórcio no item 8.9.");
+            updateDispensationNotice('conditional_c8_9_permisao_consorcio', selectedValue === 'nao', "Subitem 8.9.2 dispensado em razão da proibição de consórcio no item 8.9.");
+        } else if (groupKey === 'limite_consorcio') {
+            toggle(conditionalFieldIds.limite_consorcio, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c8_9_2_detalhes_limite', selectedValue === 'nao', "Subitens 8.9.2.1 e 8.9.2.2 dispensados por não haver limite de consorciadas no item 8.9.2.");
         } else if (groupKey === 'cooperativas') {
             toggle(conditionalFieldIds.cooperativas_proibicao, selectedValue === 'nao');
+            updateDispensationNotice('conditional_c8_10_proibicao_cooperativas', selectedValue === 'sim', "Subitem 8.10.1 dispensado em razão da permissão de cooperativas no item 8.10.");
         } else if (groupKey === 'estrangeiras') {
             toggle(conditionalFieldIds.estrangeiras_permissao, selectedValue === 'sim');
             toggle(conditionalFieldIds.estrangeiras_proibicao, selectedValue === 'nao');
+            updateDispensationNotice('conditional_c8_11_proibicao_estrangeiras', selectedValue === 'sim', "Subitem 8.11.1 dispensado em razão da permissão de empresas estrangeiras no item 8.11.");
+            updateDispensationNotice('conditional_c8_11_permisao_estrangeiras', selectedValue === 'nao', "Subitem 8.11.2 dispensado em razão da proibição de empresas estrangeiras no item 8.11.");
+        } else if (groupKey === 'margem_preferencia') {
+            toggle(conditionalFieldIds.margem_preferencia, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c8_11_2_detalhes_margem', selectedValue === 'nao', "Subitem 8.11.2.1 dispensado em razão de não caber margem de preferência no item 8.11.2.");
         } else if (groupKey === 'pessoa_fisica') {
             toggle(conditionalFieldIds.pessoa_fisica_proibicao, selectedValue === 'nao');
+            updateDispensationNotice('conditional_c8_12_proibicao_pessoa_fisica', selectedValue === 'sim', "Subitem 8.12.1 dispensado em razão da permissão de pessoa física no item 8.12.");
+        } else if (groupKey === 'quantitativo_inferior') {
+            toggle(conditionalFieldIds.quantitativo_inferior, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c9_1_quantitativo_inferior', selectedValue === 'nao', "Subitem 9.1.1 dispensado em razão da resposta negativa no item 9.1.");
+        } else if (groupKey === 'precos_diferentes') {
+            toggle(conditionalFieldIds.precos_diferentes, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c9_2_precos_diferentes', selectedValue === 'nao', "Subitem 9.2.1 dispensado em razão da resposta negativa no item 9.2.");
+        } else if (groupKey === 'mais_de_um_fornecedor') {
+            toggle(conditionalFieldIds.mais_de_um_fornecedor, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c9_3_mais_de_um_fornecedor', selectedValue === 'nao', "Subitem 9.3.1 dispensado em razão da resposta negativa no item 9.3.");
+        } else if (groupKey === 'adesao_futura') {
+            toggle(conditionalFieldIds.adesao_futura, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c9_4_adesao_futura', selectedValue === 'nao', "Subitem 9.4.1 dispensado em razão da resposta negativa no item 9.4.");
+        } else if (groupKey === 'prorrogacao_ata') {
+            toggle(conditionalFieldIds.prorrogacao_ata, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c9_5_prorrogacao_detalhes', selectedValue === 'nao', "Subitens 9.5.1 e 9.5.1.1 dispensados por não haver prorrogação da ata no item 9.5.");
+        } else if (groupKey === 'renovacao_quantidades_ata') {
+            toggle(conditionalFieldIds.renovacao_quantidades_ata, selectedValue === 'sim');
+            updateDispensationNotice('conditional_c9_5_1_1_justificativa_renovacao', selectedValue === 'nao', "Subitem 9.5.1.1 dispensado por não haver renovação de quantidades no item 9.5.1.");
         } else {
-            const condition = (groupKey.includes('justificativa')) ? selectedValue === 'nao'
-                : selectedValue === 'sim';
+            const condition = (groupKey.includes('justificativa')) ? selectedValue === 'nao' : selectedValue === 'sim';
             toggle(conditionalFieldIds[groupKey], condition);
         }
         updateAllProgressBars();
@@ -490,26 +649,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LÓGICA DE PROGRESSO ---
 
-    function isFieldLogicallyActive(input) {
-        const tabContent = input.closest('.tab-content');
+    function isFieldLogicallyActive(element) {
+        if (!element) return false;
+
+        const tabContent = element.closest('.tab-content');
         if (tabContent) {
+            if (tabContent.id === 'inicio' || tabContent.id === 'consolidacao') {
+                return false;
+            }
             const navButton = document.querySelector(`.tab-button[data-tab-target="${tabContent.id}"]`);
-            if (navButton && navButton.classList.contains('inactive')) {
+            if (navButton && (navButton.classList.contains('inactive') || window.getComputedStyle(navButton).display === 'none')) {
                 return false;
             }
         }
 
         const isSimplificadoMode = document.body.classList.contains('etp-simplificado-mode');
 
-        if (isSimplificadoMode && input.closest('.simplificado-hide')) {
+        if (isSimplificadoMode && element.closest('.simplificado-hide')) {
             return false;
         }
 
-        if (!isSimplificadoMode && input.closest('.completo-hide')) {
+        if (!isSimplificadoMode && element.closest('.completo-hide')) {
             return false;
         }
 
-        let current = input;
+        let current = element;
         while (current && !current.classList.contains('tab-content')) {
             if (current.style.display === 'none') {
                 return false;
@@ -523,13 +687,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function calculateProgress(scopeElement) {
         if (!scopeElement) return { filled: 0, total: 0, percentage: 0 };
 
-        const inputs = scopeElement.querySelectorAll('input[type="text"]:not([readonly]), input[type="number"]:not([readonly]), textarea:not([readonly]), select, input[type="checkbox"], input[type="radio"]');
+        // Caso especial: Capítulo 5 com "Não se aplica" marcado equivale a 100% de conclusão
+        if (scopeElement.id === 'cap5' && document.getElementById('c5_nao_se_aplica')?.checked) {
+            return { filled: 1, total: 1, percentage: 100 };
+        }
+
         let total = 0;
         let filled = 0;
         const processedRadioGroups = new Set();
 
+        // 1. Inputs regulares (text, number, textarea, select, radio e checkboxes isolados)
+        const inputs = scopeElement.querySelectorAll('input[type="text"]:not([readonly]), input[type="number"]:not([readonly]), textarea:not([readonly]), select, input[type="checkbox"], input[type="radio"]');
+
         inputs.forEach(input => {
-            if (input.id === 'c5_nao_se_aplica') {
+            // Ignora o toggle do Cap 5 (tratado separadamente) e checkboxes internos da lista de anexos
+            if (input.id === 'c5_nao_se_aplica' || input.closest('.scrollable-checkbox-group')) {
                 return;
             }
 
@@ -547,9 +719,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     let isFilled = (input.type === 'checkbox') ? input.checked : (input.value && input.value.trim() !== '');
 
                     if (isFilled) {
-                        if (input.id === 'etp_titulo' && input.value.startsWith("Será gerado")) return;
+                        if (input.id === 'etp_titulo' && (input.value.startsWith("Será gerado") || input.value.startsWith("Gerando"))) return;
                         filled++;
                     }
+                }
+            }
+        });
+
+        // 2. Grupos de itens relacionados nos Anexos (item A.X.3) - conta como 1 único campo obrigatório
+        const scrollableGroups = scopeElement.querySelectorAll('.scrollable-checkbox-group');
+        scrollableGroups.forEach(group => {
+            if (isFieldLogicallyActive(group)) {
+                total++;
+                const hasAnyChecked = group.querySelectorAll('input[type="checkbox"]:checked').length > 0;
+                if (hasAnyChecked) {
+                    filled++;
                 }
             }
         });
@@ -559,51 +743,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateMainProgressBar() {
+        const tabOrder = ['identificacao', 'cap1', 'cap2', 'cap3', 'cap4', 'cap5', 'cap6', 'cap7', 'cap8', 'cap9', 'anexos'];
         let totalFields = 0;
         let filledFields = 0;
-        const processedRadioGroups = new Set();
 
-        document.querySelectorAll('.tab-content:not(#consolidacao)').forEach(tab => {
-            const navButton = document.querySelector(`.tab-button[data-tab-target="${tab.id}"]`);
-            if (navButton && navButton.classList.contains('inactive')) {
+        tabOrder.forEach(tabId => {
+            const tabElement = document.getElementById(tabId);
+            if (!tabElement) return;
+
+            const navButton = document.querySelector(`.tab-button[data-tab-target="${tabId}"]`);
+            if (navButton && (navButton.classList.contains('inactive') || window.getComputedStyle(navButton).display === 'none')) {
                 return;
             }
 
-            if (tab.id === 'cap5' && document.getElementById('c5_nao_se_aplica')?.checked) return;
-
-            const inputs = tab.querySelectorAll('input[type="text"]:not([readonly]), input[type="number"]:not([readonly]), textarea:not([readonly]), select, input[type="checkbox"], input[type="radio"]');
-            inputs.forEach(input => {
-                if (input.id === 'c5_nao_se_aplica') return;
-
-                if (isFieldLogicallyActive(input)) {
-                    if (input.type === 'radio') {
-                        const groupName = input.name;
-                        if (processedRadioGroups.has(groupName)) return;
-                        processedRadioGroups.add(groupName);
-                        totalFields++;
-                        if (document.querySelector(`input[name="${groupName}"]:checked`)) {
-                            filledFields++;
-                        }
-                    } else {
-                        totalFields++;
-                        let isFilled = (input.type === 'checkbox') ? input.checked : (input.value && input.value.trim() !== '');
-                        if (isFilled) {
-                            if (input.id === 'etp_titulo' && input.value.startsWith("Será gerado")) return;
-                            filledFields++;
-                        }
-                    }
-                }
-            });
+            const tabProgress = calculateProgress(tabElement);
+            totalFields += tabProgress.total;
+            filledFields += tabProgress.filled;
         });
 
         const percentage = totalFields > 0 ? (filledFields / totalFields) * 100 : 0;
-        mainProgressBarEl.style.width = percentage + '%';
+        mainProgressBarEl.style.width = Math.round(percentage) + '%';
         mainProgressTextEl.textContent = Math.round(percentage) + '%';
     }
 
     function updateTabProgressBar() {
         const activeTab = document.querySelector('.tab-content.active');
-        if (!activeTab || activeTab.id === 'consolidacao') {
+        if (!activeTab || activeTab.id === 'consolidacao' || activeTab.id === 'inicio') {
             tabProgressWrapper.style.display = 'none';
             return;
         }
@@ -615,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tabProgressTextEl.textContent = '0%';
 
         setTimeout(() => {
-            tabProgressBarEl.style.width = progress.percentage + '%';
+            tabProgressBarEl.style.width = Math.round(progress.percentage) + '%';
             tabProgressTextEl.textContent = Math.round(progress.percentage) + '%';
         }, 50);
     }
@@ -628,15 +793,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkChapterCompletion(tabId) {
         const tabElement = document.getElementById(tabId);
-        if (!tabElement || tabId === 'consolidacao') return false;
+        if (!tabElement || tabId === 'consolidacao' || tabId === 'inicio') return false;
 
         const navButton = document.querySelector(`.tab-button[data-tab-target="${tabId}"]`);
-        if (navButton && navButton.classList.contains('inactive')) return false;
+        if (navButton && (navButton.classList.contains('inactive') || window.getComputedStyle(navButton).display === 'none')) return false;
 
         if (tabId === 'cap5' && document.getElementById('c5_nao_se_aplica')?.checked) return true;
 
         const progress = calculateProgress(tabElement);
-        return progress.total > 0 && progress.percentage === 100;
+        return progress.total > 0 && Math.round(progress.percentage) === 100;
     }
 
     function updateAllChapterCompletionStatus() {
@@ -652,43 +817,246 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LÓGICA DE IA ---
 
+    function parseAiErrorMessage(error) {
+        if (!error) {
+            return {
+                title: "Falha Inesperada",
+                message: "Não foi possível obter uma resposta da IA. Aguarde alguns instantes e tente novamente.",
+                icon: "fa-triangle-exclamation"
+            };
+        }
+
+        if (error.code === 'MISSING_KEY' || error.message?.includes("Chave de API não configurada")) {
+            return {
+                title: "Chave de API Ausente",
+                message: "A chave de acesso à IA não está configurada neste navegador. Acesse as configurações para inseri-la.",
+                icon: "fa-key",
+                showSettingsBtn: true
+            };
+        }
+
+        if (error.isTimeout || error.name === 'AbortError') {
+            return {
+                title: "Tempo Limite Excedido",
+                message: "A IA demorou mais de 30 segundos para responder e a conexão foi interrompida para evitar travamento. Verifique sua conexão e tente novamente.",
+                icon: "fa-hourglass-end"
+            };
+        }
+
+        if (error.isNetworkError || error.message?.includes("Failed to fetch") || error.name === 'TypeError') {
+            return {
+                title: "Falha de Conexão com o Servidor de IA",
+                message: "Não foi possível alcançar os servidores da Groq. Verifique sua conexão com a internet ou se a rede/VPN institucional está restringindo conexões externas a 'api.groq.com'.",
+                icon: "fa-wifi"
+            };
+        }
+
+        const status = error.status;
+        const rawMessage = (error.rawMessage || error.message || "").toLowerCase();
+
+        if (status === 429 || rawMessage.includes("rate limit") || rawMessage.includes("tokens")) {
+            let tempoFormatado = "";
+            const regexMinSec = /try again in (\d+m)?(\d+(\.\d+)?s)?/i;
+            const match = (error.rawMessage || error.message || "").match(regexMinSec);
+
+            if (match) {
+                const minutos = match[1] ? match[1].replace('m', '') : null;
+                const segundos = match[2] ? Math.ceil(parseFloat(match[2].replace('s', ''))) : null;
+                if (minutos && segundos) {
+                    tempoFormatado = ` Aproximadamente ${minutos} minuto(s) e ${segundos} segundo(s).`;
+                } else if (minutos) {
+                    tempoFormatado = ` Aproximadamente ${minutos} minuto(s).`;
+                } else if (segundos) {
+                    tempoFormatado = ` Aproximadamente ${segundos} segundo(s).`;
+                }
+            }
+
+            const orientacaoEspera = tempoFormatado
+                ? `O provedor solicita que você aguarde:${tempoFormatado}`
+                : "Os limites de tokens por minuto da sua conta foram atingidos. Aguarde cerca de 1 a 2 minutos para tentar novamente.";
+
+            return {
+                title: "Limite Temporário de Requisições Atingido",
+                message: `O volume de texto processado excedeu a capacidade momentânea do modelo. ${orientacaoEspera}`,
+                icon: "fa-clock"
+            };
+        }
+
+        if (status === 401 || rawMessage.includes("invalid api key") || rawMessage.includes("unauthorized")) {
+            return {
+                title: "Chave de API Inválida",
+                message: "A chave de API cadastrada foi recusada pelo provedor. Verifique se a chave foi copiada corretamente ou gere uma nova no console da Groq.",
+                icon: "fa-lock",
+                showSettingsBtn: true
+            };
+        }
+
+        if (status === 403 || status === 404 || rawMessage.includes("model") || rawMessage.includes("enterprise")) {
+            return {
+                title: "Modelo de IA Indisponível no seu Plano",
+                message: "O modelo solicitado requer plano Enterprise ou foi descontinuado. Acesse as configurações de IA e selecione a opção de modelos padrão recomendados.",
+                icon: "fa-ban",
+                showSettingsBtn: true
+            };
+        }
+
+        if (status >= 500) {
+            return {
+                title: "Instabilidade no Provedor Groq",
+                message: "Os servidores do provedor de IA estão momentaneamente instáveis ou passando por manutenção rápida. Tente novamente em instantes.",
+                icon: "fa-server"
+            };
+        }
+
+        return {
+            title: "Erro ao Processar Requisição da IA",
+            message: error.message || "Ocorreu um erro inesperado ao se comunicar com a IA.",
+            icon: "fa-circle-exclamation"
+        };
+    }
+
+    function renderAiErrorCard(errorInfo) {
+        const btnHtml = errorInfo.showSettingsBtn
+            ? `<button type="button" class="ai-error-action-btn" onclick="document.getElementById('btnAbrirConfigIA').click()"><i class="fas fa-cog"></i> Abrir Habilitação de IA</button>`
+            : '';
+
+        return `
+            <div class="ai-error-box">
+                <div class="ai-error-header">
+                    <i class="fas ${errorInfo.icon}"></i>
+                    <span class="ai-error-title">${errorInfo.title}</span>
+                </div>
+                <div class="ai-error-message">${errorInfo.message}</div>
+                ${btnHtml}
+            </div>
+        `;
+    }
+
+    function formatMarkdownToHtml(markdown) {
+        if (!markdown) return "";
+
+        let html = markdown
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;");
+
+        html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+        const lines = html.split('\n');
+        let processedLines = [];
+        let inBlockquote = false;
+        let blockquoteContent = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const trimmed = line.trim();
+
+            if (trimmed.startsWith('&gt;')) {
+                inBlockquote = true;
+                const cleanQuoteLine = trimmed.replace(/^&gt;\s?/, '');
+                blockquoteContent.push(cleanQuoteLine);
+            } else {
+                if (inBlockquote) {
+                    processedLines.push(`<blockquote>${blockquoteContent.join('<br>')}</blockquote>`);
+                    blockquoteContent = [];
+                    inBlockquote = false;
+                }
+                processedLines.push(line);
+            }
+        }
+
+        if (inBlockquote) {
+            processedLines.push(`<blockquote>${blockquoteContent.join('<br>')}</blockquote>`);
+        }
+
+        const rawBlocks = processedLines.join('\n').split(/\n\s*\n/);
+        const finalHtml = rawBlocks.map(block => {
+            const b = block.trim();
+            if (!b) return '';
+            if (b.startsWith('<blockquote>') || b.startsWith('<ul>') || b.startsWith('<ol>')) {
+                return b;
+            }
+            return `<p>${b.replace(/\n/g, '<br>')}</p>`;
+        }).filter(Boolean).join('');
+
+        return finalHtml;
+    }
+
     async function makeAIRequest(prompt, temperature, max_tokens, attempt = 0) {
         const currentApiKey = aiConfig.apiKey || GROQ_API_KEY;
         if (!currentApiKey) {
-            throw new Error("Chave de API não configurada. Por favor, configure sua chave no menu de Configurações de IA.");
+            const err = new Error("Chave de API não configurada. Por favor, configure sua chave no menu de Configurações de IA.");
+            err.code = 'MISSING_KEY';
+            throw err;
         }
         const modelsToTry = aiConfig.modelSelectionMode === 'custom' && aiConfig.customModels.length > 0
             ? aiConfig.customModels
             : LLM_MODELS_PRIORITY;
 
         if (attempt >= modelsToTry.length) {
-            throw new Error("Todos os modelos LLM configurados falharam ou não estão disponíveis.");
+            const err = new Error("Todos os modelos de IA disponíveis esgotaram os limites ou falharam.");
+            err.status = 429;
+            throw err;
         }
         const model = modelsToTry[attempt];
         console.log(`Tentando requisição com modelo: ${model} (Tentativa ${attempt + 1})`);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
 
         try {
             const response = await fetch(GROQ_API_URL, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${currentApiKey}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ model: model, messages: [{ role: "user", content: prompt }], temperature: temperature, max_tokens: max_tokens })
+                body: JSON.stringify({ model: model, messages: [{ role: "user", content: prompt }], temperature: temperature, max_tokens: max_tokens }),
+                signal: controller.signal
             });
 
+            clearTimeout(timeoutId);
+
             if (!response.ok) {
-                const errorBody = await response.text();
-                console.error(`Erro com modelo ${model}: ${response.status} ${response.statusText}`, errorBody);
-                if (response.status === 429 || response.status >= 500) {
+                const errorText = await response.text();
+                console.error(`Erro com modelo ${model}: ${response.status} ${response.statusText}`, errorText);
+
+                let parsedMessage = errorText;
+                try {
+                    const parsedJson = JSON.parse(errorText);
+                    if (parsedJson?.error?.message) {
+                        parsedMessage = parsedJson.error.message;
+                    }
+                } catch (e) {
+                    // Mantém o texto bruto caso não seja JSON
+                }
+
+                if ((response.status === 429 || response.status >= 500) && attempt + 1 < modelsToTry.length) {
                     return makeAIRequest(prompt, temperature, max_tokens, attempt + 1);
                 }
-                throw new Error(`Erro ${response.status} com ${model}: ${response.statusText} - ${errorBody}`);
+
+                const err = new Error(parsedMessage);
+                err.status = response.status;
+                err.rawMessage = parsedMessage;
+                err.model = model;
+                throw err;
             }
+
             const data = await response.json();
             return { data, modelUsed: model };
         } catch (error) {
+            clearTimeout(timeoutId);
+
+            if (error.name === 'AbortError') {
+                error.isTimeout = true;
+            } else if (error instanceof TypeError) {
+                error.isNetworkError = true;
+            }
+
             console.error(`Exceção ao tentar modelo ${model}:`, error);
-            if (attempt + 1 < modelsToTry.length) {
+
+            if (attempt + 1 < modelsToTry.length && (error.status === 429 || error.status >= 500 || error.isNetworkError)) {
                 return makeAIRequest(prompt, temperature, max_tokens, attempt + 1);
             }
+
             throw error;
         }
     }
@@ -700,30 +1068,29 @@ document.addEventListener('DOMContentLoaded', () => {
         const etpUnidade = document.getElementById('etp_unidade_demandante')?.value.trim();
 
         if (!cap1_1 && !cap1_2) {
-            alert("Preencha ao menos a 'Indicação da necessidade' ou 'Situações/problemas' no Capítulo 1 para gerar o título.");
+            alert("Preencha ao menos a 'Indicação da necessidade' ou 'Situações/problemas' no Capítulo 1 para que a IA possa sugerir um título condizente.");
             return;
         }
 
         const titleField = document.getElementById('etp_titulo');
         const generateButton = document.querySelector('button[data-action="generate-title-ai"]');
         if (generateButton) generateButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Gerando...';
-        if (titleField) titleField.value = "Gerando título com IA...";
+        if (titleField) titleField.value = "Gerando sugestão de título...";
 
-        // Monta o prompt usando os dados do usuário + o sufixo definido em prompts.js
         const userContext = `Unidade Demandante: "${etpUnidade || 'Não informada'}"\nIndicação da Necessidade: "${cap1_1 || 'Não preenchido'}"\nSituações/Problemas enfrentados: "${cap1_2 || 'Não preenchido'}"\nPublico Alvo: "${cap1_5 || 'Não preenchido'}"\n`;
-
         const titlePrompt = userContext + TITLE_GENERATION_PROMPT_SUFFIX;
 
         try {
             const result = await makeAIRequest(titlePrompt, 0.5, 60);
             const suggestedTitle = result.data.choices[0]?.message?.content.trim().replace(/^"|"$/g, '');
             if (titleField) {
-                titleField.value = suggestedTitle || "Não foi possível gerar o título.";
+                titleField.value = suggestedTitle || "";
             }
         } catch (error) {
             console.error("Erro ao gerar título com IA:", error);
-            if (titleField) titleField.value = "Erro ao gerar título.";
-            alert(`Erro ao gerar título: ${error.message}`);
+            if (titleField) titleField.value = "";
+            const errInfo = parseAiErrorMessage(error);
+            alert(`${errInfo.title}\n\n${errInfo.message}`);
         } finally {
             if (generateButton) generateButton.innerHTML = `<i class="fas fa-wand-magic-sparkles"></i> Gerar Título`;
             debouncedSave();
@@ -823,12 +1190,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     try {
                         const result = await makeAIRequest(prompt, 0.3, 1500);
-                        aiComplianceAnalysisEl.textContent = result.data.choices[0]?.message?.content.trim() || "Não foi possível realizar a avaliação.";
+                        const rawResponse = result.data.choices[0]?.message?.content.trim() || "Não foi possível realizar a avaliação.";
+                        aiComplianceAnalysisEl.innerHTML = formatMarkdownToHtml(rawResponse);
                         aiModelNameEl.textContent = result.modelUsed;
                     } catch (error) {
                         console.error("Erro na avaliação de conformidade:", error);
-                        aiComplianceAnalysisEl.textContent = `Ocorreu um erro ao contatar a IA: ${error.message}`;
-                        aiModelNameEl.textContent = "Falha";
+                        const errInfo = parseAiErrorMessage(error);
+                        aiComplianceAnalysisEl.innerHTML = renderAiErrorCard(errInfo);
+                        aiModelNameEl.textContent = "Indisponível";
                     }
                 }
             } else if (!manualEntry) {
@@ -862,6 +1231,208 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeVideoTutorialModal() {
         const modal = document.getElementById('videoTutorialModal');
         if (modal) modal.style.display = 'none';
+    }
+
+    // --- TRATAMENTO E PRÉ-VISUALIZAÇÃO DE TABELAS (OPÇÃO B) ---
+
+    function parseTabularData(text, html) {
+        if (html && html.includes('<table')) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const table = doc.querySelector('table');
+            if (table) {
+                const rows = Array.from(table.querySelectorAll('tr')).map(tr =>
+                    Array.from(tr.querySelectorAll('th, td')).map(cell => cell.textContent.trim())
+                ).filter(r => r.some(cell => cell !== ''));
+
+                if (rows.length > 0) {
+                    return { type: 'html', rows: rows };
+                }
+            }
+        }
+
+        if (text && text.includes('\t') && text.includes('\n')) {
+            const lines = text.split(/\r?\n/).filter(line => line.trim() !== '');
+            const rows = lines.map(line => line.split('\t').map(cell => cell.trim()));
+            if (rows.length > 0 && rows.some(r => r.length > 1)) {
+                return { type: 'tsv', rows: rows };
+            }
+        }
+
+        return null;
+    }
+
+    function generateHtmlTableFromMatrix(rows) {
+        if (!rows || rows.length === 0) return '';
+        let html = '<table class="table-rendered-content"><tbody>';
+        rows.forEach((row, rowIndex) => {
+            html += '<tr>';
+            row.forEach(cell => {
+                if (rowIndex === 0) {
+                    html += `<th>${cell || '&nbsp;'}</th>`;
+                } else {
+                    html += `<td>${cell || '&nbsp;'}</td>`;
+                }
+            });
+            html += '</tr>';
+        });
+        html += '</tbody></table>';
+        return html;
+    }
+
+    function updateTableActiveBadge(textarea, show, infoText = '') {
+        const formGroup = textarea.closest('.form-group') || textarea.parentElement;
+        const label = formGroup ? formGroup.querySelector('label') : null;
+        if (!label) return;
+
+        let badge = label.querySelector('.table-active-indicator');
+        if (show) {
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'table-active-indicator';
+                label.appendChild(badge);
+            }
+            badge.innerHTML = `<i class="fas fa-table"></i> Tabela Ativa (${infoText})`;
+        } else if (badge) {
+            badge.remove();
+        }
+    }
+
+    function removeTableFromTextarea(textarea) {
+        delete textarea.dataset.tableHtml;
+        delete textarea.dataset.tableMarker;
+        delete textarea.dataset.lastGoodValue;
+
+        const formGroup = textarea.closest('.form-group') || textarea.parentElement;
+        const previewContainer = formGroup ? formGroup.querySelector(`.table-detected-preview[data-target="${textarea.id}"]`) : null;
+        if (previewContainer) {
+            previewContainer.remove();
+        }
+
+        updateTableActiveBadge(textarea, false);
+
+        // Remove cirurgicamente qualquer versão do marcador preservando o texto anterior e posterior
+        textarea.value = textarea.value
+            .replace(/[═\s]*\[\s*📊?\s*TABELA INSERIDA:[^\]]*\][═\s]*/gi, '\n')
+            .replace(/\[Tabela inserida pelo usuário:[^\]]*\]/gi, '\n')
+            .replace(/\n{3,}/g, '\n\n')
+            .trim();
+        
+        debouncedSave();
+    }
+
+    function renderTablePreviewForTextarea(textarea, tableData) {
+        const formGroup = textarea.closest('.form-group') || textarea.parentElement;
+        let previewContainer = formGroup.querySelector(`.table-detected-preview[data-target="${textarea.id}"]`);
+
+        if (!previewContainer) {
+            previewContainer = document.createElement('div');
+            previewContainer.className = 'table-detected-preview';
+            previewContainer.setAttribute('data-target', textarea.id);
+
+            previewContainer.innerHTML = `
+                <div class="table-preview-header">
+                    <span class="table-preview-title"><i class="fas fa-table"></i> Tabela Detectada (Excel/Word)</span>
+                    <div class="table-preview-actions">
+                        <button type="button" class="btn-table-remove" title="Excluir tabela"><i class="fas fa-trash-alt"></i> Excluir Tabela</button>
+                    </div>
+                </div>
+                <div class="table-preview-body"></div>
+            `;
+
+            formGroup.appendChild(previewContainer);
+
+            previewContainer.querySelector('.btn-table-remove').addEventListener('click', () => {
+                if (confirm("Tem certeza de que deseja excluir a tabela inserida neste campo?")) {
+                    removeTableFromTextarea(textarea);
+                }
+            });
+        }
+
+        const bodyEl = previewContainer.querySelector('.table-preview-body');
+        bodyEl.innerHTML = generateHtmlTableFromMatrix(tableData.rows);
+
+        const rCount = tableData.rows.length;
+        const cCount = tableData.rows[0]?.length || 0;
+        updateTableActiveBadge(textarea, true, `${rCount}x${cCount}`);
+    }
+
+    function initTablePasteHandler() {
+        document.body.addEventListener('paste', (e) => {
+            const textarea = e.target.closest('textarea');
+            if (!textarea) return;
+
+            const clipboard = e.clipboardData || window.clipboardData;
+            if (!clipboard) return;
+
+            const textData = clipboard.getData('text/plain') || '';
+            const htmlData = clipboard.getData('text/html') || '';
+
+            const tableData = parseTabularData(textData, htmlData);
+
+            if (tableData) {
+                e.preventDefault();
+
+                if (textarea.dataset.tableHtml) {
+                    alert("Atenção: Este campo já possui uma tabela inserida.\n\nCada campo comporta apenas uma tabela por vez. Para substituí-la, clique primeiro em 'Excluir Tabela' logo abaixo ou consolide as informações em uma única planilha no Excel antes de colar.");
+                    return;
+                }
+
+                const cleanHtmlTable = generateHtmlTableFromMatrix(tableData.rows);
+                textarea.dataset.tableHtml = cleanHtmlTable;
+
+                const rowCount = tableData.rows.length;
+                const colCount = tableData.rows[0]?.length || 0;
+                const marker = `════ [ 📊 TABELA INSERIDA: ${rowCount} linhas x ${colCount} colunas ] ════`;
+                textarea.dataset.tableMarker = marker;
+
+                // Inserção exata na posição do cursor do usuário
+                const startPos = textarea.selectionStart ?? textarea.value.length;
+                const endPos = textarea.selectionEnd ?? textarea.value.length;
+                const currentVal = textarea.value;
+
+                const textBefore = currentVal.substring(0, startPos);
+                const textAfter = currentVal.substring(endPos);
+
+                const prefix = (textBefore.length > 0 && !textBefore.endsWith('\n')) ? '\n\n' : (textBefore.endsWith('\n') && !textBefore.endsWith('\n\n') ? '\n' : '');
+                const suffix = (textAfter.length > 0 && !textAfter.startsWith('\n')) ? '\n\n' : (textAfter.startsWith('\n') && !textAfter.startsWith('\n\n') ? '\n' : '');
+
+                textarea.value = `${textBefore}${prefix}${marker}${suffix}${textAfter}`;
+
+                const newCursorPos = textBefore.length + prefix.length + marker.length;
+                textarea.setSelectionRange(newCursorPos, newCursorPos);
+
+                textarea.dataset.lastGoodValue = textarea.value;
+
+                renderTablePreviewForTextarea(textarea, tableData);
+                debouncedSave();
+            }
+        });
+
+        document.body.addEventListener('input', (e) => {
+            const textarea = e.target.closest('textarea');
+            if (!textarea || !textarea.dataset.tableHtml) return;
+
+            const marker = textarea.dataset.tableMarker || '[TABELA INSERIDA:';
+
+            if (!textarea.value.includes(marker)) {
+                setTimeout(() => {
+                    const confirmRemoval = confirm("Tem certeza de que deseja excluir a tabela inserida neste campo?");
+
+                    if (confirmRemoval) {
+                        removeTableFromTextarea(textarea);
+                    } else {
+                        if (textarea.dataset.lastGoodValue) {
+                            textarea.value = textarea.dataset.lastGoodValue;
+                        } else {
+                            textarea.value = textarea.dataset.tableMarker ? `${textarea.value}\n\n${textarea.dataset.tableMarker}` : textarea.value;
+                        }
+                    }
+                }, 20);
+            } else {
+                textarea.dataset.lastGoodValue = textarea.value;
+            }
+        });
     }
 
     // --- GERENCIADOR DE ITENS DINÂMICOS ---
@@ -969,23 +1540,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateSolutionSummary() {
         const tableContainer = document.getElementById('c2_X_resumo_comparativo_table_container');
         if (!tableContainer) return;
+
+        const label = document.querySelector('label[for="c2_X_resumo_comparativo_table_container"]');
+        if (label && !label.querySelector('.summary-badge')) {
+            label.innerHTML = `2.X Resumo comparativo das soluções <span class="summary-badge"><i class="fas fa-magic"></i> Tabela-Resumo gerada automaticamente</span>`;
+        }
+
         let rowsData = [];
         document.querySelectorAll('.solucao-item').forEach(item => {
             const descricaoEl = item.querySelector(`textarea[id$="_a_descricao_sucinta"]`);
             if (descricaoEl && descricaoEl.value.trim()) {
                 rowsData.push([
                     item.getAttribute('data-solucao-index') + "ª",
-                    descricaoEl.value.trim(),
-                    item.querySelector(`textarea[id$="_g_custos_estimados"]`)?.value.trim() || 'N/P',
-                    item.querySelector(`textarea[id$="_h_vantagens"]`)?.value.trim() || 'N/P',
-                    item.querySelector(`textarea[id$="_i_desvantagens"]`)?.value.trim() || 'N/P',
+                    descricaoEl.value.trim()
                 ]);
             }
         });
         if (rowsData.length === 0) {
             tableContainer.innerHTML = '<p class="placeholder-text">Nenhuma solução com título preenchido.</p>';
         } else {
-            tableContainer.innerHTML = createSummaryTable(["Nº Solução", "Título da Solução", "Custos Estimados", "Vantagens", "Desvantagens"], rowsData);
+            tableContainer.innerHTML = createSummaryTable(["Nº Solução", "Título da Solução"], rowsData);
         }
     }
 
@@ -1021,6 +1595,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateRiskSummary() {
         const tableContainer = document.getElementById('c6_X_resumo_riscos_table_container');
         if (!tableContainer) return;
+
+        const label = document.querySelector('label[for="c6_X_resumo_riscos_table_container"]');
+        if (label && !label.querySelector('.summary-badge')) {
+            label.innerHTML = `6.X Resumo dos Riscos <span class="summary-badge"><i class="fas fa-magic"></i> Tabela-Resumo gerada automaticamente</span>`;
+        }
+
         let rowsData = [];
         document.querySelectorAll('.risco-item').forEach(item => {
             const identificacaoEl = item.querySelector(`textarea[id$="_identificacao"]`);
@@ -1028,24 +1608,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 rowsData.push([
                     item.getAttribute('data-risco-index') + "º",
                     identificacaoEl.value.trim(),
-                    item.querySelector(`textarea[id$="_danos_possiveis"]`)?.value.trim() || 'N/P',
                     item.querySelector(`select[id$="_probabilidade"]`)?.value || 'N/P',
-                    item.querySelector(`select[id$="_impacto"]`)?.value || 'N/P',
-                    item.querySelector(`textarea[id$="_acoes_preventivas"]`)?.value.trim() || 'N/P',
-                    item.querySelector(`textarea[id$="_acoes_contingencia"]`)?.value.trim() || 'N/P'
+                    item.querySelector(`select[id$="_impacto"]`)?.value || 'N/P'
                 ]);
             }
         });
         if (rowsData.length === 0) {
             tableContainer.innerHTML = '<p class="placeholder-text">Nenhum risco com identificação preenchida.</p>';
         } else {
-            tableContainer.innerHTML = createSummaryTable(["Nº", "Identificação", "Danos Possíveis", "Probabilidade", "Impacto", "Ações Preventivas", "Ações de Contingência"], rowsData);
+            tableContainer.innerHTML = createSummaryTable(["Nº", "Identificação do Risco", "Probabilidade", "Impacto"], rowsData);
         }
     }
 
     function updateContratacaoSummary() {
         const tableContainer = document.getElementById('c5_Z_resumo_contratacoes_table_container');
         if (!tableContainer) return;
+
+        const label = document.querySelector('label[for="c5_Z_resumo_contratacoes_table_container"]');
+        if (label && !label.querySelector('.summary-badge')) {
+            label.innerHTML = `5.Z Resumo das Contratações Anteriores <span class="summary-badge"><i class="fas fa-magic"></i> Tabela-Resumo gerada automaticamente</span>`;
+        }
+
         if (document.getElementById('c5_nao_se_aplica')?.checked) {
             tableContainer.innerHTML = '<p class="placeholder-text">Não se aplica / Primeira Contratação.</p>';
             return;
@@ -1057,17 +1640,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 rowsData.push([
                     item.getAttribute('data-contratacao-index') + "ª",
                     contratoNeEl.value.trim(),
-                    item.querySelector(`[id$="_processo_sei"]`)?.value.trim() || 'N/P',
-                    item.querySelector(`[id$="_fase_planejamento"]`)?.value.trim() || 'N/P',
-                    item.querySelector(`[id$="_fase_externa"]`)?.value.trim() || 'N/P',
-                    item.querySelector(`[id$="_dificuldades_execucao"]`)?.value.trim() || 'N/P'
+                    item.querySelector(`[id$="_processo_sei"]`)?.value.trim() || 'N/P'
                 ]);
             }
         });
         if (rowsData.length === 0) {
             tableContainer.innerHTML = '<p class="placeholder-text">Nenhuma contratação anterior com Contrato/NE preenchido.</p>';
         } else {
-            tableContainer.innerHTML = createSummaryTable(["Nº", "Contrato/NE", "Proc. SEI", "Lições - Planejamento", "Lições - Fase Externa", "Dificuldades Execução"], rowsData);
+            tableContainer.innerHTML = createSummaryTable(["Nº", "Nº Contrato / NE", "Nº SEI"], rowsData);
         }
     }
 
@@ -1189,12 +1769,24 @@ document.addEventListener('DOMContentLoaded', () => {
                         etpData[tabId][input.id] = input.checked;
                     } else {
                         etpData[tabId][input.id] = input.value;
+                        if (input.dataset.tableHtml) {
+                            etpData[tabId][input.id + '__tableHtml'] = input.dataset.tableHtml;
+                        }
                     }
                 }
             });
         });
 
-        etpData.cap2.solucoesMercado = Array.from(document.querySelectorAll('.solucao-item')).map(item => Object.fromEntries(Array.from(item.querySelectorAll('textarea')).map(input => [input.id, input.value])));
+        etpData.cap2.solucoesMercado = Array.from(document.querySelectorAll('.solucao-item')).map(item => {
+            const data = {};
+            item.querySelectorAll('textarea').forEach(input => {
+                data[input.id] = input.value;
+                if (input.dataset.tableHtml) {
+                    data[input.id + '__tableHtml'] = input.dataset.tableHtml;
+                }
+            });
+            return data;
+        });
         etpData.cap6.riscos = Array.from(document.querySelectorAll('.risco-item')).map(item => Object.fromEntries(Array.from(item.querySelectorAll('textarea, select')).map(input => [input.id, input.value])));
         etpData.cap5.contratacoesAnteriores = Array.from(document.querySelectorAll('.contratacao-item')).map(item => Object.fromEntries(Array.from(item.querySelectorAll('textarea, input')).map(input => [input.id, input.value])));
         etpData.anexos.items = Array.from(document.querySelectorAll('.anexo-item')).map(item => ({
@@ -1215,15 +1807,12 @@ document.addEventListener('DOMContentLoaded', () => {
     function debounce(func, delay) {
         let timeout;
         return function (...args) {
-            if (isAppInitializing) return;
             clearTimeout(timeout);
             timeout = setTimeout(() => func.apply(this, args), delay);
         };
     }
 
     function loadAllData() {
-        isAppInitializing = true; // Bloqueia o salvamento automático durante a inicialização
-
         const etpDataString = localStorage.getItem(ETP_DATA_KEY);
 
         solucaoManager.reset();
@@ -1251,8 +1840,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             updateAllSummariesAndDropDowns();
             updateAllProgressBars();
-            
-            isAppInitializing = false; // Libera o salvamento automático antes do return
             return;
         }
 
@@ -1284,8 +1871,6 @@ document.addEventListener('DOMContentLoaded', () => {
         handleModalidadeChange();
         updateChapterAccess();
         updateAllProgressBars();
-
-        isAppInitializing = false; // Libera o salvamento automático no final
     }
 
     function resetETPToIdentificacao() {
@@ -1315,13 +1900,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!tabSavedData) return;
 
         Object.keys(tabSavedData).forEach(fieldId => {
-            if (!['solucoesMercado', 'riscos', 'anexos', 'contratacoesAnteriores', 'items'].includes(fieldId)) {
+            if (!['solucoesMercado', 'riscos', 'anexos', 'contratacoesAnteriores', 'items'].includes(fieldId) && !fieldId.endsWith('__tableHtml')) {
                 const input = document.getElementById(fieldId);
                 if (input) {
                     if (input.type === 'checkbox' || input.type === 'radio') {
                         input.checked = tabSavedData[fieldId];
                     } else {
                         input.value = tabSavedData[fieldId] || '';
+                        const savedTable = tabSavedData[fieldId + '__tableHtml'];
+                        if (savedTable) {
+                            input.dataset.tableHtml = savedTable;
+                            const tableData = parseTabularData('', savedTable);
+                            if (tableData) {
+                                const rowCount = tableData.rows.length;
+                                const colCount = tableData.rows[0]?.length || 0;
+                                input.dataset.tableMarker = `════ [ 📊 TABELA INSERIDA: ${rowCount} linhas x ${colCount} colunas ] ════`;
+                                input.dataset.lastGoodValue = input.value;
+                                renderTablePreviewForTextarea(input, tableData);
+                            }
+                        }
                     }
                 }
             }
@@ -1331,10 +1928,28 @@ document.addEventListener('DOMContentLoaded', () => {
             tabSavedData.solucoesMercado.forEach(solucaoData => {
                 solucaoManager.add();
                 const newItem = document.querySelector(`.solucao-item[data-solucao-index="${solucaoManager.count}"]`);
-                if (newItem) Object.keys(solucaoData).forEach(solFieldId => {
-                    const input = newItem.querySelector(`#${solFieldId}`);
-                    if (input) input.value = solucaoData[solFieldId];
-                });
+                if (newItem) {
+                    Object.keys(solucaoData).forEach(solFieldId => {
+                        if (!solFieldId.endsWith('__tableHtml')) {
+                            const input = newItem.querySelector(`#${solFieldId}`);
+                            if (input) {
+                                input.value = solucaoData[solFieldId];
+                                const savedTable = solucaoData[solFieldId + '__tableHtml'];
+                                if (savedTable) {
+                                    input.dataset.tableHtml = savedTable;
+                                    const tableData = parseTabularData('', savedTable);
+                                    if (tableData) {
+                                        const rowCount = tableData.rows.length;
+                                        const colCount = tableData.rows[0]?.length || 0;
+                                        input.dataset.tableMarker = `[Tabela inserida pelo usuário: ${rowCount} linhas x ${colCount} colunas]`;
+                                        input.dataset.lastGoodValue = input.value;
+                                        renderTablePreviewForTextarea(input, tableData);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
             });
         }
         if (tabId === 'cap6' && tabSavedData.riscos) {
@@ -1422,10 +2037,28 @@ document.addEventListener('DOMContentLoaded', () => {
             isFilled = !!(input.value && input.value.trim());
         }
 
+        const tableHtml = input.dataset?.tableHtml || null;
+
         return {
             value: isFilled ? value : '[Sem resposta do usuário]',
+            tableHtml: tableHtml,
             status: isFilled ? 'filled' : 'unfilled'
         };
+    }
+
+    function formatConsolidatedDisplayValue(fieldData) {
+        if (fieldData.status === 'unfilled' || fieldData.status === 'inactive') {
+            return fieldData.value;
+        }
+        if (!fieldData.tableHtml) {
+            return `<span style="white-space: pre-wrap;">${fieldData.value}</span>`;
+        }
+        
+        const markerRegex = /[═\s]*\[\s*📊?\s*TABELA INSERIDA:[^\]]*\][═\s]*|\[Tabela inserida pelo usuário:[^\]]*\]/gi;
+        const parts = fieldData.value.split(markerRegex);
+        const before = parts[0]?.trim() ? `<span style="white-space: pre-wrap;">${parts[0].trim()}</span><br><br>` : '';
+        const after = parts[1]?.trim() ? `<br><span style="white-space: pre-wrap;">${parts[1].trim()}</span>` : '';
+        return `${before}<div style="margin-top: 10px; margin-bottom: 10px; overflow-x: auto;">${fieldData.tableHtml}</div>${after}`;
     }
 
     function updateConsolidatedETP() {
@@ -1442,14 +2075,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!chapterElement) return;
 
             const navButton = document.querySelector(`.tab-button[data-tab-target="${tabId}"]`);
-
-            // --- INÍCIO DA LÓGICA MODIFICADA ---
             const isInactive = navButton && navButton.classList.contains('inactive');
 
             if (isInactive && !isSimplificado) {
-                return; // Comportamento original: Pula se inativo e NÃO for simplificado.
+                return;
             }
-            // --- FIM DA LÓGICA MODIFICADA ---
 
             const details = document.createElement('details');
             details.className = 'consolidation-chapter';
@@ -1466,16 +2096,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const contentDiv = document.createElement('div');
             contentDiv.className = 'consolidation-content';
 
-            // --- INÍCIO DA LÓGICA MODIFICADA ---
             if (isInactive && isSimplificado) {
                 const p = document.createElement('p');
                 p.innerHTML = '<i>Não se aplica ao ETP Simplificado.</i>';
                 contentDiv.appendChild(p);
                 details.appendChild(contentDiv);
                 container.appendChild(details);
-                return; // Pula para o próximo capítulo do loop
+                return;
             }
-            // --- FIM DA LÓGICA MODIFICADA ---
 
             const table = document.createElement('table');
             table.className = 'consolidation-table';
@@ -1488,7 +2116,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     ? document.getElementById('c3_1_solucao_escolhida_simplificada')
                     : document.getElementById('c3_1_solucao_escolhida');
                 const fieldData = getFieldData(input);
-                tr.innerHTML = `<td>${labelText}</td><td><span class="consolidation-value-${fieldData.status}">${fieldData.value}</span></td>`;
+                tr.innerHTML = `<td>${labelText}</td><td><span class="consolidation-value-${fieldData.status}">${formatConsolidatedDisplayValue(fieldData)}</span></td>`;
                 tbody.appendChild(tr);
             }
 
@@ -1532,7 +2160,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const tr = document.createElement('tr');
                     const fieldData = getFieldData(input);
-                    tr.innerHTML = `<td>${labelText}</td><td><span class="consolidation-value-${fieldData.status}">${fieldData.value}</span></td>`;
+                    tr.innerHTML = `<td>${labelText}</td><td><span class="consolidation-value-${fieldData.status}">${formatConsolidatedDisplayValue(fieldData)}</span></td>`;
                     tbody.appendChild(tr);
                 });
 
@@ -1574,7 +2202,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     subTdValue.textContent = checkedItems || '[Nenhum item selecionado]';
                                 } else {
                                     const fieldData = getFieldData(subInput);
-                                    subTdValue.innerHTML = `<span class="consolidation-value-${fieldData.status}">${fieldData.value}</span>`;
+                                    subTdValue.innerHTML = `<span class="consolidation-value-${fieldData.status}">${formatConsolidatedDisplayValue(fieldData)}</span>`;
                                 }
                                 subTr.appendChild(subTdLabel);
                                 subTr.appendChild(subTdValue);
@@ -1719,13 +2347,16 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (subInput) {
                                 const labelText = subLabel.textContent.trim().replace(/^(\d+\.[\d\.]*|\w\.[\d\.]+)\s/, '');
                                 let value;
+                                let tableHtml = null;
                                 if (subInput.id.includes('itens_relacionados')) {
                                     const checkedItems = Array.from(subInput.querySelectorAll('input:checked')).map(cb => subInput.querySelector(`label[for="${cb.id}"]`).textContent.trim()).join('; ');
                                     value = checkedItems || '[Nenhum item selecionado]';
                                 } else {
-                                    value = getFieldData(subInput).value;
+                                    const fieldData = getFieldData(subInput);
+                                    value = fieldData.value;
+                                    tableHtml = fieldData.tableHtml;
                                 }
-                                subFields.push({ label: labelText, value });
+                                subFields.push({ label: labelText, value, tableHtml });
                             }
                         });
                         chapterData.fields.push({
@@ -1967,39 +2598,109 @@ document.addEventListener('DOMContentLoaded', () => {
                 }));
             }
 
+            function createDocxTableFromHtml(htmlContent) {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlContent, 'text/html');
+                const table = doc.querySelector('table');
+                if (!table) return null;
+
+                const rows = Array.from(table.querySelectorAll('tr')).map((tr, rIdx) => {
+                    const cells = Array.from(tr.querySelectorAll('th, td')).map(cell => {
+                        return new TableCell({
+                            children: [new Paragraph({
+                                children: [new TextRun({
+                                    text: cell.textContent.trim(),
+                                    size: 20,
+                                    bold: rIdx === 0,
+                                    ...FONT_STYLE
+                                })]
+                            })],
+                            shading: rIdx === 0 ? { fill: "EAEAEA" } : undefined
+                        });
+                    });
+                    return new TableRow({ children: cells });
+                });
+
+                return new Table({
+                    rows: rows,
+                    width: { size: 100, type: WidthType.PERCENTAGE }
+                });
+            }
+
             // 5. Campos de Texto
             chapter.fields.filter(field => field.status !== 'inactive').forEach(field => {
                 if (field.isDynamic) {
-                    // Título do Item Dinâmico (Ex: 1ª Solução)
                     docChildren.push(new Paragraph({
                         spacing: { before: 300, after: 100 },
                         children: [new TextRun({ text: field.label, size: 24, bold: true, italics: true, ...FONT_STYLE })]
                     }));
 
-                    // Subcampos do item dinâmico (Ex: Descrição, Custos...)
                     field.subFields.forEach(sub => {
                         docChildren.push(new Paragraph({
                             spacing: { before: 150 },
                             indent: { left: INDENT_LEVEL_1 },
                             children: [new TextRun({ text: sub.label, bold: true, size: 22, ...FONT_STYLE })]
                         }));
-                        docChildren.push(new Paragraph({
-                            spacing: { after: 150 },
-                            indent: { left: INDENT_LEVEL_2 },
-                            children: [new TextRun({ text: sub.value, size: 22, ...FONT_STYLE })]
-                        }));
+
+                        const markerRegex = /[═\s]*\[\s*📊?\s*TABELA INSERIDA:[^\]]*\][═\s]*|\[Tabela inserida pelo usuário:[^\]]*\]/gi;
+                        const rawTableHtml = sub.tableHtml || (sub.value && sub.value.includes('<table') ? sub.value : null);
+
+                        if (rawTableHtml && markerRegex.test(sub.value)) {
+                            const parts = sub.value.split(markerRegex);
+                            const beforeText = parts[0]?.trim();
+                            const afterText = parts[1]?.trim();
+
+                            if (beforeText) {
+                                docChildren.push(new Paragraph({
+                                    spacing: { before: 100, after: 100 },
+                                    indent: { left: INDENT_LEVEL_2 },
+                                    children: [new TextRun({ text: beforeText, size: 22, ...FONT_STYLE })]
+                                }));
+                            }
+
+                            const tableEl = createDocxTableFromHtml(rawTableHtml);
+                            if (tableEl) docChildren.push(tableEl);
+
+                            if (afterText) {
+                                docChildren.push(new Paragraph({
+                                    spacing: { before: 100, after: 150 },
+                                    indent: { left: INDENT_LEVEL_2 },
+                                    children: [new TextRun({ text: afterText, size: 22, ...FONT_STYLE })]
+                                }));
+                            }
+                        } else {
+                            const cleanText = sub.value ? sub.value.replace(markerRegex, '').trim() : '';
+                            docChildren.push(new Paragraph({
+                                spacing: { after: 150 },
+                                indent: { left: INDENT_LEVEL_2 },
+                                children: [new TextRun({ text: cleanText || sub.value, size: 22, ...FONT_STYLE })]
+                            }));
+                        }
                     });
                 } else {
-                    // Campo Normal (Label acima, valor abaixo)
                     docChildren.push(new Paragraph({
                         spacing: { before: 250 },
                         children: [new TextRun({ text: field.label, bold: true, size: 22, ...FONT_STYLE })]
                     }));
-                    docChildren.push(new Paragraph({
-                        spacing: { after: 100 },
-                        indent: { left: INDENT_LEVEL_1 },
-                        children: [new TextRun({ text: field.value, size: 22, ...FONT_STYLE })]
-                    }));
+
+                    if (field.value && field.value.includes('<table')) {
+                        const tableEl = createDocxTableFromHtml(field.value);
+                        if (tableEl) {
+                            docChildren.push(tableEl);
+                        } else {
+                            docChildren.push(new Paragraph({
+                                spacing: { after: 100 },
+                                indent: { left: INDENT_LEVEL_1 },
+                                children: [new TextRun({ text: field.value, size: 22, ...FONT_STYLE })]
+                            }));
+                        }
+                    } else {
+                        docChildren.push(new Paragraph({
+                            spacing: { after: 100 },
+                            indent: { left: INDENT_LEVEL_1 },
+                            children: [new TextRun({ text: field.value, size: 22, ...FONT_STYLE })]
+                        }));
+                    }
                 }
             });
         });
@@ -2046,19 +2747,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- FUNÇÕES DE EXPORTAÇÃO DIRETA PARA A ÁREA DE TRANSFERÊNCIA (SEI) ---
 
+    function sanitizeHtmlForSei(content) {
+        if (!content) return '';
+
+        if (content.includes('<table')) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(content, 'text/html');
+            const table = doc.querySelector('table');
+            if (table) {
+                let cleanTable = `<table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-top: 6px; margin-bottom: 10px;">`;
+                const rows = table.querySelectorAll('tr');
+                rows.forEach((tr, rIndex) => {
+                    cleanTable += `<tr>`;
+                    tr.querySelectorAll('th, td').forEach(cell => {
+                        const isHeader = cell.tagName.toLowerCase() === 'th' || rIndex === 0;
+                        const cellText = cell.textContent.trim().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                        if (isHeader) {
+                            cleanTable += `<th style="background-color: #f2f2f2; text-align: left; font-weight: bold;">${cellText || '&nbsp;'}</th>`;
+                        } else {
+                            cleanTable += `<td>${cellText || '&nbsp;'}</td>`;
+                        }
+                    });
+                    cleanTable += `</tr>`;
+                });
+                cleanTable += `</table>`;
+                return cleanTable;
+            }
+        }
+
+        return content
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\n/g, '<br>');
+    }
+
     function generateHtmlForSei(data, etpTitle) {
         const isSimplificado = document.body.classList.contains('etp-simplificado-mode');
         const mainDocTitle = isSimplificado ? "Estudo Técnico Preliminar Simplificado" : "Estudo Técnico Preliminar";
 
-        // Estilos embutidos mínimos e seguros para o SEI
         let html = `<div style="font-family: Arial, sans-serif; font-size: 11pt; color: #000000; line-height: 1.5;">`;
         
-        // Títulos Principais: Usamos <p> para forçar a quebra de linha absoluta no SEI
         html += `<p style="text-align: center; margin-bottom: 5px; display: block;"><span style="font-size: 15pt; font-weight: bold; text-transform: uppercase;">${mainDocTitle}</span></p>`;
         html += `<p style="text-align: center; margin-top: 0; margin-bottom: 30px; display: block;"><span style="font-size: 13pt; font-weight: bold;">${etpTitle}</span></p>`;
 
         data.forEach(chapter => {
-            // Títulos dos Capítulos: Usamos <p> com borda inferior
             html += `<p style="margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid #000000; padding-bottom: 5px; display: block;"><span style="font-size: 12pt; font-weight: bold; text-transform: uppercase;">${chapter.title}</span></p>`;
 
             if (chapter.isSkipped) {
@@ -2066,7 +2799,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            // Geração de Tabelas de Resumo
             if (chapter.summaryTable) {
                 html += `<p style="display: block;"><b>${chapter.summaryTable.title}</b></p>`;
                 html += `<table border="1" cellpadding="5" cellspacing="0" style="width: 100%; border-collapse: collapse; margin-bottom: 15px;"><thead><tr>`;
@@ -2080,19 +2812,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 html += `</tbody></table>`;
             }
 
-            // Geração dos Campos
+            function formatFieldValueForSei(fieldObj) {
+                let text = fieldObj.value || '';
+                const tableHtml = fieldObj.tableHtml;
+
+                const markerRegex = /[═\s]*\[\s*📊?\s*TABELA INSERIDA:[^\]]*\][═\s]*|\[Tabela inserida pelo usuário:[^\]]*\]/gi;
+
+                if (tableHtml && markerRegex.test(text)) {
+                    const cleanTable = sanitizeHtmlForSei(tableHtml);
+                    const parts = text.split(markerRegex);
+                    const beforeHtml = parts[0] ? sanitizeHtmlForSei(parts[0].trim()) + '<br>' : '';
+                    const afterHtml = parts[1] ? '<br>' + sanitizeHtmlForSei(parts[1].trim()) : '';
+                    return `${beforeHtml}${cleanTable}${afterHtml}`;
+                }
+
+                return sanitizeHtmlForSei(text);
+            }
+
             chapter.fields.filter(field => field.status !== 'inactive').forEach(field => {
                 if (field.isDynamic) {
                     html += `<p style="margin-top: 15px; margin-bottom: 5px; display: block;"><b><i>${field.label}</i></b></p>`;
                     html += `<ul style="list-style-type: none; padding-left: 20px; margin-top: 0;">`;
                     field.subFields.forEach(sub => {
-                        // Substitui quebras de linha de textarea por <br> para manter no HTML
-                        const safeValue = sub.value ? sub.value.replace(/\n/g, '<br>') : '';
+                        const safeValue = formatFieldValueForSei(sub);
                         html += `<li style="margin-bottom: 10px;"><b>${sub.label}</b><br>${safeValue}</li>`;
                     });
                     html += `</ul>`;
                 } else {
-                    const safeValue = field.value ? field.value.replace(/\n/g, '<br>') : '';
+                    const safeValue = formatFieldValueForSei(field);
                     html += `<p style="margin-bottom: 15px; display: block;"><b>${field.label}</b><br>${safeValue}</p>`;
                 }
             });
@@ -2231,10 +2978,33 @@ document.addEventListener('DOMContentLoaded', () => {
         customModelsList.appendChild(div);
     }
 
+    function disconnectAiKey() {
+        if (confirm("Deseja realmente remover a chave de API deste navegador? As funcionalidades de IA serão desabilitadas até que uma nova chave seja inserida.")) {
+            apiKeyInput.value = '';
+            aiConfig.apiKey = '';
+            aiConfig.useAI = 'no';
+            useAiRadioNo.checked = true;
+            useAiRadioYes.checked = false;
+            aiSettingsContainer.style.display = 'none';
+
+            localStorage.removeItem('etpAiConfig');
+            sessionStorage.removeItem('etpAiSessionKey');
+
+            applyAiFeatureState(false);
+            testConnectionResult.style.display = 'none';
+            alert("Chave desconectada e removida com sucesso deste navegador.");
+        }
+    }
+
     function updateAiSettingsModalUI() {
         useAiRadioYes.checked = aiConfig.useAI === 'yes';
         useAiRadioNo.checked = aiConfig.useAI === 'no';
         aiSettingsContainer.style.display = aiConfig.useAI === 'yes' ? 'block' : 'none';
+
+        const chkSession = document.getElementById('chkSessionStorageOnly');
+        if (chkSession) {
+            chkSession.checked = aiConfig.storageMode === 'session';
+        }
 
         apiKeyInput.value = aiConfig.apiKey || '';
 
@@ -2255,14 +3025,27 @@ document.addEventListener('DOMContentLoaded', () => {
             .map(input => input.value.trim())
             .filter(value => value);
 
+        const chkSession = document.getElementById('chkSessionStorageOnly');
+        const isSessionMode = chkSession ? chkSession.checked : false;
+        const currentKey = apiKeyInput.value.trim();
+
         aiConfig = {
             useAI: useAiRadioYes.checked ? 'yes' : 'no',
-            apiKey: apiKeyInput.value.trim(),
+            apiKey: currentKey,
+            storageMode: isSessionMode ? 'session' : 'local',
             modelSelectionMode: modelModeDefault.checked ? 'default' : 'custom',
             customModels: customModels
         };
 
-        localStorage.setItem('etpAiConfig', JSON.stringify(aiConfig));
+        if (isSessionMode) {
+            sessionStorage.setItem('etpAiSessionKey', currentKey);
+            const persistentConfig = { ...aiConfig, apiKey: '' };
+            localStorage.setItem('etpAiConfig', JSON.stringify(persistentConfig));
+        } else {
+            sessionStorage.removeItem('etpAiSessionKey');
+            localStorage.setItem('etpAiConfig', JSON.stringify(aiConfig));
+        }
+
         applyAiFeatureState(aiConfig.useAI === 'yes');
         closeAiSettingsModal();
         alert("Configurações de IA salvas com sucesso!");
@@ -2270,12 +3053,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadAiSettings() {
         const savedConfig = localStorage.getItem('etpAiConfig');
+        const sessionKey = sessionStorage.getItem('etpAiSessionKey');
+
         if (savedConfig) {
             aiConfig = JSON.parse(savedConfig);
+            if (sessionKey) {
+                aiConfig.apiKey = sessionKey;
+                aiConfig.storageMode = 'session';
+            }
+        } else if (sessionKey) {
+            aiConfig = {
+                useAI: 'yes',
+                apiKey: sessionKey,
+                storageMode: 'session',
+                modelSelectionMode: 'default',
+                customModels: []
+            };
         } else {
             aiConfig = {
                 useAI: 'no',
                 apiKey: '',
+                storageMode: 'local',
                 modelSelectionMode: 'default',
                 customModels: []
             };
@@ -2328,27 +3126,46 @@ document.addEventListener('DOMContentLoaded', () => {
         testConnectionResult.style.display = 'block';
         testApiConnectionButton.disabled = true;
 
-        const testPromises = modelsToTest.map(model =>
-            fetch(GROQ_API_URL, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ model: model, messages: [{ role: "user", content: "Olá" }], max_tokens: 2 })
-            }).then(response => ({ model, success: response.ok, status: response.status }))
-                .catch(error => ({ model, success: false, status: 'Network Error' }))
-        );
+        const testPromises = modelsToTest.map(async model => {
+            try {
+                const response = await fetch(GROQ_API_URL, {
+                    method: 'POST',
+                    headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ model: model, messages: [{ role: "user", content: "Olá" }], max_tokens: 2 })
+                });
+
+                if (response.ok) {
+                    return { model, success: true };
+                }
+
+                const errBody = await response.text();
+                let detail = "";
+                try {
+                    const parsed = JSON.parse(errBody);
+                    detail = parsed?.error?.message || "";
+                } catch (e) {}
+
+                const err = new Error(detail || response.statusText);
+                err.status = response.status;
+                err.rawMessage = detail;
+                return { model, success: false, info: parseAiErrorMessage(err) };
+            } catch (networkError) {
+                return { model, success: false, info: parseAiErrorMessage(networkError) };
+            }
+        });
 
         const results = await Promise.allSettled(testPromises);
 
         let successCount = 0;
-        let resultHtml = '<strong>Resultado do Teste:</strong><ul>';
+        let resultHtml = '<strong>Resultado do Teste:</strong><ul class="info-list" style="margin-top: 8px;">';
 
-        results.forEach(result => {
-            if (result.status === 'fulfilled' && result.value.success) {
+        results.forEach(res => {
+            if (res.status === 'fulfilled' && res.value.success) {
                 successCount++;
-                resultHtml += `<li><i class="fas fa-check-circle" style="color: green;"></i> <strong>${result.value.model}:</strong> Conectado com sucesso!</li>`;
+                resultHtml += `<li><i class="fas fa-check-circle" style="color: #28a745;"></i> <strong>${res.value.model}:</strong> Conectado e pronto para uso!</li>`;
             } else {
-                const status = result.status === 'fulfilled' ? result.value.status : 'Erro de Rede';
-                resultHtml += `<li><i class="fas fa-times-circle" style="color: red;"></i> <strong>${result.value.model}:</strong> Falhou (Status: ${status})</li>`;
+                const info = res.value?.info || { title: "Falha", message: "Erro desconhecido" };
+                resultHtml += `<li><i class="fas fa-times-circle" style="color: #dc3545;"></i> <strong>${res.value.model}:</strong> ${info.title} — <em>${info.message}</em></li>`;
             }
         });
         resultHtml += '</ul>';
@@ -2434,10 +3251,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'close-ai-settings-modal': closeAiSettingsModal(); break;
                 case 'close-about-modal': closeAboutModal(); break;
                 case 'close-video-modal': closeVideoTutorialModal(); break;
-                case 'add-anexo': anexoManager.add(); break;
-                case 'remove-anexo': anexoManager.remove(actionTarget.closest('.anexo-item')); break;
-                case 'copy-to-sei': copyETPtoClipboardSEI(); break;
                 case 'export-etp': exportETP(actionTarget.dataset.format); break;
+                case 'copy-to-sei': copyETPtoClipboardSEI(); break;
                 case 'next-chapter': navigateToChapter('next'); break;
                 case 'prev-chapter': navigateToChapter('prev'); break;
             }
@@ -2531,8 +3346,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Listener para formatação do campo SEI
-        document.getElementById('etp_numero_processo_sei').addEventListener('input', (e) => formatSEIProcess(e.target));
+        // Listener delegado para formatação dos campos de processo SEI e moeda (Item 4.3)
+        document.body.addEventListener('input', (e) => {
+            if (e.target && e.target.id) {
+                if (e.target.id === 'etp_numero_processo_sei' || e.target.id.includes('_processo_sei')) {
+                    formatSEIProcess(e.target);
+                } else if (e.target.id === 'c4_3_valor_total_estimado') {
+                    formatBRLCurrency(e.target);
+                }
+            }
+        });
 
         // Listener para fechar modais
         window.onclick = function (event) {
@@ -2555,6 +3378,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- INÍCIO: Listeners do Modal de Configurações de IA ---
         document.getElementById('btnAbrirConfigIA').addEventListener('click', openAiSettingsModal);
         document.getElementById('saveAiSettingsButton').addEventListener('click', saveAiSettings);
+
+        const btnClearKey = document.getElementById('btnClearApiKey');
+        if (btnClearKey) {
+            btnClearKey.addEventListener('click', disconnectAiKey);
+        }
+
+        initTablePasteHandler();
 
         useAiRadioYes.addEventListener('change', () => {
             aiSettingsContainer.style.display = 'block';

@@ -28,7 +28,7 @@ const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 // Lista de modelos de LLM padrão, recomendados pelo aplicativo.
 // Esta lista será usada quando o usuário optar pela configuração "padrão" no modal de configurações de IA.
 // A ordem representa a prioridade de uso (fallback).
-const LLM_MODELS_PRIORITY = ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"];
+const LLM_MODELS_PRIORITY = ["openai/gpt-oss-120b", "openai/gpt-oss-20b"];
 
 
 // --- MAPEAMENTO DE CAMPOS CONDICIONAIS ---
@@ -178,9 +178,6 @@ const dynamicItemConfigs = {
                 <div class="form-group"><label for="c5_contratacao${i}_fase_planejamento">5.${i}.3 Lições aprendidas na fase de planejamento da licitação</label><div class="input-with-ai"><textarea id="c5_contratacao${i}_fase_planejamento" rows="3" placeholder="Análise das recomendações da SAD e Assessoria Jurídica..."></textarea><button class="ai-help-button" data-action="get-ai-help" data-target-field="c5_contratacao${i}_fase_planejamento"><i class="fas fa-book-open"></i></button></div></div>
                 <div class="form-group"><label for="c5_contratacao${i}_fase_externa">5.${i}.4 Lições aprendidas na fase externa da licitação</label><div class="input-with-ai"><textarea id="c5_contratacao${i}_fase_externa" rows="3" placeholder="Questionamentos, impugnações, diligências, inabilitações, recursos..."></textarea><button class="ai-help-button" data-action="get-ai-help" data-target-field="c5_contratacao${i}_fase_externa"><i class="fas fa-book-open"></i></button></div></div>
                 <div class="form-group"><label for="c5_contratacao${i}_dificuldades_execucao">5.${i}.5 Dificuldades da execução contratual</label><div class="input-with-ai"><textarea id="c5_contratacao${i}_dificuldades_execucao" rows="3" placeholder="Apontar dificuldades e problemas durante a execução..."></textarea><button class="ai-help-button" data-action="get-ai-help" data-target-field="c5_contratacao${i}_dificuldades_execucao"><i class="fas fa-book-open"></i></button></div></div>`;
-        },
-        onAdd: (newItemDiv) => {
-            newItemDiv.querySelector('input[id*="_processo_sei"]').addEventListener('input', (e) => formatSEIProcess(e.target));
         },
         renumberFields: (item, newIndex) => {
             const fieldSuffixes = ['contrato_ne', 'processo_sei', 'fase_planejamento', 'fase_externa', 'dificuldades_execucao'];

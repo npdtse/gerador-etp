@@ -132,8 +132,8 @@ window.manualContent = {
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 6º, nos incisos X, XI, XII e XVI, apresenta as definições de compra, serviço, obra, etc., que orientam a correta classificação do objeto.</div>`
     },
     "c3_3_motivos_justificativas": {
-        conceito: `<h4>Conceito</h4><p>Este campo apresenta a argumentação final que levou à escolha da solução. É a síntese da análise comparativa, demonstrando, com base em critérios objetivos, por que a solução escolhida é a mais vantajosa para o TSE.</p>`,
-        comoPreencher: `<h4>Como Preencher</h4><p>Utilize o quadro comparativo do Capítulo 2 (ou apenas faça uma análise direta, no caso do ETP Simplificado) como base para esta argumentação. Destaque os benefícios técnicos (maior eficiência, segurança, qualidade) e econômicos (menor custo total de propriedade, economia de escala, redução de custos operacionais) que justificam a escolha em detrimento das outras alternativas.</p>`,
+        conceito: `<h4>Conceito</h4><p>Este campo apresenta a argumentação final que levou à escolha da solução. Demonstra, com base em critérios objetivos, por que a solução escolhida é a mais vantajosa para o TSE.</p>`,
+        comoPreencher: `<h4>Como Preencher</h4><p>Faça uma análise direta de todas as soluções de mercado pesquisadas. Destaque os benefícios técnicos (maior eficiência, segurança, qualidade) e econômicos (menor custo total de propriedade, economia de escala, redução de custos operacionais) que justificam a escolha em detrimento das outras alternativas.</p>`,
         fundamentacao: `<h4>Fundamentação</h4><div class="fundamentacao-box"><strong>Lei nº 14.133/2021:</strong> O Art. 18, § 1º, V, exige a "justificativa técnica e econômica da escolha do tipo de solução a contratar".</div>`
     },
     "c3_4_caracteristicas_basicas": {
